@@ -1,0 +1,39 @@
+<div class="mb-3 {{ $errors->has('nama') ? 'has-error' : ''}}">
+    <label for="nama" class="form-label">{{ 'Nama' }}</label>
+    <input class="form-control" name="nama" type="text" id="nama" value="{{ isset($ujian->nama) ? $ujian->nama : ''}}" >
+    {!! $errors->first('nama', '<p class="text-danger">:message</p>') !!}
+</div>
+<div class="mb-3 {{ $errors->has('sesi') ? 'has-error' : ''}}">
+    <label for="sesi" class="form-label">{{ 'Sesi' }}</label>
+    <input class="form-control" name="sesi" type="number" id="sesi" value="{{ isset($ujian->sesi) ? $ujian->sesi : ''}}" >
+    {!! $errors->first('sesi', '<p class="text-danger">:message</p>') !!}
+</div>
+<div class="mb-3 {{ $errors->has('waktu') ? 'has-error' : ''}}">
+    <label for="waktu" class="form-label">{{ 'Waktu' }}</label>
+    <input class="form-control" name="waktu" type="date" id="waktu" value="{{ isset($ujian->waktu) ? $ujian->waktu : ''}}" >
+    {!! $errors->first('waktu', '<p class="text-danger">:message</p>') !!}
+</div>
+<div class="mb-3 {{ $errors->has('kriteria') ? 'has-error' : ''}}">
+    <label for="kriteria" class="form-label">{{ 'Kriteria' }}</label>
+    <select class="form-select" name="kriteria" id="kriteria">
+        <option >Pilih Kriteria</option>
+        @foreach ($list_kriteria as $item)
+            <option value="{{$item->id}}">{{$item->nama}}</option>
+        @endforeach
+    </select>
+    {{-- <input class="form-control" name="kriteria" type="text" id="kriteria" value="{{ isset($ujian->kriteria) ? $ujian->kriteria : ''}}" > --}}
+    {!! $errors->first('kriteria', '<p class="text-danger">:message</p>') !!}
+</div>
+{{-- <div class="mb-3 {{ $errors->has('batasnilai') ? 'has-error' : ''}}">
+    <label for="batasnilai" class="form-label">{{ 'Batas Nilai' }}</label>
+    <input class="form-control" name="batasnilai" type="number" id="batasnilai" value="{{ isset($ujian->batasnilai) ? $ujian->batasnilai : ''}}" >
+    {!! $errors->first('batasnilai', '<p class="text-danger">:message</p>') !!}
+</div> --}}
+
+
+<div class="d-flex justify-content-between">
+    <a href="#">
+        <button class="btn btn-secondary">Cancel</button>
+    </a>
+    <input  type="submit" class="btn btn-primary me-2" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">
+</div>
