@@ -51,10 +51,10 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ url('/indikator/store') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                    <form method="POST" action="{{ url('/soca/indikator/store') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
                         {{ csrf_field() }}
 
-                        @include ('master.indikator.form', ['formMode' => 'create'])
+                        @include ('master.soca.indikator.form', ['formMode' => 'create'])
 
                     </form>
 

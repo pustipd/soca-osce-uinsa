@@ -17,10 +17,10 @@ return new class extends Migration
         Schema::create('station_osce', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('id_penguji');
+            $table->unsignedBigInteger('id_penguji')->nullable();
             // $table->foreign('id_penguji')->references('id')->on('penguji');
 
-            $table->unsignedBigInteger('id_ujian_osce');
+            $table->unsignedBigInteger('id_ujian_osce')->nullable();
             $table->foreign('id_ujian_osce')->references('id')->on('ujian_osce');
 
             $table->integer("no_station");

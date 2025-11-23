@@ -1,9 +1,9 @@
 <div class="mb-3 {{ $errors->has('id_kriteria') ? 'has-error' : ''}}">
     <label for="id_kriteria" class="form-label">{{ 'Id Kriteria' }}</label>
     <select name="id_kriteria" id="id_kriteria" class="form-select select2">
-        <option selected>Pilih Kriteria</option>
+        <option value="" disabled selected>Pilih Kriteria</option>
         @foreach ($list_kriteria as $kriteria)
-            <option value="{{$kriteria->id}}">{{$kriteria->nama}}</option>
+            <option value="{{$kriteria->id}}" @if (isset($indikator) && $indikator->id_kriteria == $kriteria->id) selected @endif>{{$kriteria->nama}}</option>
         @endforeach
     </select>
     {!! $errors->first('id_kriteria', '<p class="text-danger">:message</p>') !!}
@@ -21,8 +21,7 @@
 
 
 <div class="d-flex justify-content-between">
-    <a href="#">
-        <button class="btn btn-secondary">Cancel</button>
+    <a href="{{url('soca/indikator')}}" class="btn btn-secondary">Cancel
     </a>
     <input  type="submit" class="btn btn-primary me-2" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">
 </div>

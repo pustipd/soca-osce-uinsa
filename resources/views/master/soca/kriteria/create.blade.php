@@ -51,10 +51,10 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ url('/kriteria/store') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                    <form method="POST" action="{{ url('/soca/kriteria/store') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
                         {{ csrf_field() }}
 
-                        @include ('master.kriteria.form', ['formMode' => 'create'])
+                        @include ('master.soca.kriteria.form', ['formMode' => 'create'])
 
                     </form>
 

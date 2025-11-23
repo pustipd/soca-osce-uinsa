@@ -37,8 +37,15 @@ class StationController extends Controller
     {
         $station = new StationOsce();
         $station->no_station = $request->no_station;
-        $station->id_penguji = $request->penguji;
-        $station->id_ujian_osce = $request->ujian;
+
+        if($request->penguji) {
+            $station->id_penguji = $request->penguji;
+        }
+
+        if($request->ujian) {
+            $station->id_ujian_osce = $request->ujian;
+        }
+
         $station->save();
 
         return redirect('osce/station');
@@ -77,6 +84,24 @@ class StationController extends Controller
         $station->id_ujian_osce = $request->ujian;
         $station->save();
 
+        return redirect('osce/station');
+
+    }
+
+    public function delete($id)
+    {
+        $station = StationOsce::find($id);
+
+        if(! $station)
+        {
+            return redirect('osce/station');
+        }
+
+        if($station->pesertaOsce()->exists()){
+            return redirect('osce/station');
+        }
+
+        $station->delete();
         return redirect('osce/station');
 
     }

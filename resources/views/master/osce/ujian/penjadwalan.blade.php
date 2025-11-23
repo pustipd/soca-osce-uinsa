@@ -13,35 +13,7 @@
                     <form method="POST" action="{{url('osce/exam-scheduling/store')}}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
                         {{ csrf_field() }}
 
-                        <div class="mb-3 {{ $errors->has('id_mahasiswa') ? 'has-error' : ''}}">
-                            <label for="id-mahasiswa" class="form-label">{{ 'Nama Mahasiswa' }}</label>
-                            <select name="id_mahasiswa" id="id-mahasiswa" class="form-select select2">
-                                <option selected>Pilih Mahasiswa</option>
-                                @foreach ($list_mahasiswa as $mahasiswa)
-                                    <option value="{{$mahasiswa->id}}">{{$mahasiswa->nama}}</option>
-                                @endforeach
-                            </select>
-                            {!! $errors->first('id_mahasiswa', '<p class="text-danger">:message</p>') !!}
-                        </div>
-
-                        <div class="mb-3 {{ $errors->has('id-station') ? 'has-error' : ''}}">
-                            <label for="id-station" class="form-label">{{ 'Station' }}</label>
-                            <select name="id_station" id="id-station" class="form-select select2">
-                                <option selected>Pilih Station</option>
-                                @foreach ($list_station as $station)
-                                    <option value="{{$station->id}}">{{$station->no_station}}</option>
-                                @endforeach
-                            </select>
-                            {!! $errors->first('id_station', '<p class="text-danger">:message</p>') !!}
-                        </div>
-
-                        <div class="d-flex justify-content-between">
-                            <a href="#">
-                                <button class="btn btn-secondary">Cancel</button>
-                            </a>
-                            <input type="submit" class="btn btn-primary me-2" value="Jadwalkan">
-                        </div>
-
+                        @include ('master.osce.ujian.form_penjadwalan', ['formMode' => 'create'])
 
                     </form>
 

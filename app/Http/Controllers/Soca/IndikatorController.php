@@ -6,14 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 // Models
-use App\Models\IndikatorOsce;
+use App\Models\IndikatorSoca;
 use App\Models\KriteriaSoca;
 
 class IndikatorController extends Controller
 {
     public function index()
     {
-        $indikator = IndikatorOsce::all();
+        $indikator = IndikatorSoca::all();
 
         return view('master.soca.indikator.index', [
             'indikator' => $indikator
@@ -36,7 +36,7 @@ class IndikatorController extends Controller
         $indikator->skormax = $request->skormax;
         $indikator->save();
 
-        return redirect('indikator');
+        return redirect('soca/indikator');
     }
 
     public function edit($id)
@@ -45,11 +45,14 @@ class IndikatorController extends Controller
 
         if(! $indikator)
         {
-            return redirect('indikator');
+            return redirect('soca/indikator');
         }
 
+        $list_kriteria = KriteriaSoca::all();
+
         return view('master.soca.indikator.edit', [
-            "indikator" => $indikator
+            "indikator" => $indikator,
+            "list_kriteria" => $list_kriteria
         ]);
     }
 
@@ -59,7 +62,7 @@ class IndikatorController extends Controller
 
         if(! $indikator)
         {
-            return redirect('indikator');
+            return redirect('soca/indikator');
         }
 
         $indikator->id_kriteria = $request->id_kriteria;
@@ -67,7 +70,26 @@ class IndikatorController extends Controller
         $indikator->skormax = $request->skormax;
         $indikator->save();
 
-        return redirect('indikator');
+        return redirect('soca/indikator');
 
+    }
+
+    public function delete($id)
+    {
+
+        $indikator = IndikatorSoca::find($id);
+
+        if(! $indikator)
+        {
+            return redirect('soca/indikator');
+        }
+
+        if($indikator->hasilUjianSoca()->exists()) {
+            return redirect('soca/indikator');
+        }
+
+        $indikator->delete();
+
+        return redirect('soca/indikator');
     }
 }

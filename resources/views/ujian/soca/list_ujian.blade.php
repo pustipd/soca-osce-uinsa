@@ -45,6 +45,7 @@
                                     <th scope="col" class="px-6 py-3">Sesi</th>
                                     <th scope="col" class="px-6 py-3">Waktu</th>
                                     <th scope="col" class="px-6 py-3">Mahasiswa</th>
+                                    <th scope="col" class="px-6 py-3">Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -57,11 +58,35 @@
                                         <td class="px-6 py-4">{{ $item->ujianSoca->sesi }}</td>
                                         <td class="px-6 py-4">{{ $item->ujianSoca->waktu }}</td>
                                         <td class="px-6 py-4">{{ $item->mahasiswa->nama }}</td>
+                                        <td class="px-6 py-4">{{ ucfirst($item->status) }}</td>
                                         <td>
                                             @if ($item->hasilUjianSoca()->exists())
-                                                <a href="{{ url('soca/penguji/hasil-ujian/' . $item->id) }}" title="View Ujian">
-                                                    <button class="btn btn-secondary btn-sm"><i class="fa fa-eye" aria-hidden="true"></i>Lihat hasil</button>
-                                                </a>
+
+                                                @if ($item->id_penguji1 == auth('penguji')->user()->id)
+
+                                                    @if (! $item->hasilUjianSoca()->first()->skor1)
+                                                        <a href="{{ url('soca/penguji/ujian/' . $item->id) }}" title="View Ujian">
+                                                            <button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i>Mulai Ujian</button>
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ url('soca/penguji/hasil-ujian/' . $item->id) }}" title="View Ujian">
+                                                            <button class="btn btn-secondary btn-sm"><i class="fa fa-eye" aria-hidden="true"></i>Lihat hasil</button>
+                                                        </a>
+                                                    @endif
+
+                                                @else
+
+                                                    @if (! $item->hasilUjianSoca()->first()->skor2)
+                                                        <a href="{{ url('soca/penguji/ujian/' . $item->id) }}" title="View Ujian">
+                                                            <button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i>Mulai Ujian</button>
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ url('soca/penguji/hasil-ujian/' . $item->id) }}" title="View Ujian">
+                                                            <button class="btn btn-secondary btn-sm"><i class="fa fa-eye" aria-hidden="true"></i>Lihat hasil</button>
+                                                        </a>
+                                                    @endif
+
+                                                @endif
                                             @else
                                                 <a href="{{ url('soca/penguji/ujian/' . $item->id) }}" title="View Ujian">
                                                     <button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i>Mulai Ujian</button>

@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                          <h6 class="card-title">Edit Kriteria #{{ $kriteria->id }}</h6>
-                        <a href="{{ url('/kriteria') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
+                        <a href="{{ url('/osce/kriteria') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
                     </div>
 
                     @if ($errors->any())
@@ -47,11 +47,11 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ url('/kriteria/' . $kriteria->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                    <form method="POST" action="{{ url('/osce/kriteria/' . $kriteria->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
                         {{ method_field('PATCH') }}
                         {{ csrf_field() }}
 
-                        @include ('master.kriteria.form', ['formMode' => 'edit'])
+                        @include ('master.osce.kriteria.form', ['formMode' => 'edit'])
 
                     </form>
 

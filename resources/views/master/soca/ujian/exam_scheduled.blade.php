@@ -31,7 +31,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
                         <h6 class="card-title">Jadwalkan Ujian</h6>
-                        <a href="{{ url('/exam-scheduling/create') }}">
+                        <a href="{{ url('/soca/exam-scheduling/create') }}">
                             <button class="btn btn-secondary">Create New</button>
                         </a>
                     </div>
@@ -39,7 +39,13 @@
                         <table id="dataTableExample" class="table">
                             <thead>
                                 <tr>
-                                    <th>#</th><th scope="col" class="px-6 py-3">Nama Mahasiswa</th><th scope="col" class="px-6 py-3">Penguji 1</th><th scope="col" class="px-6 py-3">Penguji 2</th><th scope="col" class="px-6 py-3">Ujian</th><th>Actions</th>
+                                    <th>#</th>
+                                    <th scope="col" class="px-6 py-3">Nama Mahasiswa</th>
+                                    <th scope="col" class="px-6 py-3">Penguji 1</th>
+                                    <th scope="col" class="px-6 py-3">Penguji 2</th>
+                                    <th scope="col" class="px-6 py-3">Ujian</th>
+                                    <th scope="col" class="px-6 py-3">Status</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -50,11 +56,12 @@
                                         <td class="px-6 py-4">{{ $item->penguji1->nama }}</td>
                                         <td class="px-6 py-4">{{ $item->penguji2->nama }}</td>
                                         <td class="px-6 py-4">{{ $item->ujianSoca->nama }}</td>
+                                        <td class="px-6 py-4">{{ ucfirst($item->status) }}</td>
                                         <td>
-                                            <a href="{{ url('/ujian/' . $item->id) }}" title="View Ujian"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
-                                            <a href="{{ url('/ujian/' . $item->id . '/edit') }}" title="Edit Ujian"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
+                                            <a href="{{ url('/soca/exam-scheduled/' . $item->id) }}" title="View Ujian"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
+                                            <a href="{{ url('/soca/exam-scheduled/' . $item->id . '/edit') }}" title="Edit Ujian"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
 
-                                            <form method="POST" action="{{ url('/ujian' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
+                                            <form method="POST" action="{{ url('/soca/exam-scheduled' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                                                 {{ method_field('DELETE') }}
                                                 {{ csrf_field() }}
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete Ujian" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>

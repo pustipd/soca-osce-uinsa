@@ -16,4 +16,9 @@ class IndikatorSoca extends Model
     {
         return $this->belongsTo(KriteriaSoca::class, 'id_kriteria');
     }
+
+    public function hasilUjianSoca()
+    {
+        return $this->hasMany(HasilUjianSoca::class, 'id_indikator_soca');
+    }
 }

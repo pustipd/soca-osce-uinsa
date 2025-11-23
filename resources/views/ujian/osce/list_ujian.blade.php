@@ -45,6 +45,7 @@
                                     <th scope="col" class="px-6 py-3">Sesi</th>
                                     <th scope="col" class="px-6 py-3">Waktu</th>
                                     <th scope="col" class="px-6 py-3">Mahasiswa</th>
+                                    <th scope="col" class="px-6 py-3">Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -57,8 +58,9 @@
                                         <td class="px-6 py-4">{{ $item->stationOsce->ujianOsce->sesi }}</td>
                                         <td class="px-6 py-4">{{ $item->stationOsce->ujianOsce->waktu }}</td>
                                         <td class="px-6 py-4">{{ $item->mahasiswa->nama }}</td>
+                                        <td class="px-6 py-4">{{ ucfirst($item->status) }}</td>
                                         <td>
-                                            @if ($item->hasilUjianOsce()->exists())
+                                            @if ($item->status == "selesai")
                                                 <a href="{{ url('/osce/penguji/hasil-ujian/' . $item->id) }}" title="View Ujian">
                                                     <button class="btn btn-secondary btn-sm"><i class="fa fa-eye" aria-hidden="true"></i>Lihat hasil</button>
                                                 </a>

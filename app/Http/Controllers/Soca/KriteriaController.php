@@ -31,7 +31,7 @@ class KriteriaController extends Controller
         $kriteria->totalnilai = $request->totalnilai;
         $kriteria->save();
 
-        return redirect('kriteria');
+        return redirect('soca/kriteria');
     }
 
     public function edit($id)
@@ -40,7 +40,7 @@ class KriteriaController extends Controller
 
         if(! $kriteria)
         {
-            return redirect('kriteria');
+            return redirect('soca/kriteria');
         }
 
         return view('master.soca.kriteria.edit', [
@@ -54,14 +54,32 @@ class KriteriaController extends Controller
 
         if(! $kriteria)
         {
-            return redirect('kriteria');
+            return redirect('soca/kriteria');
         }
 
         $kriteria->nama = $request->nama;
         $kriteria->totalnilai = $request->totalnilai;
         $kriteria->save();
 
-        return redirect('kriteria');
+        return redirect('soca/kriteria');
 
+    }
+
+    public function delete($id)
+    {
+
+        $kriteria = KriteriaSoca::find($id);
+
+        if(! $kriteria)
+        {
+            return redirect('soca/kriteria');
+        }
+
+        if($kriteria->ujianSoca()->exists() || $kriteria->indikatorSoca()->exists()) {
+            return redirect('soca/kriteria');
+        }
+
+        $kriteria->delete();
+        return redirect('soca/kriteria');
     }
 }

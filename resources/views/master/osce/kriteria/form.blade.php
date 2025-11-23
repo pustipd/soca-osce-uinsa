@@ -11,8 +11,7 @@
 
 
 <div class="d-flex justify-content-between">
-    <a href="#">
-        <button class="btn btn-secondary">Cancel</button>
+    <a href="{{url('osce/kriteria')}}" class="btn btn-secondary">Cancel
     </a>
     <input  type="submit" class="btn btn-primary me-2" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">
 </div>

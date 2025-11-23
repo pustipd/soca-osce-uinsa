@@ -55,8 +55,11 @@ class UjianController extends Controller
             return redirect('osce/ujian');
         }
 
+        $list_kriteria = KriteriaOsce::all();
+
         return view('master.osce.ujian.edit', [
-            "ujian" => $ujian
+            "ujian" => $ujian,
+            'list_kriteria' => $list_kriteria
         ]);
     }
 
@@ -71,12 +74,27 @@ class UjianController extends Controller
         $ujian->nama = $request->nama;
         $ujian->sesi = $request->sesi;
         $ujian->waktu = $request->waktu;
-        $ujian->kriteria = $request->kriteria;
-        $ujian->batasnilai = $request->batasnilai;
+        $ujian->id_kriteria = $request->kriteria;
         $ujian->save();
 
         return redirect('osce/ujian');
 
+    }
+
+    public function delete($id)
+    {
+        $ujian = UjianOsce::find($id);
+
+        if(! $ujian){
+            return redirect('osce/ujian');
+        }
+
+        if($ujian->stationOsce()->exists()) {
+            return redirect('osce/ujian');
+        }
+
+        $ujian->delete();
+        return redirect('osce/ujian');
     }
 
     public function listExamScheduled()
@@ -110,5 +128,61 @@ class UjianController extends Controller
         $peserta->save();
 
         return redirect('osce/exam-scheduled');
+    }
+
+    public function editExamScheduled($id) {
+
+        $peserta = PesertaOsce::find($id);
+
+        if(! $peserta) {
+            return redirect('osce/exam-scheduled');
+        }
+
+        $list_mahasiswa = Mahasiswa::all();
+        $list_penguji = Penguji::all();
+        $list_station = StationOsce::all();
+
+        return view('master.osce.ujian.edit_penjadwalan', [
+            'peserta' => $peserta,
+            'list_mahasiswa' => $list_mahasiswa,
+            'list_penguji' => $list_penguji,
+            'list_station' => $list_station
+        ]);
+
+    }
+
+
+    public function updateExamScheduled($id, Request $request) {
+
+        $peserta = PesertaOsce::find($id);
+
+        if(! $peserta) {
+            return redirect('osce/exam-scheduled');
+        }
+
+        $peserta->id_mahasiswa = $request->id_mahasiswa;
+        $peserta->id_station = $request->id_station;
+        $peserta->save();
+
+        return redirect('osce/exam-scheduled');
+
+    }
+
+
+    public function deleteExamScheduled($id) {
+
+        $peserta = PesertaOsce::find($id);
+
+        if(! $peserta) {
+            return redirect('osce/exam-scheduled');
+        }
+
+        if($peserta->hasilUjianOsce()->exists()) {
+            return redirect('osce/exam-scheduled');
+        }
+
+        $peserta->delete();
+        return redirect('osce/exam-scheduled');
+
     }
 }

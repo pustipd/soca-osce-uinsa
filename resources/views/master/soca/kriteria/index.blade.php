@@ -31,7 +31,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
                         <h6 class="card-title">Kriteria</h6>
-                        <a href="{{ url('/kriteria/create') }}">
+                        <a href="{{ url('/soca/kriteria/create') }}">
                             <button class="btn btn-secondary">Create New</button>
                         </a>
                     </div>
@@ -48,10 +48,10 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td class="px-6 py-4">{{ $item->nama }}</td><td class="px-6 py-4">{{ $item->totalnilai }}</td>
                                         <td>
-                                            <a href="{{ url('/kriteria/' . $item->id) }}" title="View Kriteria"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
-                                            <a href="{{ url('/kriteria/' . $item->id . '/edit') }}" title="Edit Kriteria"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
+                                            <a href="{{ url('/soca/kriteria/' . $item->id) }}" title="View Kriteria"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
+                                            <a href="{{ url('/soca/kriteria/' . $item->id . '/edit') }}" title="Edit Kriteria"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
 
-                                            <form method="POST" action="{{ url('/kriteria' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
+                                            <form method="POST" action="{{ url('/soca/kriteria' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                                                 {{ method_field('DELETE') }}
                                                 {{ csrf_field() }}
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete Kriteria" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>

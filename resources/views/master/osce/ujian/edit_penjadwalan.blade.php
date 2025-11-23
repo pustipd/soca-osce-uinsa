@@ -7,13 +7,14 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                          <h6 class="card-title">Penjadwalan Ujian</h6>
-                        <a href="{{ url('/soca/exam-scheduling') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
+                        <a href="{{ url('/osce/exam-scheduled') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
                     </div>
 
-                    <form method="POST" action="{{url('/soca/exam-scheduling/store')}}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                    <form method="POST" action="{{url('/osce/exam-scheduled/' . $peserta->id)}}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                        {{ method_field('PATCH') }}
                         {{ csrf_field() }}
 
-                        @include ('master.soca.ujian.form_penjadwalan', ['formMode' => 'create'])
+                        @include ('master.osce.ujian.form_penjadwalan', ['formMode' => 'edit'])
 
                     </form>
 
@@ -47,6 +48,6 @@
         $("#id-mahasiswa").select2();
         $("#id-penguji1").select2();
         $("#id-penguji2").select2();
-        $("#id-ujian-soca").select2();
+        $("#id-station").select2();
     </script>
 @endpush

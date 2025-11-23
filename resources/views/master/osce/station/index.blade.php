@@ -51,8 +51,8 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td class="px-6 py-4">{{ $item->no_station }}</td>
-                                        <td class="px-6 py-4">{{ $item->ujianOsce->nama }}</td>
-                                        <td class="px-6 py-4">{{ $item->penguji->nama }}</td>
+                                        <td class="px-6 py-4">{{ ($item->ujianOsce()->exists()) ? $item->ujianOsce->nama : '-' }}</td>
+                                        <td class="px-6 py-4">{{ ($item->penguji()->exists()) ? $item->penguji->nama : '-'  }}</td>
                                         <td>
                                             <a href="{{ url('/osce/station/' . $item->id) }}" title="View Station"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
                                             <a href="{{ url('/osce/station/' . $item->id . '/edit') }}" title="Edit Station"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>

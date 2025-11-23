@@ -48,9 +48,11 @@ class IndikatorController extends Controller
         {
             return redirect('osce/indikator');
         }
+        $list_kriteria = KriteriaOsce::all();
 
         return view('master.osce.indikator.edit', [
-            "indikator" => $indikator
+            "indikator" => $indikator,
+            "list_kriteria" => $list_kriteria
         ]);
     }
 
@@ -71,5 +73,23 @@ class IndikatorController extends Controller
 
         return redirect('osce/indikator');
 
+    }
+
+    public function delete($id)
+    {
+
+        $indikator = IndikatorOsce::find($id);
+
+        if(! $indikator)
+        {
+            return redirect('osce/indikator');
+        }
+
+        if($indikator->hasilUjianOsce()->exists()) {
+            return redirect('osce/indikator');
+        }
+
+        $indikator->delete();
+        return redirect('osce/indikator');
     }
 }

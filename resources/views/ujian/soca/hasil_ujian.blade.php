@@ -51,8 +51,8 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ url('/kriteria/store') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
-                        {{ csrf_field() }}
+                    {{-- <form method="POST" action="{{ url('/kriteria/store') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                        {{ csrf_field() }} --}}
 
                         <div class="mb-3">
                             <label for="nama" class="form-label">{{ 'Nama' }}</label>
@@ -62,30 +62,45 @@
                         <div class="mb-3">
                             <label for="ujian" class="form-label">{{ 'Ujian' }}</label>
                             <input class="form-control" name="ujian" type="text" id="ujian" value="{{ isset($peserta->ujianSoca->nama) ? $peserta->ujianSoca->nama : ''}}" disabled>
-                            {!! $errors->first('totalnilai', '<p class="text-danger">:message</p>') !!}
+                            {{-- {!! $errors->first('totalnilai', '<p class="text-danger">:message</p>') !!} --}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">{{ 'Status' }}</label>
+                            <input class="form-control" name="status" type="text" id="status" value="{{ isset($peserta->status) ? ucfirst($peserta->status) : ''}}" disabled>
+                            {{-- {!! $errors->first('status', '<p class="text-danger">:message</p>') !!} --}}
+                        </div>
+                        <div class="mb-3">
+                            <label for="batasnilai" class="form-label">{{ 'Batas Nilai' }}</label>
+                            <input class="form-control" name="batasnilai" type="text" id="batasnilai" value="{{ isset($peserta->ujianSoca->batasnilai) ? ucfirst($peserta->ujianSoca->batasnilai) : ''}}" disabled>
+                            {{-- {!! $errors->first('status', '<p class="text-danger">:message</p>') !!} --}}
                         </div>
 
                         <hr>
 
                         @foreach ($peserta->hasilUjianSoca as $key => $item)
+                            <form action="{{url('/soca/penguji/update-hasil-ujian')}}" method="POST">
+                            @csrf
+                                <input type="hidden" name="id_ujian" value="{{$item->id}}">
 
-                            <h3>Indikator {{$key + 1 }}</h3>
+                                <h3 class="mt-3 mb-2">Indikator {{$key + 1 }}</h3>
 
-                            <div class="mb-3">
-                                <label for="skor1" class="form-label">{{ 'Skor 1' }}</label>
-                                <input class="form-control" name="skor1" type="text" id="skor1" value="{{ isset($item->skor1) ? $item->skor1 : ''}}" disabled>
-                                {{-- {!! $errors->first('totalnilai', '<p class="text-danger">:message</p>') !!} --}}
-                            </div>
+                                <div class="mb-3">
+                                    <label for="skor1" class="form-label">{{ 'Skor 1' }}</label>
+                                    <input class="form-control" name="skor1" type="number" id="skor1" value="{{ isset($item->skor1) ? $item->skor1 : ''}}" @if (auth('penguji')->user()->id != $peserta->id_penguji1) disabled @endif>
+                                    {{-- {!! $errors->first('totalnilai', '<p class="text-danger">:message</p>') !!} --}}
+                                </div>
 
-                            <div class="mb-3">
-                                <label for="skor2" class="form-label">{{ 'Skor 2' }}</label>
-                                <input class="form-control" name="skor2" type="text" id="skor2" value="{{ isset($item->skor2) ? $item->skor2 : ''}}" disabled>
-                                {{-- {!! $errors->first('totalnilai', '<p class="text-danger">:message</p>') !!} --}}
-                            </div>
+                                <div class="mb-3">
+                                    <label for="skor2" class="form-label">{{ 'Skor 2' }}</label>
+                                    <input class="form-control" name="skor2" type="number" id="skor2" value="{{ isset($item->skor2) ? $item->skor2 : ''}}" @if (auth('penguji')->user()->id != $peserta->id_penguji2) disabled @endif>
+                                    {{-- {!! $errors->first('totalnilai', '<p class="text-danger">:message</p>') !!} --}}
+                                </div>
 
-                            <hr>
-
+                                <hr>
+                                <button class="btn btn-primary btn-sm w-100">Edit</button>
+                            </form>
                         @endforeach
+
 
                         {{-- <div class="d-flex justify-content-between">
                             <a href="#">
@@ -95,7 +110,7 @@
                         </div> --}}
 
 
-                    </form>
+                    {{-- </form> --}}
 
                 </div>
             </div>

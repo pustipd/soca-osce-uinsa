@@ -14,6 +14,11 @@ class HasilUjianSoca extends Model
 
     public function pesertaSoca()
     {
-        return $this->belongsTo(pesertaSoca::class, 'id_peserta_soca');
+        return $this->belongsTo(PesertaSoca::class, 'id_peserta_soca');
+    }
+
+    public function indikatorSoca()
+    {
+        return $this->belongsTo(IndikatorSoca::class, 'id_indikator_soca');
     }
 }

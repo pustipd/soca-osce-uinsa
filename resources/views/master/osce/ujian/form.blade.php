@@ -16,9 +16,9 @@
 <div class="mb-3 {{ $errors->has('kriteria') ? 'has-error' : ''}}">
     <label for="kriteria" class="form-label">{{ 'Kriteria' }}</label>
     <select class="form-select" name="kriteria" id="kriteria">
-        <option >Pilih Kriteria</option>
+        <option value="" disabled selected>Pilih Kriteria</option>
         @foreach ($list_kriteria as $item)
-            <option value="{{$item->id}}">{{$item->nama}}</option>
+            <option value="{{$item->id}}" @if (isset($ujian) && $item->id == $ujian->id_kriteria) selected @endif>{{$item->nama}}</option>
         @endforeach
     </select>
     {{-- <input class="form-control" name="kriteria" type="text" id="kriteria" value="{{ isset($ujian->kriteria) ? $ujian->kriteria : ''}}" > --}}
@@ -32,8 +32,7 @@
 
 
 <div class="d-flex justify-content-between">
-    <a href="#">
-        <button class="btn btn-secondary">Cancel</button>
+    <a href="{{url('osce/ujian')}}" class="btn btn-secondary">Cancel
     </a>
     <input  type="submit" class="btn btn-primary me-2" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">
 </div>

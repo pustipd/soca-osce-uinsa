@@ -10,12 +10,17 @@
 </div>
 <div class="mb-3 {{ $errors->has('waktu') ? 'has-error' : ''}}">
     <label for="waktu" class="form-label">{{ 'Waktu' }}</label>
-    <input class="form-control" name="waktu" type="date" id="waktu" value="{{ isset($ujian->waktu) ? $ujian->waktu : ''}}" >
+    <input class="form-control" name="waktu" type="date" id="waktu" value="{{ isset($ujian->waktu) ? Carbon\Carbon::parse($ujian->waktu)->format("Y-m-d") : ''}}" >
     {!! $errors->first('waktu', '<p class="text-danger">:message</p>') !!}
 </div>
-<div class="mb-3 {{ $errors->has('kriteria') ? 'has-error' : ''}}">
-    <label for="kriteria" class="form-label">{{ 'Kriteria' }}</label>
-    <input class="form-control" name="kriteria" type="text" id="kriteria" value="{{ isset($ujian->kriteria) ? $ujian->kriteria : ''}}" >
+<div class="mb-3 {{ $errors->has('id_kriteria') ? 'has-error' : ''}}">
+    <label for="id_kriteria" class="form-label">{{ 'Kriteria' }}</label>
+    <select name="id_kriteria" id="id_kriteria" class="form-select">
+        <option value="" disabled selected>Pilih Kriteria</option>
+        @foreach ($list_kriteria as $item)
+            <option value="{{$item->id}}" @if (isset($ujian) && $item->id == $ujian->id_kriteria) selected @endif>{{$item->nama}}</option>
+        @endforeach
+    </select>
     {!! $errors->first('kriteria', '<p class="text-danger">:message</p>') !!}
 </div>
 <div class="mb-3 {{ $errors->has('batasnilai') ? 'has-error' : ''}}">
@@ -26,8 +31,7 @@
 
 
 <div class="d-flex justify-content-between">
-    <a href="#">
-        <button class="btn btn-secondary">Cancel</button>
+    <a href="{{url('/soca/ujian')}}" class="btn btn-secondary" >Cancel
     </a>
     <input  type="submit" class="btn btn-primary me-2" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">
 </div>

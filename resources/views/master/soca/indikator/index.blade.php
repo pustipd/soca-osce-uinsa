@@ -31,7 +31,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
                         <h6 class="card-title">Indikator</h6>
-                        <a href="{{ url('/indikator/create') }}">
+                        <a href="{{ url('/soca/indikator/create') }}">
                             <button class="btn btn-secondary">Create New</button>
                         </a>
                     </div>
@@ -46,12 +46,14 @@
                                 @foreach($indikator as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td class="px-6 py-4">{{ $item->id_kriteria }}</td><td class="px-6 py-4">{{ $item->deskripsi }}</td><td class="px-6 py-4">{{ $item->skormax }}</td>
+                                        <td class="px-6 py-4">{{ $item->id_kriteria }}</td>
+                                        <td class="px-6 py-4">{{ Str::limit($item->deskripsi, 15) }}</td>
+                                        <td class="px-6 py-4">{{ $item->skormax }}</td>
                                         <td>
-                                            <a href="{{ url('/indikator/' . $item->id) }}" title="View Indikator"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
-                                            <a href="{{ url('/indikator/' . $item->id . '/edit') }}" title="Edit Indikator"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
+                                            <a href="{{ url('/soca/indikator/' . $item->id) }}" title="View Indikator"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
+                                            <a href="{{ url('/soca/indikator/' . $item->id . '/edit') }}" title="Edit Indikator"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
 
-                                            <form method="POST" action="{{ url('/indikator' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
+                                            <form method="POST" action="{{ url('/soca/indikator' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                                                 {{ method_field('DELETE') }}
                                                 {{ csrf_field() }}
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete Indikator" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>

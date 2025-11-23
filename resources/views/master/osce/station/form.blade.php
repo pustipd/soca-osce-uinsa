@@ -8,16 +8,16 @@
     <label for="penguji" class="form-label">{{ 'Penguji' }}</label>
 
     <select name="penguji" id="penguji" class="form-select">
-        @if ($station && $station->id_penguji)
+        {{-- @if ($station && $station->id_penguji)
             @foreach ($list_penguji as $item)
                 <option value="{{$item->id}}" @if ($item->id == $station->id_penguji) selected @endif>{{$item->nama}}</option>
             @endforeach
-        @else
-            <option>Pilih Penguji</option>
+        @else --}}
+            <option value="" disabled selected>Pilih Penguji</option>
             @foreach ($list_penguji as $item)
-                <option value="{{$item->id}}">{{$item->nama}}</option>
+                <option value="{{$item->id}}" @if (isset($station) && $station->id_penguji == $item->id) selected @endif>{{$item->nama}}</option>
             @endforeach
-        @endif
+        {{-- @endif --}}
     </select>
 
     {!! $errors->first('penguji', '<p class="text-danger">:message</p>') !!}
@@ -26,16 +26,10 @@
     <label for="ujian" class="form-label">{{ 'Ujian' }}</label>
 
     <select name="ujian" id="ujian" class="form-select">
-        @if ($station && $station->id_ujian_osce)
-            @foreach ($list_ujian as $item)
-                <option value="{{$item->id}}" @if ($item->id == $station->id_ujian_osce) selected @endif>{{$item->nama}}</option>
-            @endforeach
-        @else
-            <option>Pilih Ujian</option>
-            @foreach ($list_ujian as $item)
-                <option value="{{$item->id}}">{{$item->nama}}</option>
-            @endforeach
-        @endif
+        <option value="" selected disabled>Pilih Ujian</option>
+        @foreach ($list_ujian as $item)
+            <option value="{{$item->id}}" @if (isset($station) && $item->id == $station->id_ujian_osce) selected @endif>{{$item->nama}}</option>
+        @endforeach
     </select>
 
     {!! $errors->first('ujian', '<p class="text-danger">:message</p>') !!}
@@ -43,8 +37,7 @@
 
 
 <div class="d-flex justify-content-between">
-    <a href="#">
-        <button class="btn btn-secondary">Cancel</button>
+    <a href="{{url('osce/station')}}" class="btn btn-secondary">Cancel
     </a>
     <input  type="submit" class="btn btn-primary me-2" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">
 </div>

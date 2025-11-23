@@ -27,7 +27,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_ujian_soca');
             // $table->foreign('id_ujian_soca')->references('id')->on('kriteria_soca');
 
-            $table->string("status")->nullable();
+            $table->enum("status", ['terjadwal', 'sedang', 'tidak sinkron', 'sinkron', 'tidak hadir', 'selesai'])->nullable();
             $table->string("totalskor1")->nullable();
             $table->string("totalskor2")->nullable();
 

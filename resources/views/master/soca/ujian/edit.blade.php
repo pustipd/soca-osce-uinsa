@@ -7,9 +7,9 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                          <h6 class="card-title">Edit Ujian #{{ $ujian->id }}</h6>
-                        <a href="{{ url('/ujian') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
+                        <a href="{{ url('/soca/ujian') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
                     </div>
-                   
+
                     @if ($errors->any())
                         <div class="alert alert-danger" role="alert">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -47,11 +47,11 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ url('/ujian/' . $ujian->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                    <form method="POST" action="{{ url('/soca/ujian/' . $ujian->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
                         {{ method_field('PATCH') }}
                         {{ csrf_field() }}
 
-                        @include ('master.ujian.form', ['formMode' => 'edit'])
+                        @include ('master.soca.ujian.form', ['formMode' => 'edit'])
 
                     </form>
 

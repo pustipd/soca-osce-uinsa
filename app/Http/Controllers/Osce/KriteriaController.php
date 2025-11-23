@@ -64,4 +64,21 @@ class KriteriaController extends Controller
         return redirect('osce/kriteria');
 
     }
+
+    public function delete($id) {
+
+        $kriteria = KriteriaOsce::find($id);
+
+        if(! $kriteria)
+        {
+            return redirect('osce/kriteria');
+        }
+
+        if($kriteria->ujianOsce()->exists() || $kriteria->IndikatorOsce()->exists()) {
+            return redirect('osce/kriteria');
+        }
+
+        $kriteria->delete();
+        return redirect('osce/kriteria');
+    }
 }
