@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 // Models
 use App\Models\IndikatorOsce;
 use App\Models\KriteriaOsce;
+use App\Models\UjianOsce;
 
 class IndikatorController extends Controller
 {
@@ -22,16 +23,17 @@ class IndikatorController extends Controller
 
     public function create()
     {
-        $list_kriteria = KriteriaOsce::all();
+        $list_ujian = UjianOsce::all();
         return view('master.osce.indikator.create', [
-            'list_kriteria' => $list_kriteria
+            'list_ujian' => $list_ujian
         ]);
     }
 
     public function store(Request $request)
     {
         $indikator = new IndikatorOsce();
-        $indikator->id_kriteria = $request->id_kriteria;
+        $indikator->nama = $request->nama;
+        $indikator->id_ujian = $request->id_ujian;
         $indikator->deskripsi = $request->deskripsi;
         $indikator->skormax = $request->skormax;
         $indikator->bobot = $request->bobot;
@@ -48,11 +50,11 @@ class IndikatorController extends Controller
         {
             return redirect('osce/indikator');
         }
-        $list_kriteria = KriteriaOsce::all();
+        $list_ujian = UjianOsce::all();
 
         return view('master.osce.indikator.edit', [
             "indikator" => $indikator,
-            "list_kriteria" => $list_kriteria
+            "list_ujian" => $list_ujian
         ]);
     }
 
@@ -65,7 +67,8 @@ class IndikatorController extends Controller
             return redirect('osce/indikator');
         }
 
-        $indikator->id_kriteria = $request->id_kriteria;
+        $indikator->nama = $request->nama;
+        $indikator->id_ujian = $request->id_ujian;
         $indikator->deskripsi = $request->deskripsi;
         $indikator->skormax = $request->skormax;
         $indikator->bobot = $request->bobot;

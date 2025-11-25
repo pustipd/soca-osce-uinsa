@@ -26,12 +26,7 @@ class UjianController extends Controller
 
     public function create()
     {
-
-        $list_kriteria = KriteriaOsce::all();
-
-        return view('master.osce.ujian.create', [
-            "list_kriteria" => $list_kriteria
-        ]);
+        return view('master.osce.ujian.create',);
     }
 
     public function store(Request $request)
@@ -40,7 +35,7 @@ class UjianController extends Controller
         $ujian->nama = $request->nama;
         $ujian->sesi = $request->sesi;
         $ujian->waktu = $request->waktu;
-        $ujian->id_kriteria = $request->kriteria;
+        $ujian->kriteria = $request->kriteria;
         $ujian->save();
 
         return redirect('osce/ujian');
@@ -55,11 +50,8 @@ class UjianController extends Controller
             return redirect('osce/ujian');
         }
 
-        $list_kriteria = KriteriaOsce::all();
-
         return view('master.osce.ujian.edit', [
-            "ujian" => $ujian,
-            'list_kriteria' => $list_kriteria
+            "ujian" => $ujian
         ]);
     }
 
@@ -74,7 +66,7 @@ class UjianController extends Controller
         $ujian->nama = $request->nama;
         $ujian->sesi = $request->sesi;
         $ujian->waktu = $request->waktu;
-        $ujian->id_kriteria = $request->kriteria;
+        $ujian->kriteria = $request->kriteria;
         $ujian->save();
 
         return redirect('osce/ujian');
@@ -99,8 +91,10 @@ class UjianController extends Controller
 
     public function listExamScheduled()
     {
-
-        $list_peserta = PesertaOsce::all();
+        // $list_peserta = PesertaOsce::all();
+        $list_peserta = PesertaOsce::with('stationOsce')
+                    ->get()
+                    ->groupBy('stationOsce.id_ujian_osce');
 
         return view('master.osce.ujian.exam_scheduled', [
             'list_peserta' => $list_peserta
@@ -112,20 +106,27 @@ class UjianController extends Controller
         $list_mahasiswa = Mahasiswa::all();
         $list_penguji = Penguji::all();
         $list_station = StationOsce::all();
+        $list_ujian = UjianOsce::all();
 
         return view('master.osce.ujian.penjadwalan', [
             'list_mahasiswa' => $list_mahasiswa,
             'list_penguji' => $list_penguji,
-            'list_station' => $list_station
+            'list_station' => $list_station,
+            'list_ujian' => $list_ujian
         ]);
     }
 
     public function doExamScheduling(Request $request)
     {
-        $peserta = new PesertaOsce();
-        $peserta->id_mahasiswa = $request->id_mahasiswa;
-        $peserta->id_station = $request->id_station;
-        $peserta->save();
+
+        $list_station = StationOsce::where("id_ujian_osce", $request->id_ujian)->get();
+
+        foreach($list_station as $station) {
+            $peserta = new PesertaOsce();
+            $peserta->id_mahasiswa = $request->id_mahasiswa;
+            $peserta->id_station = $station->id;
+            $peserta->save();
+        }
 
         return redirect('osce/exam-scheduled');
     }
@@ -141,18 +142,28 @@ class UjianController extends Controller
         $list_mahasiswa = Mahasiswa::all();
         $list_penguji = Penguji::all();
         $list_station = StationOsce::all();
+        $list_ujian = UjianOsce::all();
+
+        $id_ujian = 0;
+
+        if($peserta->stationOsce()->exists()) {
+            $id_ujian = $peserta->stationOsce()->first()->id_ujian_osce;
+        }
 
         return view('master.osce.ujian.edit_penjadwalan', [
             'peserta' => $peserta,
             'list_mahasiswa' => $list_mahasiswa,
             'list_penguji' => $list_penguji,
-            'list_station' => $list_station
+            'list_station' => $list_station,
+            'list_ujian' => $list_ujian,
+            'id_ujian' => $id_ujian
         ]);
 
     }
 
 
-    public function updateExamScheduled($id, Request $request) {
+    public function updateExamScheduled($id, Request $request)
+    {
 
         $peserta = PesertaOsce::find($id);
 
@@ -160,14 +171,24 @@ class UjianController extends Controller
             return redirect('osce/exam-scheduled');
         }
 
-        $peserta->id_mahasiswa = $request->id_mahasiswa;
-        $peserta->id_station = $request->id_station;
-        $peserta->save();
+        $list_station = StationOsce::where('id_ujian_osce', $peserta->stationOsce->id_ujian_osce)->get();
+
+        foreach($list_station as $station) {
+            PesertaOsce::where("id_station", $station->id)->where("id_mahasiswa", $peserta->id_mahasiswa)->delete();
+        }
+
+        $list_station = StationOsce::where("id_ujian_osce", $request->id_ujian)->get();
+
+        foreach($list_station as $station) {
+            $peserta = new PesertaOsce();
+            $peserta->id_mahasiswa = $request->id_mahasiswa;
+            $peserta->id_station = $station->id;
+            $peserta->save();
+        }
 
         return redirect('osce/exam-scheduled');
 
     }
-
 
     public function deleteExamScheduled($id) {
 
@@ -177,12 +198,38 @@ class UjianController extends Controller
             return redirect('osce/exam-scheduled');
         }
 
+        $id_mahasiswa = $peserta->id_mahasiswa;
+
         if($peserta->hasilUjianOsce()->exists()) {
             return redirect('osce/exam-scheduled');
         }
 
-        $peserta->delete();
+        $list_station = StationOsce::where('id_ujian_osce', $peserta->stationOsce->id_ujian_osce)->get();
+
+        foreach($list_station as $station) {
+            PesertaOsce::where("id_station", $station->id)->where("id_mahasiswa", $id_mahasiswa)->delete();
+        }
+
         return redirect('osce/exam-scheduled');
 
+    }
+
+    public function detailExamScheduled($id)
+    {
+        $peserta = PesertaOsce::find($id);
+
+        if(! $peserta) {
+            return redirect('osce/exam-scheduled');
+        }
+
+        $id_ujian = $peserta->stationOsce->id_ujian_osce;
+
+        $list_station = StationOsce::where("id_ujian_osce", $id_ujian)->pluck('id')->toArray();
+
+        $list_peserta = PesertaOsce::where("id_mahasiswa", $peserta->id_mahasiswa)->whereIn("id_station", $list_station)->get();
+
+        return view('master.osce.ujian.detail_exam_scheduled', [
+            'list_peserta' => $list_peserta
+        ]);
     }
 }

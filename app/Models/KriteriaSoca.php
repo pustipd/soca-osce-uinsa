@@ -12,11 +12,6 @@ class KriteriaSoca extends Model
     protected $connection = 'soca';
     protected $table = 'kriteria_soca';
 
-    public function ujianSoca()
-    {
-        return $this->hasMany(UjianSoca::class, 'id_kriteria');
-    }
-
     public function indikatorSoca()
     {
         return $this->hasMany(IndikatorSoca::class, 'id_kriteria');

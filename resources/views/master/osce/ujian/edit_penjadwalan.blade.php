@@ -46,8 +46,6 @@
 @push('custom-scripts')
     <script>
         $("#id-mahasiswa").select2();
-        $("#id-penguji1").select2();
-        $("#id-penguji2").select2();
-        $("#id-station").select2();
+        $("#id-ujian").select2();
     </script>
 @endpush

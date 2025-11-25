@@ -39,14 +39,18 @@
                         <table id="dataTableExample" class="table">
                             <thead>
                                 <tr>
-                                    <th>#</th><th scope="col" class="px-6 py-3">Id Kriteria</th><th scope="col" class="px-6 py-3">Deskripsi</th><th scope="col" class="px-6 py-3">Skormax</th><th>Actions</th>
+                                    <th>#</th>
+                                    <th scope="col" class="px-6 py-3">Ujian</th>
+                                    <th scope="col" class="px-6 py-3">Deskripsi</th>
+                                    <th scope="col" class="px-6 py-3">Skormax</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($indikator as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td class="px-6 py-4">{{ $item->id_kriteria }}</td>
+                                        <td class="px-6 py-4">{{ $item->ujianSoca->nama }}</td>
                                         <td class="px-6 py-4">{{ Str::limit($item->deskripsi, 15) }}</td>
                                         <td class="px-6 py-4">{{ $item->skormax }}</td>
                                         <td>

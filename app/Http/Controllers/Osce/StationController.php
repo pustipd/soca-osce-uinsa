@@ -35,6 +35,13 @@ class StationController extends Controller
 
     public function store(Request $request)
     {
+
+        $station = StationOsce::where("id_ujian_osce", $request->ujian)->where("no_station", $request->no_station)->first();
+
+        if($station) {
+            return redirect('osce/station');
+        }
+
         $station = new StationOsce();
         $station->no_station = $request->no_station;
 
@@ -77,6 +84,12 @@ class StationController extends Controller
         if(! $station)
         {
             return redirect('osce/station');
+        }
+
+        $exists = StationOsce::where('id', '!=', $id)->where("no_station", $request->no_station)->where("id_ujian_osce", $request->ujian)->first();
+
+        if($exists) {
+            return redirect('soce/station');
         }
 
         $station->no_station = $request->no_station;

@@ -82,6 +82,6 @@
 
 @push('custom-scripts')
     <script>
-        // $('#mbkm_place_id').select2();
+        $('#id_ujian').select2();
     </script>
 @endpush

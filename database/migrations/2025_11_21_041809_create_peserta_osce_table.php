@@ -27,6 +27,7 @@ return new class extends Migration
             $table->enum("status", ['terjadwal', 'aktif', 'tidak hadir', 'selesai'])->nullable();
             $table->integer("skor")->nullable();
             $table->text("feedback")->nullable();
+            $table->integer("rotasi")->nullable();
 
             $table->timestamps();
         });

@@ -68,7 +68,9 @@ Route::prefix('soca')->group(function() {
     Route::patch('exam-scheduled/{id}', [UjianController::class, 'updateExamScheduled']);
     Route::delete('exam-scheduled/{id}', [UjianController::class, 'deleteExamScheduled']);
 
+    Route::post('penguji/ujian/check-gap-point', [PengujiController::class, 'checkGapPoint']);
     Route::get('penguji/list-ujian', [PengujiController::class, 'index']);
+    Route::get('penguji/ujian/{id}/tidak-hadir', [PengujiController::class, 'mahasiswaAbsenSoca']);
     Route::get('penguji/ujian/{id}', [PengujiController::class, 'exam']);
     Route::post('penguji/penilaian-ujian', [PengujiController::class, 'examJudgmentSoca']);
     Route::get('penguji/hasil-ujian/{id}', [PengujiController::class, 'hasilUjianSoca']);
@@ -126,11 +128,14 @@ Route::prefix('osce')->group(function() {
     Route::get('exam-scheduled', [UjianControllerOsce::class, 'listExamScheduled']);
     Route::get('exam-scheduling/create', [UjianControllerOsce::class, 'examScheduling']);
     Route::post('exam-scheduling/store', [UjianControllerOsce::class, 'doExamScheduling']);
+    Route::get('exam-scheduled/{id}', [UjianControllerOsce::class, 'detailExamScheduled']);
     Route::get('exam-scheduled/{id}/edit', [UjianControllerOsce::class, 'editExamScheduled']);
     Route::patch('exam-scheduled/{id}', [UjianControllerOsce::class, 'updateExamScheduled']);
     Route::delete('exam-scheduled/{id}', [UjianControllerOsce::class, 'deleteExamScheduled']);
 
+    Route::get('penguji/ujian/check-station/{id}', [PengujiController::class, 'checkStation']);
     Route::get('penguji/list-ujian', [PengujiController::class, 'listUjianOsce']);
+    Route::get('penguji/ujian/{id}/tidak-hadir', [PengujiController::class, 'mahasiswaAbsenOsce']);
     Route::get('penguji/ujian/{id}', [PengujiController::class, 'ujianOsce']);
     Route::post('penguji/penilaian-ujian', [PengujiController::class, 'examJudgmentOsce']);
     Route::get('penguji/hasil-ujian/{id}', [PengujiController::class, 'hasilUjianOsce']);

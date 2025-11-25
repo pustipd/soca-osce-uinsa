@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string("nama", 100);
             $table->integer("sesi");
             $table->dateTime('waktu');
-            // $table->string("kriteria");
+            $table->string("kriteria");
 
-            $table->unsignedBigInteger('id_kriteria');
-            $table->foreign('id_kriteria')->references('id')->on('kriteria_soca');
+            // $table->unsignedBigInteger('id_kriteria');
+            // $table->foreign('id_kriteria')->references('id')->on('kriteria_soca');
 
             $table->integer("batasnilai");
             $table->timestamps();

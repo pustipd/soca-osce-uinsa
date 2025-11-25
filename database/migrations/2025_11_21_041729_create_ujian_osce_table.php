@@ -19,10 +19,10 @@ return new class extends Migration
             $table->string("nama", 100);
             $table->integer("sesi");
             $table->date("waktu");
-            // $table->string("kriteria", 120);
+            $table->string("kriteria");
 
-            $table->unsignedBigInteger('id_kriteria');
-            $table->foreign('id_kriteria')->references('id')->on('kriteria_osce');
+            // $table->unsignedBigInteger('id_kriteria');
+            // $table->foreign('id_kriteria')->references('id')->on('kriteria_osce');
 
             $table->timestamps();
         });

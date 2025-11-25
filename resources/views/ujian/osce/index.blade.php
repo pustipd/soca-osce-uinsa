@@ -32,6 +32,20 @@
             text-align: center;
             flex-shrink: 0;        /* prevents footer from shrinking */
         }
+
+        .wizard.vertical > .content {
+            margin-left: 0 !important;
+        }
+
+        .wizard .steps {
+            float: right !important;
+            /* width: 220px; */
+        }
+
+        .wizard .content {
+            margin-right: 240px;
+        }
+
     </style>
 
 {{-- <nav class="page-breadcrumb">
@@ -45,19 +59,23 @@
   <div class="col-md-12 stretch-card">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Ujian OSCE ({{$ujian->stationOsce->ujianOsce->kriteriaOsce->nama}})</h4>
+        <h4 class="card-title text-center" style="font-size: 20px">{{$peserta->stationOsce->ujianOsce->nama}} ( {{$peserta->mahasiswa->nim}} / {{$peserta->mahasiswa->nama}} )</h4>
+        <h4 class="text-center" style="font-size: 18px; margin-bottom: 12px">Station : {{$peserta->stationOsce->no_station}}</h4>
 
         <form id="form-penilaian" action="{{url('osce/penguji/penilaian-ujian')}}" method="POST">
             @csrf
-            <input type="hidden" name="id_peserta" value="{{$ujian->id}}">
-            <input type="hidden" name="id_kriteria" value="{{$ujian->stationOsce->ujianOsce->id_kriteria}}">
+            <input type="hidden" name="id_peserta" value="{{$peserta->id}}">
+            <input type="hidden" name="id_ujian" value="{{$peserta->stationOsce->ujianOsce->id}}">
             <div id="wizardVertical">
                 @php($iter = 0)
-                @foreach ($ujian->stationOsce->ujianOsce->kriteriaOsce->indikatorOsce as $key => $item)
+                @foreach ($peserta->stationOsce->ujianOsce->indikatorOsce as $key => $item)
                     @php($iter++)
-                    <h2>Indikator {{$iter}}</h2>
+                    <h2>{{$item->nama}}</h2>
                     <section class="indikator-box">
-                        <h4>Indikator {{$iter}}</h4>
+                        <div class="d-flex justify-content-between">
+                            <h4>{{$item->nama}}</h4>
+                            <p class="badge bg-warning text-dark mt-1">Bobot : {{$item->bobot}}</p>
+                        </div>
 
                         <div class="scroll-area">
                             <p>{{$item->deskripsi}}</p>
@@ -84,9 +102,14 @@
 
                     </section>
                 @endforeach
-            </form>
+            </div>
 
-        </div>
+            <div class="form-group mt-3">
+                <label for="" class="form-label">Silahkan isi Feedback</label>
+                <textarea id="feedback" class="form-control" rows="5" name="feedback" required></textarea>
+            </div>
+        </form>
+
 
       </div>
     </div>
@@ -107,13 +130,12 @@
 
         onStepChanging: function (event, currentIndex, newIndex) {
 
-            let indikator = @json($ujian->stationOsce->ujianOsce->kriteriaOsce->indikatorSoca);
+            let indikator = @json($peserta->stationOsce->ujianOsce->indikatorOsce);
             let total_indikator = indikator.length;
 
             for(let i = 0; i < total_indikator; i++) {
                 let nilai = $('input[name="nilai-' + i + '"]').val();
             }
-
 
             if(localStorage.getItem("nilai") !== null) {
 
@@ -124,7 +146,43 @@
         },
         onFinished: function (event, currentIndex) {
 
-            $("#form-penilaian").submit();
+            let is_complete = true;
+
+            let feedback = $("#feedback").val();
+
+            if(! feedback) {
+                is_complete = false;
+            }
+
+            if(is_complete) {
+
+                $.ajax({
+                    url: "{{url('osce/penguji/ujian/check-station/')}}" + "/" + "{{$peserta->id}}",
+                    type: "GET",
+                    // data: $("#form-penilaian").serialize(),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    },
+                    success: function(response) {
+                        console.log("SUCCESS:", response);
+
+                        if(response.status == 'complete') {
+                        //     $("#status-nilai").css('color', 'green');
+                        //     $("#status-nilai").html('Sinkron')
+                            $("#form-penilaian").submit();
+
+                        } else {
+                        //     $("#status-nilai").css('color', 'red');
+                        //     $("#status-nilai").html('Tidak Sinkron')
+                        }
+
+                    },
+                    error: function(xhr) {
+                        console.log("ERROR:", xhr.responseText);
+                    }
+                });
+
+            }
 
             // Submit form, AJAX, redirect, etc.
             // Example:

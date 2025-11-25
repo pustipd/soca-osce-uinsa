@@ -29,19 +29,13 @@
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    {{-- <div class="d-flex justify-content-between mb-3">
-                        <h6 class="card-title">Ujian</h6>
-                        <a href="{{ url('/ujian/create') }}">
-                            <button class="btn btn-secondary">Create New</button>
-                        </a>
-                    </div> --}}
                     <div class="table-responsive">
                         <table id="dataTableExample" class="table">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th scope="col" class="px-6 py-3">Nama Ujian</th>
-                                    <th scope="col" class="px-6 py-3">Kriteria</th>
+                                    {{-- <th scope="col" class="px-6 py-3">Kriteria</th> --}}
                                     <th scope="col" class="px-6 py-3">Sesi</th>
                                     <th scope="col" class="px-6 py-3">Waktu</th>
                                     <th scope="col" class="px-6 py-3">Mahasiswa</th>
@@ -50,11 +44,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($list_ujian as $item)
+                                @foreach($list_peserta as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td class="px-6 py-4">{{ $item->ujianSoca->nama }}</td>
-                                        <td class="px-6 py-4">{{ $item->ujianSoca->kriteriaSoca->nama }}</td>
+                                        {{-- <td class="px-6 py-4">{{ $item->ujianSoca->nama }}</td> --}}
                                         <td class="px-6 py-4">{{ $item->ujianSoca->sesi }}</td>
                                         <td class="px-6 py-4">{{ $item->ujianSoca->waktu }}</td>
                                         <td class="px-6 py-4">{{ $item->mahasiswa->nama }}</td>
@@ -91,6 +85,10 @@
                                                 <a href="{{ url('soca/penguji/ujian/' . $item->id) }}" title="View Ujian">
                                                     <button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i>Mulai Ujian</button>
                                                 </a>
+                                                <form method="GET" action="{{ url('/soca/penguji/ujian' . '/' . $item->id . '/tidak-hadir') }}" accept-charset="UTF-8" style="display:inline">
+                                                    {{ csrf_field() }}
+                                                    <button type="submit" class="btn btn-danger" title="Tidak Hadir" onclick="return confirm(&quot;Mahasiswa tidak hadir?&quot;)">Tidak Hadir</button>
+                                                </form>
                                             @endif
                                         </td>
                                     </tr>

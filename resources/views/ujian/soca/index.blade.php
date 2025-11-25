@@ -32,6 +32,20 @@
             text-align: center;
             flex-shrink: 0;        /* prevents footer from shrinking */
         }
+
+        .wizard.vertical > .content {
+            margin-left: 0 !important;
+        }
+
+        .wizard .steps {
+            float: right !important;
+            /* width: 220px; */
+        }
+
+        .wizard .content {
+            margin-right: 240px;
+        }
+
     </style>
 
 {{-- <nav class="page-breadcrumb">
@@ -45,19 +59,28 @@
   <div class="col-md-12 stretch-card">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Ujian SOCA ({{$ujian->ujianSoca->kriteriaSoca->nama}})</h4>
+        <h3 class="card-title text-center" style="font-size: 20px">{{$peserta->ujianSoca->nama}} ( {{$peserta->mahasiswa->nim}} / {{$peserta->mahasiswa->nama}} )</h3>
+
+        <div class="d-flex">
+            <button type="button" id="btn-check-nilai" class="btn btn-secondary btn-sm mb-3 me-4">Check Nilai</button>
+            <h6 class="mt-2">Status Nilai : <span id="status-nilai">Tidak Sinkron</span></h6>
+        </div>
 
         <form id="form-penilaian" action="{{url('soca/penguji/penilaian-ujian')}}" method="POST">
             @csrf
-            <input type="hidden" name="id_peserta" value="{{$ujian->id}}">
-            <input type="hidden" name="id_kriteria" value="{{$ujian->ujianSoca->kriteriaSoca->id}}">
+
+            <input type="hidden" name="tipe_penguji" value="{{$tipe_penguji}}">
+            <input type="hidden" name="id_peserta" value="{{$peserta->id}}">
+            <input type="hidden" name="id_ujian" value="{{$peserta->ujianSoca->id}}">
             <div id="wizardVertical">
+
                 @php($iter = 0)
-                @foreach ($ujian->ujianSoca->kriteriaSoca->indikatorSoca as $key => $item)
+                @foreach ($peserta->ujianSoca->indikatorSoca as $key => $item)
                     @php($iter++)
-                    <h2>Indikator {{$iter}}</h2>
+                    <h2>{{$item->nama}}</h2>
                     <section class="indikator-box">
-                        <h4 class="mb-3">Indikator {{$iter}}</h4>
+                        <h4 class="mb-3">{{$item->nama}}</h4>
+                        <input type="hidden" name="indikator[{{$key}}]" value="{{$item->id}}">
 
                         <div class="scroll-area">
                             <p>{{$item->deskripsi}}</p>
@@ -74,36 +97,13 @@
 
                     </section>
                 @endforeach
+            </div>
+
+            <div class="form-group mt-3">
+                <label for="" class="form-label">Silahkan isi Feedback</label>
+                <textarea id="feedback" class="form-control" rows="5" name="feedback" required></textarea>
+            </div>
         </form>
-
-          {{-- <h2>Second Step</h2>
-          <section>
-            <h4>Second Step</h4>
-            <p>Donec mi sapien, hendrerit nec egestas a, rutrum vitae dolor. Nullam venenatis diam ac ligula elementum pellentesque.
-                In lobortis sollicitudin felis non eleifend. Morbi tristique tellus est, sed tempor elit. Morbi varius, nulla quis condimentum
-                dictum, nisi elit condimentum magna, nec venenatis urna quam in nisi. Integer hendrerit sapien a diam adipiscing consectetur.
-                In euismod augue ullamcorper leo dignissim quis elementum arcu porta. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Vestibulum leo velit, blandit ac tempor nec, ultrices id diam. Donec metus lacus, rhoncus sagittis iaculis nec, malesuada a diam.
-                Donec non pulvinar urna. Aliquam id velit lacus.</p>
-          </section>
-
-          <h2>Third Step</h2>
-          <section>
-            <h4>Third Step</h4>
-            <p>Morbi ornare tellus at elit ultrices id dignissim lorem elementum. Sed eget nisl at justo condimentum dapibus. Fusce eros justo,
-                pellentesque non euismod ac, rutrum sed quam. Ut non mi tortor. Vestibulum eleifend varius ullamcorper. Aliquam erat volutpat.
-                Donec diam massa, porta vel dictum sit amet, iaculis ac massa. Sed elementum dui commodo lectus sollicitudin in auctor mauris
-                venenatis.</p>
-          </section>
-
-          <h2>Fourth Step</h2>
-          <section>
-            <h4>Fourth Step</h4>
-            <p>Quisque at sem turpis, id sagittis diam. Suspendisse malesuada eros posuere mauris vehicula vulputate. Aliquam sed sem tortor.
-                Quisque sed felis ut mauris feugiat iaculis nec ac lectus. Sed consequat vestibulum purus, imperdiet varius est pellentesque vitae.
-                Suspendisse consequat cursus eros, vitae tempus enim euismod non. Nullam ut commodo tortor.</p>
-          </section> --}}
-        </div>
 
       </div>
     </div>
@@ -127,7 +127,7 @@
 
         onStepChanging: function (event, currentIndex, newIndex) {
 
-            let indikator = @json($ujian->ujianSoca->kriteriaSoca->indikatorSoca);
+            let indikator = @json($peserta->ujianSoca->indikatorSoca);
             let total_indikator = indikator.length;
 
             for(let i = 0; i < total_indikator; i++) {
@@ -139,12 +139,27 @@
 
             }
 
-            // console.log(nilai)
             return true; // allow to continue
         },
         onFinished: function (event, currentIndex) {
 
-            $("#form-penilaian").submit();
+            let is_complete = true;
+
+            let feedback = $("#feedback").val();
+
+            if(! feedback) {
+                is_complete = false;
+            }
+
+            let status_penilaian = $("#status-nilai").html();
+
+            if(status_penilaian != "Sinkron") {
+                is_complete = false;
+            }
+
+            if(is_complete) {
+                $("#form-penilaian").submit();
+            }
 
             // Submit form, AJAX, redirect, etc.
             // Example:
@@ -156,5 +171,37 @@
         stepsOrientation: 'vertical'
     });
 
+  </script>
+
+  <script>
+    $("#btn-check-nilai").on('click', function() {
+
+        $.ajax({
+            url: "{{url('soca/penguji/ujian/check-gap-point')}}",
+            type: "POST",
+            data: $("#form-penilaian").serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            },
+            success: function(response) {
+                console.log("SUCCESS:", response);
+
+                if(response.status == 'success') {
+                    $("#status-nilai").css('color', 'green');
+                    $("#status-nilai").html('Sinkron')
+
+                } else {
+                    $("#status-nilai").css('color', 'red');
+                    $("#status-nilai").html('Tidak Sinkron')
+                }
+
+            },
+            error: function(xhr) {
+                console.log("ERROR:", xhr.responseText);
+            }
+        });
+
+
+    });
   </script>
 @endpush

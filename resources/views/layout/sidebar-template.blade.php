@@ -13,12 +13,12 @@
             <span class="link-title">Ujian</span>
         </a>
     </li>
-    <li class="nav-item {{ active_class(['soca/kriteria/*']) }}">
+    {{-- <li class="nav-item {{ active_class(['soca/kriteria/*']) }}">
         <a href="{{ url('soca/kriteria') }}" class="nav-link">
             <i class="link-icon" data-feather="box"></i>
             <span class="link-title">Kriteria</span>
         </a>
-    </li>
+    </li> --}}
     <li class="nav-item {{ active_class(['soca/indikator/*']) }}">
         <a href="{{ url('soca/indikator') }}" class="nav-link">
             <i class="link-icon" data-feather="box"></i>
@@ -57,12 +57,12 @@
             <span class="link-title">Ujian</span>
         </a>
     </li>
-    <li class="nav-item {{ active_class(['osce/kriteria/*']) }}">
+    {{-- <li class="nav-item {{ active_class(['osce/kriteria/*']) }}">
         <a href="{{ url('osce/kriteria') }}" class="nav-link">
             <i class="link-icon" data-feather="box"></i>
             <span class="link-title">Kriteria</span>
         </a>
-    </li>
+    </li> --}}
     <li class="nav-item {{ active_class(['osce/indikator/*']) }}">
         <a href="{{ url('osce/indikator') }}" class="nav-link">
             <i class="link-icon" data-feather="box"></i>

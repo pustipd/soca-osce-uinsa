@@ -25,11 +25,7 @@ class UjianController extends Controller
 
     public function create()
     {
-        $list_kriteria = KriteriaSoca::all();
-
-        return view('master.soca.ujian.create', [
-            'list_kriteria' => $list_kriteria
-        ]);
+        return view('master.soca.ujian.create');
     }
 
     public function store(Request $request)
@@ -38,7 +34,8 @@ class UjianController extends Controller
         $ujian->nama = $request->nama;
         $ujian->sesi = $request->sesi;
         $ujian->waktu = $request->waktu;
-        $ujian->id_kriteria = $request->id_kriteria;
+        // $ujian->id_kriteria = $request->id_kriteria;
+        $ujian->kriteria = $request->kriteria;
         $ujian->batasnilai = $request->batasnilai;
         $ujian->save();
 
@@ -53,11 +50,9 @@ class UjianController extends Controller
         if(! $ujian){
             return redirect('soca/ujian');
         }
-        $list_kriteria = KriteriaSoca::all();
 
         return view('master.soca.ujian.edit', [
-            "ujian" => $ujian,
-            "list_kriteria" => $list_kriteria
+            "ujian" => $ujian
         ]);
     }
 
@@ -72,7 +67,7 @@ class UjianController extends Controller
         $ujian->nama = $request->nama;
         $ujian->sesi = $request->sesi;
         $ujian->waktu = $request->waktu;
-        $ujian->id_kriteria = $request->id_kriteria;
+        $ujian->kriteria = $request->kriteria;
         $ujian->batasnilai = $request->batasnilai;
         $ujian->save();
 

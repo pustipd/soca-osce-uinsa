@@ -29,12 +29,6 @@
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    {{-- <div class="d-flex justify-content-between mb-3">
-                        <h6 class="card-title">Ujian</h6>
-                        <a href="{{ url('/ujian/create') }}">
-                            <button class="btn btn-secondary">Create New</button>
-                        </a>
-                    </div> --}}
                     <div class="table-responsive">
                         <table id="dataTableExample" class="table">
                             <thead>

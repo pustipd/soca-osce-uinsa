@@ -15,12 +15,13 @@
 </div>
 <div class="mb-3 {{ $errors->has('id_kriteria') ? 'has-error' : ''}}">
     <label for="id_kriteria" class="form-label">{{ 'Kriteria' }}</label>
-    <select name="id_kriteria" id="id_kriteria" class="form-select">
+    <textarea name="kriteria" id="kriteria" cols="10" rows="5" class="form-control">{{ isset($ujian->kriteria) ? $ujian->kriteria : '' }}</textarea>
+    {{-- <select name="id_kriteria" id="id_kriteria" class="form-select">
         <option value="" disabled selected>Pilih Kriteria</option>
         @foreach ($list_kriteria as $item)
             <option value="{{$item->id}}" @if (isset($ujian) && $item->id == $ujian->id_kriteria) selected @endif>{{$item->nama}}</option>
         @endforeach
-    </select>
+    </select> --}}
     {!! $errors->first('kriteria', '<p class="text-danger">:message</p>') !!}
 </div>
 <div class="mb-3 {{ $errors->has('batasnilai') ? 'has-error' : ''}}">

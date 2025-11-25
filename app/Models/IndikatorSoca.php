@@ -12,9 +12,9 @@ class IndikatorSoca extends Model
     protected $connection = 'soca';
     protected $table = 'indikator_soca';
 
-    public function kriteriaSoca()
+    public function ujianSoca()
     {
-        return $this->belongsTo(KriteriaSoca::class, 'id_kriteria');
+        return $this->belongsTo(UjianSoca::class, 'id_ujian');
     }
 
     public function hasilUjianSoca()

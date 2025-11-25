@@ -14,8 +14,9 @@ return new class extends Migration
     {
         Schema::create('indikator_soca', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_kriteria');
-            $table->foreign('id_kriteria')->references('id')->on('kriteria_soca');
+            $table->unsignedBigInteger('id_ujian');
+            $table->foreign('id_ujian')->references('id')->on('ujian_soca');
+            $table->string("nama");
             $table->text("deskripsi");
             $table->integer("skormax");
             $table->timestamps();

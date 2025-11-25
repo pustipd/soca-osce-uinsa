@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                          <h6 class="card-title">Penjadwalan Ujian</h6>
-                        <a href="{{ url('osce/exam-scheduling') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
+                        <a href="{{ url('osce/exam-scheduled') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
                     </div>
 
                     <form method="POST" action="{{url('osce/exam-scheduling/store')}}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
@@ -45,8 +45,6 @@
 @push('custom-scripts')
     <script>
         $("#id-mahasiswa").select2();
-        $("#id-penguji1").select2();
-        $("#id-penguji2").select2();
-        $("#id-ujian-soca").select2();
+        $("#id-ujian").select2();
     </script>
 @endpush

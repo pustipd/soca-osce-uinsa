@@ -85,6 +85,6 @@
 
 @push('custom-scripts')
     <script>
-        $('#id_kriteria').select2();
+        $('#id_ujian').select2();
     </script>
 @endpush

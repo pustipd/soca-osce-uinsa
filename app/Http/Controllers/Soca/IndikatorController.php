@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 // Models
 use App\Models\IndikatorSoca;
 use App\Models\KriteriaSoca;
+use App\Models\UjianSoca;
 
 class IndikatorController extends Controller
 {
@@ -22,16 +23,17 @@ class IndikatorController extends Controller
 
     public function create()
     {
-        $list_kriteria = KriteriaSoca::all();
+        $list_ujian = UjianSoca::all();
         return view('master.soca.indikator.create', [
-            'list_kriteria' => $list_kriteria
+            'list_ujian' => $list_ujian
         ]);
     }
 
     public function store(Request $request)
     {
         $indikator = new IndikatorSoca();
-        $indikator->id_kriteria = $request->id_kriteria;
+        $indikator->nama = $request->nama;
+        $indikator->id_ujian = $request->id_ujian;
         $indikator->deskripsi = $request->deskripsi;
         $indikator->skormax = $request->skormax;
         $indikator->save();
@@ -48,11 +50,11 @@ class IndikatorController extends Controller
             return redirect('soca/indikator');
         }
 
-        $list_kriteria = KriteriaSoca::all();
+        $list_ujian = UjianSoca::all();
 
         return view('master.soca.indikator.edit', [
             "indikator" => $indikator,
-            "list_kriteria" => $list_kriteria
+            "list_ujian" => $list_ujian
         ]);
     }
 
@@ -65,7 +67,8 @@ class IndikatorController extends Controller
             return redirect('soca/indikator');
         }
 
-        $indikator->id_kriteria = $request->id_kriteria;
+        $indikator->nama = $request->nama;
+        $indikator->id_ujian = $request->id_ujian;
         $indikator->deskripsi = $request->deskripsi;
         $indikator->skormax = $request->skormax;
         $indikator->save();

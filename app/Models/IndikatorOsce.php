@@ -13,9 +13,9 @@ class IndikatorOsce extends Model
 
     protected $connection = 'osce';
 
-    public function kriteriaOsce()
+    public function ujianOsce()
     {
-        return $this->belongsTo(KriteriaOsce::class, 'id_kriteria');
+        return $this->belongsTo(UjianOsce::class, 'id_ujian');
     }
 
     public function hasilUjianOsce()

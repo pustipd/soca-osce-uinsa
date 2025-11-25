@@ -41,8 +41,8 @@
                                 <tr>
                                     <th>#</th>
                                     <th scope="col" class="px-6 py-3">Nama Mahasiswa</th>
+                                    {{-- <th scope="col" class="px-6 py-3">Station</th> --}}
                                     <th scope="col" class="px-6 py-3">Ujian</th>
-                                    <th scope="col" class="px-6 py-3">Station</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -50,14 +50,14 @@
                                 @foreach($list_peserta as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td class="px-6 py-4">{{ $item->mahasiswa()->first()->nama }}</td>
-                                        <td class="px-6 py-4">{{ $item->stationOsce->no_station }}</td>
-                                        <td class="px-6 py-4">{{ $item->stationOsce->ujianOsce->nama }}</td>
+                                        <td class="px-6 py-4">{{ $item->first()->mahasiswa()->first()->nama }}</td>
+                                        {{-- <td class="px-6 py-4">{{ $item->stationOsce->no_station }}</td> --}}
+                                        <td class="px-6 py-4">{{ $item->first()->stationOsce->ujianOsce->nama }}</td>
                                         <td>
-                                            <a href="{{ url('/osce/exam-scheduled/' . $item->id) }}" title="View Ujian"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
-                                            <a href="{{ url('/osce/exam-scheduled/' . $item->id . '/edit') }}" title="Edit Ujian"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
+                                            <a href="{{ url('/osce/exam-scheduled/' . $item->first()->id) }}" title="View Ujian"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
+                                            <a href="{{ url('/osce/exam-scheduled/' . $item->first()->id . '/edit') }}" title="Edit Ujian"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
 
-                                            <form method="POST" action="{{ url('/osce/exam-scheduled' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
+                                            <form method="POST" action="{{ url('/osce/exam-scheduled' . '/' . $item->first()->id) }}" accept-charset="UTF-8" style="display:inline">
                                                 {{ method_field('DELETE') }}
                                                 {{ csrf_field() }}
                                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete Ujian" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>

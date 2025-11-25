@@ -11,6 +11,8 @@ use App\Models\IndikatorSoca;
 use App\Models\HasilUjianSoca;
 use App\Models\IndikatorOsce;
 use App\Models\HasilUjianOsce;
+use App\Models\UjianSoca;
+use App\Models\StationOsce;
 use Auth;
 
 class PengujiController extends Controller
@@ -19,10 +21,10 @@ class PengujiController extends Controller
     {
 
         $penguji_id = auth('penguji')->user()->id;
-        $list_ujian = PesertaSoca::with('ujianSoca.kriteriaSoca')->where("id_penguji1", $penguji_id)->orWhere("id_penguji2", $penguji_id)->get();
+        $list_peserta = PesertaSoca::with('ujianSoca')->where("id_penguji1", $penguji_id)->orWhere("id_penguji2", $penguji_id)->get();
 
         return view('ujian.soca.list_ujian', [
-            "list_ujian" => $list_ujian
+            "list_peserta" => $list_peserta
         ]);
     }
 
@@ -34,8 +36,15 @@ class PengujiController extends Controller
             return redirect('penguji/list-ujian');
         }
 
+        $tipe_penguji = 1;
+
+        if(auth('penguji')->user()->id == $peserta->id_penguji2) {
+            $tipe_penguji = 2;
+        }
+
         return view ('ujian.soca.index', [
-            'ujian' => $peserta
+            'peserta' => $peserta,
+            'tipe_penguji' => $tipe_penguji
         ]);
     }
 
@@ -103,7 +112,7 @@ class PengujiController extends Controller
         $total_nilai1 = 0;
         $total_nilai2 = 0;
 
-        $list_indikator = IndikatorSoca::where("id_kriteria", $request->id_kriteria)->pluck('id')->toArray();
+        $list_indikator = IndikatorSoca::where("id_ujian", $request->id_ujian)->pluck('id')->toArray();
 
         foreach($list_indikator as $key => $indikator) {
 
@@ -186,7 +195,7 @@ class PengujiController extends Controller
         $peserta->save();
 
         return view ('ujian.osce.index', [
-            'ujian' => $peserta
+            'peserta' => $peserta
         ]);
 
     }
@@ -206,7 +215,7 @@ class PengujiController extends Controller
 
         $peserta = PesertaOsce::find($request->id_peserta);
 
-        $list_indikator = IndikatorOsce::where("id_kriteria", $request->id_kriteria)->get();
+        $list_indikator = IndikatorOsce::where("id_ujian", $request->id_ujian)->get();
 
         foreach($list_indikator as $key => $indikator) {
 
@@ -226,8 +235,133 @@ class PengujiController extends Controller
         }
 
         $peserta->status = "selesai";
+        $peserta->feedback = $request->feedback;
         $peserta->save();
 
         return redirect('osce/penguji/list-ujian');
+    }
+
+    public function checkGapPoint(Request $request)
+    {
+        $peserta = PesertaSoca::find($request->id_peserta);
+
+        if(! $peserta) {
+            return response([
+                "status" => "not-found"
+            ]);
+        }
+
+        $total_nilai1 = 0;
+        $total_nilai2 = 0;
+
+        foreach($request->indikator as $key => $data) {
+
+            $hasil = HasilUjianSoca::where("id_peserta_soca", $request->id_peserta)->where("id_indikator_soca", $data)->first();
+
+            if(! $hasil) {
+                $hasil = new HasilUjianSoca();
+            }
+
+            $hasil->id_peserta_soca = $request->id_peserta;
+            $hasil->id_indikator_soca = $data;
+
+            if($request->tipe_penguji == 1) {
+                $hasil->skor1 = $request->nilai[$key];
+                $total_nilai1 += $request->nilai[$key];
+
+                if($hasil->skor2) {
+                    $total_nilai2 += $hasil->skor2;
+                }
+
+            } else {
+                $hasil->skor2 = $request->nilai[$key];
+                $total_nilai2 += $request->nilai[$key];
+
+                if(isset($hasil->skor1)) {
+                    $total_nilai1 += $hasil->skor1;
+                }
+
+            }
+
+            $hasil->save();
+
+        }
+
+        $ujian = UjianSoca::find($peserta->id_ujian_soca);
+
+        if(abs($total_nilai1 - $total_nilai2) > $ujian->batasnilai) {
+            return response([
+                "status" => "failed"
+            ]);
+        }
+
+        return response([
+            "status" => "success"
+        ]);
+    }
+
+    public function mahasiswaAbsenSoca($id)
+    {
+
+        $peserta = PesertaSoca::find($id);
+
+        if(! $peserta) {
+            return redirect('soca/penguji/list-ujian');
+        }
+
+        $peserta->status = "tidak hadir";
+        $peserta->save();
+
+        return redirect('soca/penguji/list-ujian');
+    }
+
+    public function mahasiswaAbsenOsce($id)
+    {
+
+        $peserta = PesertaOsce::find($id);
+
+        if(! $peserta) {
+            return redirect('osce/penguji/list-ujian');
+        }
+
+        $peserta->status = "tidak hadir";
+        $peserta->save();
+
+        return redirect('osce/penguji/list-ujian');
+    }
+
+    public function checkStation($id)
+    {
+
+        $peserta = PesertaOsce::find($id);
+
+        if($peserta->status == 'aktif') {
+            $peserta->status = "penilaian";
+            $peserta->save();
+        }
+
+        $is_complete = true;
+
+        $rotasi = $peserta->rotasi;
+
+        $list_station = StationOsce::where("id_ujian_osce", $peserta->stationOsce->id_ujian_osce)->pluck('id')->toArray();
+        $list_peserta = PesertaOsce::where("id_mahasiswa", '!=', $peserta->id_mahasiswa)->whereIn("id_station", $list_station)->where('rotasi', $rotasi)->get();
+
+        foreach($list_peserta as $item) {
+            if($item->status != 'penilaian') {
+                $is_complete = false;
+            }
+        }
+
+        if($is_complete) {
+            return response([
+                'status' => "complete"
+            ]);
+        }
+
+        return response([
+            'status' => 'not-complete'
+        ]);
+
     }
 }

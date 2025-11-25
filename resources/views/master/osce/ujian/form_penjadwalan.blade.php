@@ -10,15 +10,15 @@
     {!! $errors->first('id_mahasiswa', '<p class="text-danger">:message</p>') !!}
 </div>
 
-<div class="mb-3 {{ $errors->has('id-station') ? 'has-error' : ''}}">
-    <label for="id-station" class="form-label">{{ 'Station' }}</label>
-    <select name="id_station" id="id-station" class="form-select select2">
-        <option value="" disabled selected>Pilih Station</option>
-        @foreach ($list_station as $station)
-            <option value="{{$station->id}}" @if (isset($peserta) && $peserta->id_station == $station->id) selected @endif>{{$station->no_station}} ({{$station->ujianOsce->nama}})</option>
+<div class="mb-3 {{ $errors->has('id-ujian') ? 'has-error' : ''}}">
+    <label for="id-ujian" class="form-label">{{ 'Ujian' }}</label>
+    <select name="id_ujian" id="id-ujian" class="form-select select2">
+        <option value="" disabled selected>Pilih Ujian</option>
+        @foreach ($list_ujian as $ujian)
+            <option value="{{$ujian->id}}" @if (isset($peserta) && $id_ujian == $ujian->id) selected @endif>{{$ujian->nama}}</option>
         @endforeach
     </select>
-    {!! $errors->first('id_station', '<p class="text-danger">:message</p>') !!}
+    {!! $errors->first('id_ujian', '<p class="text-danger">:message</p>') !!}
 </div>
 
 <div class="d-flex justify-content-between">

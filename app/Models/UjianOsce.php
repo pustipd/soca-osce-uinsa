@@ -13,13 +13,13 @@ class UjianOsce extends Model
 
     protected $connection = 'osce';
 
-    public function kriteriaOsce()
-    {
-        return $this->belongsTo(KriteriaOsce::class, 'id_kriteria');
-    }
-
     public function stationOsce()
     {
         return $this->hasMany(StationOsce::class, 'id_ujian_osce');
+    }
+
+    public function indikatorOsce()
+    {
+        return $this->hasMany(IndikatorOsce::class, 'id_ujian');
     }
 }

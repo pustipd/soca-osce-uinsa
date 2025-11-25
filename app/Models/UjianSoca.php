@@ -17,8 +17,8 @@ class UjianSoca extends Model
         return $this->hasMany(PesertaSoca::class, 'id_ujian_soca');
     }
 
-    public function kriteriaSoca()
+    public function indikatorSoca()
     {
-        return $this->belongsTo(KriteriaSoca::class, 'id_kriteria');
+        return $this->hasMany(IndikatorSoca::class, 'id_ujian');
     }
 }
