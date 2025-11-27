@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\IndikatorSoca;
 use App\Models\KriteriaSoca;
 use App\Models\UjianSoca;
+use App\Models\KategoriSoca;
 
 class IndikatorController extends Controller
 {
@@ -23,17 +24,21 @@ class IndikatorController extends Controller
 
     public function create()
     {
-        $list_ujian = UjianSoca::all();
+        $list_kriteria = KriteriaSoca::all();
+        $list_kategori = KategoriSoca::all();
+
         return view('master.soca.indikator.create', [
-            'list_ujian' => $list_ujian
+            'list_kriteria' => $list_kriteria,
+            "list_kategori" => $list_kategori
         ]);
     }
 
     public function store(Request $request)
     {
         $indikator = new IndikatorSoca();
-        $indikator->nama = $request->nama;
-        $indikator->id_ujian = $request->id_ujian;
+        // $indikator->nama = $request->nama;
+        $indikator->id_kriteria = $request->id_kriteria;
+        $indikator->id_kategori = $request->id_kategori;
         $indikator->deskripsi = $request->deskripsi;
         $indikator->skormax = $request->skormax;
         $indikator->save();
@@ -50,11 +55,13 @@ class IndikatorController extends Controller
             return redirect('soca/indikator');
         }
 
-        $list_ujian = UjianSoca::all();
+        $list_kriteria = KriteriaSoca::all();
+        $list_kategori = KategoriSoca::all();
 
         return view('master.soca.indikator.edit', [
             "indikator" => $indikator,
-            "list_ujian" => $list_ujian
+            "list_kriteria" => $list_kriteria,
+            "list_kategori" => $list_kategori
         ]);
     }
 
@@ -67,8 +74,9 @@ class IndikatorController extends Controller
             return redirect('soca/indikator');
         }
 
-        $indikator->nama = $request->nama;
-        $indikator->id_ujian = $request->id_ujian;
+        // $indikator->nama = $request->nama;
+        $indikator->id_kriteria = $request->id_kriteria;
+        $indikator->id_kategori = $request->id_kategori;
         $indikator->deskripsi = $request->deskripsi;
         $indikator->skormax = $request->skormax;
         $indikator->save();

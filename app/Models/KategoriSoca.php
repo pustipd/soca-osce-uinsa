@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UjianSoca extends Model
+class KategoriSoca extends Model
 {
     use HasFactory;
 
     protected $connection = 'soca';
-    protected $table = 'ujian_soca';
+    protected $table = 'kategori_soca';
 
-    public function pengujiSoca()
+    public function indikatorSoca()
     {
-        return $this->hasMany(PengujiSoca::class, 'id_ujian_soca');
+        return $this->hasMany(IndikatorSoca::class, 'id_kategori');
     }
 }

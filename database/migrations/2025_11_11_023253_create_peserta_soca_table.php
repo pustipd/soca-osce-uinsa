@@ -18,18 +18,15 @@ return new class extends Migration
             $table->unsignedBigInteger('id_mahasiswa');
             // $table->foreign('id_mahasiswa')->references('id')->on('mahasiswa');
 
-            $table->unsignedBigInteger('id_penguji1');
-            // $table->foreign('id_penguji')->references('id')->on('kriteria_soca');
-
-            $table->unsignedBigInteger('id_penguji2');
-            // $table->foreign('id_penguji2')->references('id')->on('kriteria_soca');
-
-            $table->unsignedBigInteger('id_ujian_soca');
-            // $table->foreign('id_ujian_soca')->references('id')->on('kriteria_soca');
+            $table->unsignedBigInteger('id_penguji_soca');
+            $table->foreign('id_penguji_soca')->references('id')->on('penguji_soca');
 
             $table->enum("status", ['terjadwal', 'sedang', 'tidak sinkron', 'sinkron', 'tidak hadir', 'selesai'])->nullable();
             $table->string("totalskor1")->nullable();
             $table->string("totalskor2")->nullable();
+
+            $table->integer("urutan")->nullable();
+            $table->enum("rating", ["tidak lulus", "borderline", "lulus", "superior"])->default("tidak lulus");
 
             $table->text("feedback")->nullable();
 

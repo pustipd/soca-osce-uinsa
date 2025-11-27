@@ -30,7 +30,6 @@
     {!! $errors->first('batasnilai', '<p class="text-danger">:message</p>') !!}
 </div>
 
-
 <div class="d-flex justify-content-between">
     <a href="{{url('/soca/ujian')}}" class="btn btn-secondary" >Cancel
     </a>

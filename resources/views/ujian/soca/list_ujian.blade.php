@@ -35,26 +35,29 @@
                                 <tr>
                                     <th>#</th>
                                     <th scope="col" class="px-6 py-3">Nama Ujian</th>
-                                    {{-- <th scope="col" class="px-6 py-3">Kriteria</th> --}}
-                                    <th scope="col" class="px-6 py-3">Sesi</th>
-                                    <th scope="col" class="px-6 py-3">Waktu</th>
-                                    <th scope="col" class="px-6 py-3">Mahasiswa</th>
-                                    <th scope="col" class="px-6 py-3">Status</th>
+                                    <th scope="col" class="px-6 py-3">Kriteria</th>
+                                    <th scope="col" class="px-6 py-3">Station</th>
+                                    <th scope="col" class="px-6 py-3">Penguji 1</th>
+                                    <th scope="col" class="px-6 py-3">Penguji 2</th>
+                                    {{-- <th scope="col" class="px-6 py-3">Status</th> --}}
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($list_peserta as $item)
+                                @foreach($list_penguji as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td class="px-6 py-4">{{ $item->ujianSoca->nama }}</td>
-                                        {{-- <td class="px-6 py-4">{{ $item->ujianSoca->nama }}</td> --}}
-                                        <td class="px-6 py-4">{{ $item->ujianSoca->sesi }}</td>
-                                        <td class="px-6 py-4">{{ $item->ujianSoca->waktu }}</td>
-                                        <td class="px-6 py-4">{{ $item->mahasiswa->nama }}</td>
-                                        <td class="px-6 py-4">{{ ucfirst($item->status) }}</td>
+                                        <td class="px-6 py-4">{{ $item->kriteriaSoca->nama }}</td>
+                                        <td class="px-6 py-4">{{ $item->station }}</td>
+                                        <td class="px-6 py-4">{{ $item->penguji1->nama }}</td>
+                                        <td class="px-6 py-4">{{ $item->penguji2->nama }}</td>
+                                        {{-- <td class="px-6 py-4">{{ ucfirst($item->status) }}</td> --}}
                                         <td>
-                                            @if ($item->hasilUjianSoca()->exists())
+                                                <a href="{{ url('soca/penguji/ujian/' . $item->id) }}" title="View Ujian">
+                                                    <button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i>Mulai Ujian</button>
+                                                </a>
+                                            {{-- @if ($item->hasilUjianSoca()->exists())
 
                                                 @if ($item->id_penguji1 == auth('penguji')->user()->id)
 
@@ -89,7 +92,7 @@
                                                     {{ csrf_field() }}
                                                     <button type="submit" class="btn btn-danger" title="Tidak Hadir" onclick="return confirm(&quot;Mahasiswa tidak hadir?&quot;)">Tidak Hadir</button>
                                                 </form>
-                                            @endif
+                                            @endif --}}
                                         </td>
                                     </tr>
                                 @endforeach

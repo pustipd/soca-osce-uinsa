@@ -23,6 +23,9 @@ return new class extends Migration
             $table->unsignedBigInteger('id_ujian_osce')->nullable();
             $table->foreign('id_ujian_osce')->references('id')->on('ujian_osce');
 
+            $table->unsignedBigInteger('id_kriteria')->nullable();
+            $table->foreign('id_kriteria')->references('id')->on('kriteria_osce');
+
             $table->integer("no_station");
             $table->timestamps();
         });

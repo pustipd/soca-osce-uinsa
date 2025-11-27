@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer("sesi");
             $table->date("waktu");
             $table->string("kriteria");
+            $table->boolean("status");
 
             // $table->unsignedBigInteger('id_kriteria');
             // $table->foreign('id_kriteria')->references('id')->on('kriteria_osce');

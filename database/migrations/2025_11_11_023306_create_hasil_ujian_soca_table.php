@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('id_peserta_soca');
-            // $table->foreign('id_peserta_soca')->references('id')->on('mahasiswa');
+            $table->foreign('id_peserta_soca')->references('id')->on('peserta_soca');
 
             $table->unsignedBigInteger('id_indikator_soca');
-            // $table->foreign('id_indikator_soca')->references('id')->on('mahasiswa');
+            $table->foreign('id_indikator_soca')->references('id')->on('indikator_soca');
 
             $table->integer("skor1")->nullable();
             $table->integer("skor2")->nullable();

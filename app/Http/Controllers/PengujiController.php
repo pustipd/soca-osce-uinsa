@@ -13,6 +13,7 @@ use App\Models\IndikatorOsce;
 use App\Models\HasilUjianOsce;
 use App\Models\UjianSoca;
 use App\Models\StationOsce;
+use App\Models\PengujiSoca;
 use Auth;
 
 class PengujiController extends Controller
@@ -21,30 +22,36 @@ class PengujiController extends Controller
     {
 
         $penguji_id = auth('penguji')->user()->id;
-        $list_peserta = PesertaSoca::with('ujianSoca')->where("id_penguji1", $penguji_id)->orWhere("id_penguji2", $penguji_id)->get();
+        $list_penguji = PengujiSoca::where("id_penguji1", $penguji_id)->orWhere("id_penguji2", $penguji_id)->get();
 
         return view('ujian.soca.list_ujian', [
-            "list_peserta" => $list_peserta
+            "list_penguji" => $list_penguji
         ]);
     }
 
     public function exam($id)
     {
-        $peserta = PesertaSoca::find($id);
+        $penguji = PengujiSoca::find($id);
 
-        if(! $peserta) {
+        if(! $penguji) {
             return redirect('penguji/list-ujian');
         }
 
         $tipe_penguji = 1;
 
-        if(auth('penguji')->user()->id == $peserta->id_penguji2) {
+        if(auth('penguji')->user()->id == $penguji->id_penguji2) {
             $tipe_penguji = 2;
         }
 
-        return view ('ujian.soca.index', [
-            'peserta' => $peserta,
-            'tipe_penguji' => $tipe_penguji
+        $list_peserta = PesertaSoca::where("id_penguji_soca", $penguji->id)->get();
+
+        $list_indikator = IndikatorSoca::where("id_kriteria", $penguji->id_kriteria)->get();
+
+        return view ('ujian.soca.index2', [
+            'list_peserta' => $list_peserta,
+            'penguji' => $penguji,
+            'tipe_penguji' => $tipe_penguji,
+            "list_indikator" => $list_indikator
         ]);
     }
 

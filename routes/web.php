@@ -10,6 +10,8 @@ use App\Http\Controllers\PengujiController;
 use App\Http\Controllers\Soca\UjianController;
 use App\Http\Controllers\Soca\KriteriaController;
 use App\Http\Controllers\Soca\IndikatorController;
+use App\Http\Controllers\Soca\KategoriController;
+use App\Http\Controllers\Soca\PenjadwalanController;
 
 use App\Http\Controllers\Osce\UjianController as UjianControllerOsce;
 use App\Http\Controllers\Osce\KriteriaController as KriteriaControllerOsce;
@@ -33,6 +35,15 @@ Route::get('logout', function() {
 });
 
 Route::prefix('soca')->group(function() {
+
+    Route::prefix("kategori")->group(function() {
+        Route::get('', [KategoriController::class, 'index']);
+        Route::get('create', [KategoriController::class, 'create']);
+        Route::post('store', [KategoriController::class, 'store']);
+        Route::get('{id}/edit', [KategoriController::class, 'edit']);
+        Route::patch('{id}', [KategoriController::class, 'update']);
+        Route::delete('{id}', [KategoriController::class, 'delete']);
+    });
 
     Route::prefix("ujian")->group(function() {
         Route::get('', [UjianController::class, 'index']);
@@ -61,12 +72,16 @@ Route::prefix('soca')->group(function() {
         Route::delete('{id}', [IndikatorController::class, 'delete']);
     });
 
-    Route::get('exam-scheduled', [UjianController::class, 'listExamScheduled']);
-    Route::get('exam-scheduling/create', [UjianController::class, 'examScheduling']);
-    Route::post('exam-scheduling/store', [UjianController::class, 'doExamScheduling']);
-    Route::get('exam-scheduled/{id}/edit', [UjianController::class, 'editExamScheduled']);
-    Route::patch('exam-scheduled/{id}', [UjianController::class, 'updateExamScheduled']);
-    Route::delete('exam-scheduled/{id}', [UjianController::class, 'deleteExamScheduled']);
+    Route::prefix("penjadwalan")->group(function() {
+        Route::get('', [PenjadwalanController::class, 'index']);
+        Route::get('mapping/{id}', [PenjadwalanController::class, 'mappingWithMahasiswa']);
+        Route::post('mapping', [PenjadwalanController::class, 'doMappingWithMahasiswa']);
+        Route::get('create', [PenjadwalanController::class, 'create']);
+        Route::post('store', [PenjadwalanController::class, 'store']);
+        Route::get('{id}/edit', [PenjadwalanController::class, 'edit']);
+        Route::patch('{id}', [PenjadwalanController::class, 'update']);
+        Route::delete('{id}', [PenjadwalanController::class, 'delete']);
+    });
 
     Route::post('penguji/ujian/check-gap-point', [PengujiController::class, 'checkGapPoint']);
     Route::get('penguji/list-ujian', [PengujiController::class, 'index']);

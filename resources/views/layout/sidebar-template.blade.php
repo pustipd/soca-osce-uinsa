@@ -13,20 +13,26 @@
             <span class="link-title">Ujian</span>
         </a>
     </li>
-    {{-- <li class="nav-item {{ active_class(['soca/kriteria/*']) }}">
+    <li class="nav-item {{ active_class(['soca/kriteria/*']) }}">
         <a href="{{ url('soca/kriteria') }}" class="nav-link">
             <i class="link-icon" data-feather="box"></i>
             <span class="link-title">Kriteria</span>
         </a>
-    </li> --}}
+    </li>
     <li class="nav-item {{ active_class(['soca/indikator/*']) }}">
         <a href="{{ url('soca/indikator') }}" class="nav-link">
             <i class="link-icon" data-feather="box"></i>
             <span class="link-title">Indikator</span>
         </a>
     </li>
-    <li class="nav-item {{ active_class(['soca/exam-scheduled/*']) }}">
-        <a href="{{ url('soca/exam-scheduled') }}" class="nav-link">
+    <li class="nav-item {{ active_class(['soca/kategori/*']) }}">
+        <a href="{{ url('soca/kategori') }}" class="nav-link">
+            <i class="link-icon" data-feather="box"></i>
+            <span class="link-title">Kategori</span>
+        </a>
+    </li>
+    <li class="nav-item {{ active_class(['soca/penjadwalan/*']) }}">
+        <a href="{{ url('soca/penjadwalan') }}" class="nav-link">
             <i class="link-icon" data-feather="box"></i>
             <span class="link-title">Penjadwalan Ujian</span>
         </a>

@@ -17,19 +17,9 @@ class PesertaSoca extends Model
         return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa');
     }
 
-    public function penguji1()
+    public function pengujiSoca()
     {
-        return $this->belongsTo(Penguji::class, 'id_penguji1');
-    }
-
-    public function penguji2()
-    {
-        return $this->belongsTo(Penguji::class, 'id_penguji2');
-    }
-
-    public function ujianSoca()
-    {
-        return $this->belongsTo(UjianSoca::class, 'id_ujian_soca');
+        return $this->belongsTo(PengujiSoca::class, 'id_penguji_soca');
     }
 
     public function hasilUjianSoca()

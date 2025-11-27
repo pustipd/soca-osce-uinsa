@@ -4,7 +4,7 @@
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">CRUD-MASTER</a></li>
-            <li class="breadcrumb-item active" aria-current="page">indikator</li>
+            <li class="breadcrumb-item active" aria-current="page">kategori-soca</li>
         </ol>
     </nav>
 
@@ -12,7 +12,7 @@
         <div class="col-md-6 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h6 class="card-title">Create New Indikator</h6>
+                    <h6 class="card-title">Create New KategoriSoca</h6>
 
                    @if ($errors->any())
                         <div class="alert alert-danger" role="alert">
@@ -51,10 +51,10 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ url('/soca/indikator/store') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                    <form method="POST" action="{{ url('/soca/kategori/store') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
                         {{ csrf_field() }}
 
-                        @include ('master.soca.indikator.form', ['formMode' => 'create'])
+                        @include ('master.soca.kategori.form', ['formMode' => 'create'])
 
                     </form>
 
@@ -85,7 +85,6 @@
 
 @push('custom-scripts')
     <script>
-        $('#id_kriteria').select2();
-        $('#id_kategori').select2();
+        // $('#mbkm_place_id').select2();
     </script>
 @endpush

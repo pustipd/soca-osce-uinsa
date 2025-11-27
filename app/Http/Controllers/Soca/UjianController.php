@@ -37,6 +37,7 @@ class UjianController extends Controller
         // $ujian->id_kriteria = $request->id_kriteria;
         $ujian->kriteria = $request->kriteria;
         $ujian->batasnilai = $request->batasnilai;
+        $ujian->status = true;
         $ujian->save();
 
         return redirect('soca/ujian');
@@ -91,96 +92,4 @@ class UjianController extends Controller
         return redirect('soca/ujian');
     }
 
-    public function listExamScheduled()
-    {
-
-        $list_peserta = PesertaSoca::all();
-
-        return view('master.soca.ujian.exam_scheduled', [
-            'list_peserta' => $list_peserta
-        ]);
-    }
-
-    public function examScheduling()
-    {
-        $list_mahasiswa = Mahasiswa::all();
-        $list_penguji = Penguji::all();
-        $list_ujian = UjianSoca::all();
-
-        return view('master.soca.ujian.penjadwalan', [
-            'list_mahasiswa' => $list_mahasiswa,
-            'list_penguji' => $list_penguji,
-            'list_ujian' => $list_ujian
-        ]);
-    }
-
-    public function doExamScheduling(Request $request)
-    {
-        $peserta = new PesertaSoca();
-        $peserta->id_mahasiswa = $request->id_mahasiswa;
-        $peserta->id_penguji1 = $request->id_penguji1;
-        $peserta->id_penguji2 = $request->id_penguji2;
-        $peserta->id_ujian_soca = $request->id_ujian_soca;
-        $peserta->save();
-
-        return redirect('soca/exam-scheduled');
-    }
-
-    public function editExamScheduled($id) {
-
-        $peserta = PesertaSoca::find($id);
-
-        if(! $peserta) {
-            return redirect('soca/exam-scheduled');
-        }
-
-        $list_mahasiswa = Mahasiswa::all();
-        $list_penguji = Penguji::all();
-        $list_ujian = UjianSoca::all();
-
-        return view('master.soca.ujian.edit_penjadwalan', [
-            'peserta' => $peserta,
-            'list_mahasiswa' => $list_mahasiswa,
-            'list_penguji' => $list_penguji,
-            'list_ujian' => $list_ujian
-        ]);
-
-    }
-
-
-    public function updateExamScheduled($id, Request $request) {
-
-        $peserta = PesertaSoca::find($id);
-
-        if(! $peserta) {
-            return redirect('soca/exam-scheduled');
-        }
-
-        $peserta->id_mahasiswa = $request->id_mahasiswa;
-        $peserta->id_penguji1 = $request->id_penguji1;
-        $peserta->id_penguji2 = $request->id_penguji2;
-        $peserta->id_ujian_soca = $request->id_ujian_soca;
-        $peserta->save();
-
-        return redirect('soca/exam-scheduled');
-
-    }
-
-
-    public function deleteExamScheduled($id) {
-
-        $peserta = PesertaSoca::find($id);
-
-        if(! $peserta) {
-            return redirect('soca/exam-scheduled');
-        }
-
-        if($peserta->hasilUjianSoca()->exists()) {
-            return redirect('soca/exam-scheduled');
-        }
-
-        $peserta->delete();
-        return redirect('soca/exam-scheduled');
-
-    }
 }

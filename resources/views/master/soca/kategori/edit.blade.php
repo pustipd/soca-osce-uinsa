@@ -1,20 +1,16 @@
 @extends('layout.master')
 
 @section('content')
-    <nav class="page-breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">CRUD-MASTER</a></li>
-            <li class="breadcrumb-item active" aria-current="page">indikator</li>
-        </ol>
-    </nav>
-
     <div class="row">
-        <div class="col-md-6 grid-margin stretch-card">
+        <div class="col-md-9">
             <div class="card">
                 <div class="card-body">
-                    <h6 class="card-title">Create New Indikator</h6>
+                    <div class="d-flex justify-content-between">
+                         <h6 class="card-title">Edit KategoriSoca #{{ $kategorisoca->id }}</h6>
+                        <a href="{{ url('/kategori-soca') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
+                    </div>
 
-                   @if ($errors->any())
+                    @if ($errors->any())
                         <div class="alert alert-danger" role="alert">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -51,10 +47,11 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ url('/soca/indikator/store') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                    <form method="POST" action="{{ url('/soca/kategori/' . $kategorisoca->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                        {{ method_field('PATCH') }}
                         {{ csrf_field() }}
 
-                        @include ('master.soca.indikator.form', ['formMode' => 'create'])
+                        @include ('master.soca.kategori.form', ['formMode' => 'edit'])
 
                     </form>
 
@@ -85,7 +82,6 @@
 
 @push('custom-scripts')
     <script>
-        $('#id_kriteria').select2();
-        $('#id_kategori').select2();
+        // $('#mbkm_place_id').select2();
     </script>
 @endpush

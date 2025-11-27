@@ -16,4 +16,9 @@ class KriteriaSoca extends Model
     {
         return $this->hasMany(IndikatorSoca::class, 'id_kriteria');
     }
+
+    public function pengujiSoca()
+    {
+        return $this->hasMany(PengujiSoca::class, 'id_kriteria');
+    }
 }

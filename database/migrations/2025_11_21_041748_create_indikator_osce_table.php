@@ -17,8 +17,8 @@ return new class extends Migration
         Schema::create('indikator_osce', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('id_ujian');
-            $table->foreign('id_ujian')->references('id')->on('ujian_osce');
+            $table->unsignedBigInteger('id_kriteria');
+            $table->foreign('id_kriteria')->references('id')->on('kriteria_osce');
             $table->string('nama');
 
             $table->text('deskripsi');
