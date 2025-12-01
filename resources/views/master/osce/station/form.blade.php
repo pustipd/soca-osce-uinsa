@@ -35,6 +35,19 @@
     {!! $errors->first('ujian', '<p class="text-danger">:message</p>') !!}
 </div>
 
+<div class="mb-3 {{ $errors->has('kriteria') ? 'has-error' : ''}}">
+    <label for="kriteria" class="form-label">{{ 'Kriteria' }}</label>
+
+    <select name="kriteria" id="kriteria" class="form-select">
+        <option value="" selected disabled>Pilih kriteria</option>
+        @foreach ($list_kriteria as $item)
+            <option value="{{$item->id}}" @if (isset($station) && $item->id == $station->id_kriteria) selected @endif>{{$item->nama}}</option>
+        @endforeach
+    </select>
+
+    {!! $errors->first('kriteria', '<p class="text-danger">:message</p>') !!}
+</div>
+
 
 <div class="d-flex justify-content-between">
     <a href="{{url('osce/station')}}" class="btn btn-secondary">Cancel

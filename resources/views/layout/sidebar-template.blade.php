@@ -63,12 +63,12 @@
             <span class="link-title">Ujian</span>
         </a>
     </li>
-    {{-- <li class="nav-item {{ active_class(['osce/kriteria/*']) }}">
+    <li class="nav-item {{ active_class(['osce/kriteria/*']) }}">
         <a href="{{ url('osce/kriteria') }}" class="nav-link">
             <i class="link-icon" data-feather="box"></i>
             <span class="link-title">Kriteria</span>
         </a>
-    </li> --}}
+    </li>
     <li class="nav-item {{ active_class(['osce/indikator/*']) }}">
         <a href="{{ url('osce/indikator') }}" class="nav-link">
             <i class="link-icon" data-feather="box"></i>
@@ -81,8 +81,8 @@
             <span class="link-title">Station</span>
         </a>
     </li>
-    <li class="nav-item {{ active_class(['osce/exam-scheduled/*']) }}">
-        <a href="{{ url('osce/exam-scheduled') }}" class="nav-link">
+    <li class="nav-item {{ active_class(['osce/penjadwalan/*']) }}">
+        <a href="{{ url('osce/penjadwalan') }}" class="nav-link">
             <i class="link-icon" data-feather="box"></i>
             <span class="link-title">Penjadwalan Ujian</span>
         </a>

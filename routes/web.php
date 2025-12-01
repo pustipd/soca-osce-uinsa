@@ -16,6 +16,7 @@ use App\Http\Controllers\Soca\PenjadwalanController;
 use App\Http\Controllers\Osce\UjianController as UjianControllerOsce;
 use App\Http\Controllers\Osce\KriteriaController as KriteriaControllerOsce;
 use App\Http\Controllers\Osce\IndikatorController as IndikatorControllerOsce;
+use App\Http\Controllers\Osce\PenjadwalanController as PenjadwalanControllerOsce;
 use App\Http\Controllers\Osce\StationController;
 use App\Http\Controllers\AuthController;
 
@@ -73,6 +74,7 @@ Route::prefix('soca')->group(function() {
     });
 
     Route::prefix("penjadwalan")->group(function() {
+        Route::post('/mapping/import', [PenjadwalanController::class, 'importDataMahasiswa']);
         Route::get('', [PenjadwalanController::class, 'index']);
         Route::get('mapping/{id}', [PenjadwalanController::class, 'mappingWithMahasiswa']);
         Route::post('mapping', [PenjadwalanController::class, 'doMappingWithMahasiswa']);
@@ -140,13 +142,26 @@ Route::prefix('osce')->group(function() {
         Route::delete('{id}', [StationController::class, 'delete']);
     });
 
-    Route::get('exam-scheduled', [UjianControllerOsce::class, 'listExamScheduled']);
-    Route::get('exam-scheduling/create', [UjianControllerOsce::class, 'examScheduling']);
-    Route::post('exam-scheduling/store', [UjianControllerOsce::class, 'doExamScheduling']);
-    Route::get('exam-scheduled/{id}', [UjianControllerOsce::class, 'detailExamScheduled']);
-    Route::get('exam-scheduled/{id}/edit', [UjianControllerOsce::class, 'editExamScheduled']);
-    Route::patch('exam-scheduled/{id}', [UjianControllerOsce::class, 'updateExamScheduled']);
-    Route::delete('exam-scheduled/{id}', [UjianControllerOsce::class, 'deleteExamScheduled']);
+    Route::prefix('penjadwalan')->group(function() {
+
+        Route::prefix('mapping')->group(function() {
+            Route::post('/import', [PenjadwalanControllerOsce::class, 'importDataMahasiswa']);
+            Route::get('{id}', [PenjadwalanControllerOsce::class, 'mapping']);
+            Route::post('', [PenjadwalanControllerOsce::class, 'doMapping']);
+            Route::get('{id}/edit', [PenjadwalanControllerOsce::class, 'editMapping']);
+            Route::patch('{id}', [PenjadwalanControllerOsce::class, 'updateMapping']);
+            Route::delete('{id}', [PenjadwalanControllerOsce::class, 'deleteMapping']);
+        });
+
+        Route::get('', [PenjadwalanControllerOsce::class, 'index']);
+        Route::get('create', [PenjadwalanControllerOsce::class, 'create']);
+        Route::post('store', [PenjadwalanControllerOsce::class, 'store']);
+        Route::get('{id}', [PenjadwalanControllerOsce::class, 'detail']);
+        Route::get('{id}/edit', [PenjadwalanControllerOsce::class, 'edit']);
+        Route::patch('{id}', [PenjadwalanControllerOsce::class, 'update']);
+        Route::delete('{id}', [PenjadwalanControllerOsce::class, 'delete']);
+
+    });
 
     Route::get('penguji/ujian/check-station/{id}', [PengujiController::class, 'checkStation']);
     Route::get('penguji/list-ujian', [PengujiController::class, 'listUjianOsce']);

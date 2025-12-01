@@ -24,7 +24,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_station');
             $table->foreign('id_station')->references('id')->on('station_osce');
 
-            $table->enum("status", ['terjadwal', 'aktif', 'tidak hadir', 'selesai'])->nullable();
+            $table->enum("status", ['terjadwal', 'aktif', 'tidak hadir', 'selesai'])->default('terjadwal');
             $table->integer("skor")->nullable();
             $table->text("feedback")->nullable();
             $table->integer("rotasi")->nullable();

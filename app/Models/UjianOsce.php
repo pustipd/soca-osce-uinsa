@@ -17,9 +17,4 @@ class UjianOsce extends Model
     {
         return $this->hasMany(StationOsce::class, 'id_ujian_osce');
     }
-
-    public function indikatorOsce()
-    {
-        return $this->hasMany(IndikatorOsce::class, 'id_ujian');
-    }
 }

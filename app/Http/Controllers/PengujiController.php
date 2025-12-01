@@ -14,6 +14,8 @@ use App\Models\HasilUjianOsce;
 use App\Models\UjianSoca;
 use App\Models\StationOsce;
 use App\Models\PengujiSoca;
+use App\Models\UjianOsce;
+
 use Auth;
 
 class PengujiController extends Controller
@@ -45,13 +47,37 @@ class PengujiController extends Controller
 
         $list_peserta = PesertaSoca::where("id_penguji_soca", $penguji->id)->get();
 
+        $peserta = 0;
+
+        for($i = 0; $i < count($list_peserta); $i++) {
+            if($list_peserta[$i]->status == "sedang") {
+
+                if($tipe_penguji == 1 && ! $list_peserta[$i]->feedback1) {
+                    $peserta = $list_peserta[$i];
+                    break;
+                } else if($tipe_penguji == 2 && ! $list_peserta[$i]->feedback2) {
+                    $peserta = $list_peserta[$i];
+                    break;
+                }
+
+            } else if($list_peserta[$i]->status == "terjadwal") {
+                $peserta = $list_peserta[$i];
+                break;
+            }
+        }
+
         $list_indikator = IndikatorSoca::where("id_kriteria", $penguji->id_kriteria)->get();
+
+        if(is_int($peserta)) {
+            return redirect('soca/penguji/list-ujian');
+        }
 
         return view ('ujian.soca.index2', [
             'list_peserta' => $list_peserta,
             'penguji' => $penguji,
             'tipe_penguji' => $tipe_penguji,
-            "list_indikator" => $list_indikator
+            "list_indikator" => $list_indikator,
+            "peserta" => $peserta
         ]);
     }
 
@@ -119,38 +145,47 @@ class PengujiController extends Controller
         $total_nilai1 = 0;
         $total_nilai2 = 0;
 
-        $list_indikator = IndikatorSoca::where("id_ujian", $request->id_ujian)->pluck('id')->toArray();
+        // $list_indikator = IndikatorSoca::where("id_ujian", $request->id_ujian)->pluck('id')->toArray();
 
-        foreach($list_indikator as $key => $indikator) {
+        // foreach($list_indikator as $key => $indikator) {
+        foreach($request->indikator_id as $key => $indikator) {
 
             $hasil = HasilUjianSoca::where("id_peserta_soca", $request->id_peserta)->where("id_indikator_soca", $indikator)->first();
 
             if(! $hasil) {
                 $hasil = new HasilUjianSoca();
                 $is_new = true;
+                $hasil->id_peserta_soca = $request->id_peserta;
+                $hasil->id_indikator_soca = $indikator;
             }
 
-            $hasil->id_peserta_soca = $request->id_peserta;
-            $hasil->id_indikator_soca = $indikator;
+            // if($peserta->id_penguji1 == $penguji_id) {
+            //     $hasil->skor1 = $request->nilai[$key];
+            //     if($hasil->skor2) {
+            //         $is_done = true;
+            //         $total_nilai1 += $hasil->skor1;
+            //         $total_nilai2 += $hasil->skor2;
+            //     }
+            // } else if($peserta->id_penguji2 == $penguji_id) {
+            //     $hasil->skor2 = $request->nilai[$key];
+            //     if($hasil->skor1) {
+            //         $is_done = true;
+            //         $total_nilai1 += $hasil->skor1;
+            //         $total_nilai2 += $hasil->skor2;
+            //     }
+            // } else{
+            //     $hasil->skor1 = $request->nilai[$key];
+            //     $hasil->skor2 = $request->nilai[$key];
+            //     $is_done = true;
+            // }
 
-            if($peserta->id_penguji1 == $penguji_id) {
+            if($request->tipe_penguji == 1) {
                 $hasil->skor1 = $request->nilai[$key];
-                if($hasil->skor2) {
-                    $is_done = true;
-                    $total_nilai1 += $hasil->skor1;
-                    $total_nilai2 += $hasil->skor2;
-                }
-            } else if($peserta->id_penguji2 == $penguji_id) {
+            } else if($request->tipe_penguji == 2) {
                 $hasil->skor2 = $request->nilai[$key];
-                if($hasil->skor1) {
-                    $is_done = true;
-                    $total_nilai1 += $hasil->skor1;
-                    $total_nilai2 += $hasil->skor2;
-                }
-            } else{
+            } else {
                 $hasil->skor1 = $request->nilai[$key];
                 $hasil->skor2 = $request->nilai[$key];
-                $is_done = true;
             }
 
             $hasil->save();
@@ -158,21 +193,21 @@ class PengujiController extends Controller
 
         if($is_new) {
             $peserta->status = "sedang";
+        } else {
+            $peserta->status = "selesai";
         }
 
-        if($is_done) {
-            $batas_nilai = $peserta->ujianSoca->batasnilai;
-
-            if(abs($total_nilai1 - $total_nilai2) > $batas_nilai) {
-                $peserta->status = "tidak sinkron";
-            } else {
-                $peserta->status = "sinkron";
-            }
-
+        if($request->tipe_penguji == 1) {
+            $peserta->feedback1 = $request->feedback;
+            $peserta->rating1 = $request->rating;
+        } else {
+            $peserta->feedback2 = $request->feedback;
+            $peserta->rating2 = $request->rating;
         }
 
         $peserta->save();
 
+        return redirect('osce/penguji/ujian/' . $request->penguji_soca_id);
         return redirect('soca/penguji/list-ujian');
     }
 
@@ -181,27 +216,52 @@ class PengujiController extends Controller
 
         $penguji_id = auth('penguji')->user()->id;
 
-        $list_ujian = PesertaOsce::whereHas('stationOsce', function($q) use ($penguji_id) {
-            $q->where('id_penguji', $penguji_id);
-        })->get();
+        // $list_ujian = UjianOsce::whereHas('stationOsce', function($q) use ($penguji_id) {
+        //     $q->where('id_penguji', $penguji_id);
+        // })->get();
+
+        $list_station = StationOsce::where('id_penguji', $penguji_id)->get();
 
         return view('ujian.osce.list_ujian', [
-            "list_ujian" => $list_ujian
+            "list_station" => $list_station
         ]);
     }
 
     public function ujianOsce($id)
     {
-        $peserta = PesertaOsce::find($id);
+        $station = StationOsce::find($id);
 
-        if(! $peserta) {
+        if(! $station) {
             return redirect('osce/penguji/list-ujian');
         }
 
-        $peserta->status = "aktif";
-        $peserta->save();
+        $list_indikator = IndikatorOsce::where("id_kriteria", $station->id_kriteria)->get();
+        $list_peserta = PesertaOsce::where("id_station", $station->id)->get();
 
-        return view ('ujian.osce.index', [
+        $peserta = 0;
+
+        for($i = 0; $i < count($list_peserta); $i++) {
+            if($list_peserta[$i]->status == "aktif") {
+
+                if($list_peserta[$i]->feedback) {
+                    $peserta = $list_peserta[$i];
+                    break;
+                }
+
+            } else if($list_peserta[$i]->status == "terjadwal") {
+                $peserta = $list_peserta[$i];
+                break;
+            }
+        }
+
+        if(is_int($peserta)) {
+            return redirect('osce/penguji/list-ujian');
+        }
+
+        return view ('ujian.osce.index2', [
+            'station' => $station,
+            'list_indikator' => $list_indikator,
+            'list_peserta' => $list_peserta,
             'peserta' => $peserta
         ]);
 
@@ -220,32 +280,36 @@ class PengujiController extends Controller
     public function examJudgmentOsce(Request $request)
     {
 
-        $peserta = PesertaOsce::find($request->id_peserta);
+        $peserta = PesertaOsce::find($request->peserta_id);
 
-        $list_indikator = IndikatorOsce::where("id_ujian", $request->id_ujian)->get();
+        $station = StationOsce::find($request->station_id);
 
-        foreach($list_indikator as $key => $indikator) {
+        // $list_indikator = IndikatorOsce::where("id_ujian", $station->id_ujian_osce)->get();
+        $total_skor = 0;
 
-            $hasil = HasilUjianOsce::where("id_peserta_osce", $request->id_peserta)->where("id_indikator_osce", $indikator->id)->first();
+        foreach($request->indikator_id as $key => $indikator) {
+
+            $hasil = HasilUjianOsce::where("id_peserta_osce", $peserta->id)->where("id_indikator_osce", $indikator)->first();
 
             if(! $hasil) {
                 $hasil = new HasilUjianOsce();
+                $hasil->id_peserta_osce = $peserta->id;
+                $hasil->id_indikator_osce = $indikator;
             }
 
-            $hasil->id_peserta_osce = $request->id_peserta;
-            $hasil->id_indikator_osce = $indikator->id;
-
             $hasil->skor = $request->nilai[$key];
-            $hasil->bobot = $indikator->bobot;
+            $hasil->bobot = $request->bobot[$key];
+            $total_skor += ($request->nilai[$key] * $request->bobot[$key]);
 
             $hasil->save();
         }
 
         $peserta->status = "selesai";
         $peserta->feedback = $request->feedback;
+        $peserta->skor = $total_skor;
         $peserta->save();
 
-        return redirect('osce/penguji/list-ujian');
+        return redirect('osce/penguji/ujian/' . $station->id);
     }
 
     public function checkGapPoint(Request $request)
@@ -258,48 +322,61 @@ class PengujiController extends Controller
             ]);
         }
 
-        $total_nilai1 = 0;
-        $total_nilai2 = 0;
+        $total_nilai = 0;
 
-        foreach($request->indikator as $key => $data) {
+        foreach($request->indikator_id as $key => $data) {
+            $total_nilai += $request->nilai[$key];
 
-            $hasil = HasilUjianSoca::where("id_peserta_soca", $request->id_peserta)->where("id_indikator_soca", $data)->first();
+            // $hasil = HasilUjianSoca::where("id_peserta_soca", $request->id_peserta)->where("id_indikator_soca", $data)->first();
 
-            if(! $hasil) {
-                $hasil = new HasilUjianSoca();
-            }
+            // if(! $hasil) {
+            //     $hasil = new HasilUjianSoca();
+            // }
 
-            $hasil->id_peserta_soca = $request->id_peserta;
-            $hasil->id_indikator_soca = $data;
+            // $hasil->id_peserta_soca = $request->id_peserta;
+            // $hasil->id_indikator_soca = $data;
 
-            if($request->tipe_penguji == 1) {
-                $hasil->skor1 = $request->nilai[$key];
-                $total_nilai1 += $request->nilai[$key];
+            // if($request->tipe_penguji == 1) {
+                // $hasil->skor1 = $request->nilai[$key];
+                // $total_nilai1 += $request->nilai[$key];
+                // if($hasil->skor2) {
+                //     $total_nilai2 += $hasil->skor2;
+                // }
 
-                if($hasil->skor2) {
-                    $total_nilai2 += $hasil->skor2;
-                }
+            // } else {
+                // $hasil->skor2 = $request->nilai[$key];
+                // $total_nilai2 += $request->nilai[$key];
 
-            } else {
-                $hasil->skor2 = $request->nilai[$key];
-                $total_nilai2 += $request->nilai[$key];
+                // if(isset($hasil->skor1)) {
+                //     $total_nilai1 += $hasil->skor1;
+                // }
 
-                if(isset($hasil->skor1)) {
-                    $total_nilai1 += $hasil->skor1;
-                }
+            // }
 
-            }
-
-            $hasil->save();
-
+            // $hasil->save();
         }
 
-        $ujian = UjianSoca::find($peserta->id_ujian_soca);
+        $ujian = UjianSoca::find($peserta->pengujiSoca->id_ujian_soca);
 
-        if(abs($total_nilai1 - $total_nilai2) > $ujian->batasnilai) {
-            return response([
-                "status" => "failed"
-            ]);
+        if($request->tipe_penguji == 1) {
+            $peserta->totalskor1 = $total_nilai;
+            $peserta->save();
+
+            if(abs($total_nilai - $peserta->totalskor2) > $ujian->batasnilai) {
+                return response([
+                    "status" => "failed"
+                ]);
+            }
+
+        } else {
+            $peserta->totalskor2 = $total_nilai;
+            $peserta->save();
+
+            if(abs($total_nilai - $peserta->totalskor1) > $ujian->batasnilai) {
+                return response([
+                    "status" => "failed"
+                ]);
+            }
         }
 
         return response([

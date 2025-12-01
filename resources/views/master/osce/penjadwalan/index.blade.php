@@ -31,7 +31,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
                         <h6 class="card-title">Jadwalkan Ujian</h6>
-                        <a href="{{ url('/soca/penjadwalan/create') }}">
+                        <a href="{{ url('osce/penjadwalan/create') }}">
                             <button class="btn btn-secondary">Create New</button>
                         </a>
                     </div>
@@ -41,39 +41,48 @@
                                 <tr>
                                     <th>#</th>
                                     <th scope="col" class="px-6 py-3">Ujian</th>
+                                    <th scope="col" class="px-6 py-3">Waktu</th>
                                     <th scope="col" class="px-6 py-3">Kriteria</th>
-                                    <th scope="col" class="px-6 py-3">Penguji 1</th>
-                                    <th scope="col" class="px-6 py-3">Penguji 2</th>
-                                    <th scope="col" class="px-6 py-3">Station</th>
                                     <th scope="col" class="px-6 py-3">Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($list_penguji as $item)
+                                @foreach($list_ujian as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td class="px-6 py-4">{{ $item->ujianSoca->nama }} Sesi {{ $item->ujianSoca->sesi }}</td>
-                                        <td class="px-6 py-4">{{ $item->kriteriaSoca->nama }}</td>
-                                        <td class="px-6 py-4">{{ $item->penguji1->nama }}</td>
-                                        <td class="px-6 py-4">{{ $item->penguji2->nama }}</td>
-                                        <td class="px-6 py-4">{{ $item->station }}</td>
+                                        <td class="px-6 py-4">{{ $item->nama }} Sesi {{$item->sesi}}</td>
+                                        <td class="px-6 py-4">{{ $item->waktu }}</td>
+                                        <td class="px-6 py-4">{{ $item->kriteria }}</td>
                                         <td class="px-6 py-4">
-                                            @if ($item->ujianSoca->status == 1)
-                                                Aktif
+                                            @if ($item->stationOsce()->exists())
+
+                                                @if ($item->stationOsce()->first()->pesertaOsce()->first())
+                                                    <p class="badge bg-success">Sudah di mapping</p>
+                                                @else
+                                                    <p class="badge bg-secondary">Belum di mapping</p>
+                                                @endif
+
                                             @else
-                                                Tidak Aktif
+                                                <p class="badge bg-warning">Belum ada station</p>
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ url('/soca/penjadwalan/mapping/' . $item->id) }}" title="Mapping Ujian"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> Mapping</button></a>
-                                            <a href="{{ url('/soca/penjadwalan/' . $item->id . '/edit') }}" title="Edit Ujian"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
 
-                                            <form method="POST" action="{{ url('/soca/penjadwalan' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
-                                                {{ method_field('DELETE') }}
-                                                {{ csrf_field() }}
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Delete Ujian" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
-                                            </form>
+                                            @if ($item->stationOsce()->exists())
+
+                                                @if ($item->stationOsce()->first()->pesertaOsce()->first())
+                                                    <a href="{{ url('/osce/penjadwalan/mapping/' . $item->id) . '/edit' }}" title="Edit Mapping"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> Edit Mapping</button></a>
+                                                    <form method="POST" action="{{ url('/osce/penjadwalan/mapping/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
+                                                        {{ method_field('DELETE') }}
+                                                        {{ csrf_field() }}
+                                                        <button type="submit" class="btn btn-danger btn-sm" title="Delete Mapping" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete Mapping</button>
+                                                    </form>
+                                                @else
+                                                    <a href="{{ url('/osce/penjadwalan/mapping/' . $item->id) }}" title="Mapping"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> Mapping</button></a>
+                                                @endif
+
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

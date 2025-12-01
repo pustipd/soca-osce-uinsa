@@ -59,8 +59,8 @@
   <div class="col-md-12 stretch-card">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title text-center" style="font-size: 20px">{{$peserta->stationOsce->ujianOsce->nama}} ( {{$peserta->mahasiswa->nim}} / {{$peserta->mahasiswa->nama}} )</h4>
-        <h4 class="text-center" style="font-size: 18px; margin-bottom: 12px">Station : {{$peserta->stationOsce->no_station}}</h4>
+        {{-- <h4 class="card-title text-center" style="font-size: 20px">{{$peserta->stationOsce->ujianOsce->nama}} ( {{$peserta->mahasiswa->nim}} / {{$peserta->mahasiswa->nama}} )</h4> --}}
+        <h4 class="text-center" style="font-size: 18px; margin-bottom: 12px">Station : {{$station->no_station}}</h4>
 
         <form id="form-penilaian" action="{{url('osce/penguji/penilaian-ujian')}}" method="POST">
             @csrf

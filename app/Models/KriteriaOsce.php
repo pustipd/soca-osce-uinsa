@@ -18,4 +18,9 @@ class KriteriaOsce extends Model
         return $this->hasMany(IndikatorOsce::class, 'id_kriteria');
     }
 
+    public function stationOsce()
+    {
+        return $this->hasMany(StationOsce::class, 'id_kriteria');
+    }
+
 }

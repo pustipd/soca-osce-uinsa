@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreign('id_kriteria')->references('id')->on('kriteria_soca');
             $table->unsignedBigInteger('id_kategori');
             $table->foreign('id_kategori')->references('id')->on('kategori_soca');
+            $table->string("nama");
             $table->text("deskripsi");
             $table->integer("skormax");
             $table->timestamps();

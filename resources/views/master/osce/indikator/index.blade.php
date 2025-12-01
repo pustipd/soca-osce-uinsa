@@ -40,8 +40,8 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th scope="col" class="px-6 py-3">Ujian</th>
-                                    <th scope="col" class="px-6 py-3">Deskripsi</th>
+                                    <th scope="col" class="px-6 py-3">Kriteria</th>
+                                    <th scope="col" class="px-6 py-3">Nama Indikator</th>
                                     <th scope="col" class="px-6 py-3">Skormax</th>
                                     <th scope="col" class="px-6 py-3">Bobot</th>
                                     <th>Actions</th>
@@ -51,8 +51,8 @@
                                 @foreach($indikator as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td class="px-6 py-4">{{ $item->ujianOsce->nama }}</td>
-                                        <td class="px-6 py-4">{{ Str::limit($item->deskripsi, 15) }}</td>
+                                        <td class="px-6 py-4">{{ $item->kriteriaOsce->nama }}</td>
+                                        <td class="px-6 py-4">{{ $item->nama }}</td>
                                         <td class="px-6 py-4">{{ $item->skormax }}</td>
                                         <td class="px-6 py-4">{{ $item->bobot }}</td>
                                         <td>

@@ -23,9 +23,9 @@ class IndikatorController extends Controller
 
     public function create()
     {
-        $list_ujian = UjianOsce::all();
+        $list_kriteria = KriteriaOsce::all();
         return view('master.osce.indikator.create', [
-            'list_ujian' => $list_ujian
+            'list_kriteria' => $list_kriteria
         ]);
     }
 
@@ -33,7 +33,7 @@ class IndikatorController extends Controller
     {
         $indikator = new IndikatorOsce();
         $indikator->nama = $request->nama;
-        $indikator->id_ujian = $request->id_ujian;
+        $indikator->id_kriteria = $request->id_kriteria;
         $indikator->deskripsi = $request->deskripsi;
         $indikator->skormax = $request->skormax;
         $indikator->bobot = $request->bobot;
@@ -68,7 +68,7 @@ class IndikatorController extends Controller
         }
 
         $indikator->nama = $request->nama;
-        $indikator->id_ujian = $request->id_ujian;
+        $indikator->id_kriteria = $request->id_kriteria;
         $indikator->deskripsi = $request->deskripsi;
         $indikator->skormax = $request->skormax;
         $indikator->bobot = $request->bobot;

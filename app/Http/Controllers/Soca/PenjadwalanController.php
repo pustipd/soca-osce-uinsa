@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Soca;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 // models
 use App\Models\PengujiSoca;
@@ -12,6 +13,9 @@ use App\Models\Penguji;
 use App\Models\UjianSoca;
 use App\Models\KriteriaSoca;
 use App\Models\PesertaSoca;
+
+// Import
+use App\Imports\PenjadwalanSoca;
 
 class PenjadwalanController extends Controller
 {
@@ -157,5 +161,38 @@ class PenjadwalanController extends Controller
         }
 
         return redirect('soca/penjadwalan');
+    }
+
+    public function importDataMahasiswa(Request $request)
+    {
+        // return 'ok';
+
+        try {
+
+            $collection = Excel::toCollection(new PenjadwalanSoca, $request->file('import_mahasiswa'));
+
+            $nims = $collection[0]->pluck('nim');
+
+            $list_mahasiswa = Mahasiswa::whereIn("nim", $nims)->get();
+
+            if(count($list_mahasiswa) < 1) {
+                return response([
+                    "status" => "not-found"
+                ]);
+            }
+
+            return response([
+                "status" => "success",
+                "data" => $list_mahasiswa
+            ]);
+
+        } catch (\Throwable $th) {
+
+            return response([
+                "status" => "failed"
+            ]);
+
+        }
+
     }
 }

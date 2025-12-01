@@ -83,42 +83,72 @@
                             {!! $errors->first('penguji2', '<p class="text-danger">:message</p>') !!}
                         </div>
 
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h5>Mahasiswa</h5>
-                                <button type="button" id="addChild" class="btn btn-primary btn-sm">
-                                + Tambah Mahasiswa
-                                </button>
+                        <h5 class="mb-3">Metode Input Data Mahasiswa</h5>
+
+                        <div class="mb-3">
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="input_mahasiswa" id="manual-input" value="manual" checked>
+                                <label class="form-check-label" for="manual-input">
+                                    Input Manual Data Mahasiswa
+                                </label>
                             </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="input_mahasiswa" id="import-mahasiswa" value="import">
+                                <label class="form-check-label" for="import-mahasiswa">
+                                    Import Data Mahasiswa
+                                </label>
+                            </div>
+                        </div>
 
-                            <div id="childRows">
+                        <div id="form-import-mahasiswa" class="mb-2" style="display: none">
+                            {{-- <form id="form-tt" action="{{url('/soca/penjadwalan/mapping/import')}}" method="POST" enctype="multipart/form-data"> --}}
+                                {{-- @csrf --}}
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <label for="form-label">Impor Data Mahasiswa</label>
+                                        <input type="file" name="import_mahasiswa" class="form-control">
+                                    </div>
+                                    <button id="btn-import" type="button" class="btn btn-primary btn-sm">Import</button>
+                                </div>
+                            {{-- </form> --}}
+                        </div>
 
-                                @foreach ($list_peserta as $item)
-                                    <div class="child-row">
-                                        <div class="form-group row mb-2">
-                                            <label class="col-sm-3 col-form-label">Mahasiswa</label>
-                                            <div class="col-sm-7">
-                                                <select name="mahasiswa[]" class="form-select">
-                                                    <option value="" disabled selected>Pilih Mahasiswa</option>
-                                                    @foreach ($list_mahasiswa as $mahasiswa)
-                                                        <option value="{{$mahasiswa->id}}" @if ($mahasiswa->id == $item->id_mahasiswa) selected @endif>{{$mahasiswa->nama}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-sm-2 text-right">
-                                                <button type="button" class="btn btn-danger btn-sm removeChild">X</button>
-                                            </div>
+                        <div id="form-input-manual-mahasiswa" style="display: flex" class="justify-content-between align-items-center mb-2">
+                            <h5>Mahasiswa</h5>
+                            <button type="button" id="addChild" class="btn btn-primary btn-sm">
+                            + Tambah Mahasiswa
+                            </button>
+                        </div>
+
+                        <div id="childRows" class="mt-2">
+
+                            @foreach ($list_peserta as $item)
+                                <div class="child-row">
+                                    <div class="form-group row mb-2">
+                                        <label class="col-sm-3 col-form-label">Mahasiswa</label>
+                                        <div class="col-sm-7">
+                                            <select name="mahasiswa[]" class="form-select">
+                                                <option value="" disabled selected>Pilih Mahasiswa</option>
+                                                @foreach ($list_mahasiswa as $mahasiswa)
+                                                    <option value="{{$mahasiswa->id}}" @if ($mahasiswa->id == $item->id_mahasiswa) selected @endif>{{$mahasiswa->nama}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label">Urutan</label>
-                                            <div class="col-sm-9">
-                                                <input type="number" class="form-control" name="urutan[]" value="{{$item->urutan}}" required>
-                                            </div>
+                                        <div class="col-sm-2 text-right">
+                                            <button type="button" class="btn btn-danger btn-sm removeChild">X</button>
                                         </div>
                                     </div>
-                                @endforeach
 
-                            </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label">Urutan</label>
+                                        <div class="col-sm-9">
+                                            <input type="number" class="form-control" name="urutan[]" value="{{$item->urutan}}" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                        </div>
 
                             <hr>
                         <div class="d-flex justify-content-between">
@@ -155,9 +185,93 @@
 @endpush
 
 @push('custom-scripts')
+
     <script>
-        // $('#mbkm_place_id').select2();
+
+        let list_mahasiswa = @json($list_mahasiswa);
+
+        function addChildRowFromImport(item, index) {
+
+            const childContainer = document.getElementById('childRows');
+
+            const row = document.createElement('div');
+            row.classList.add('child-row');
+
+            row.innerHTML = `
+                <div class="form-group row mb-2">
+                    <label class="col-sm-3 col-form-label">Mahasiswa</label>
+                    <div class="col-sm-7">
+                        <input type="hidden" class="form-control" name="mahasiswa[]" value="${item.id}">
+                        <input type="text" class="form-control" value="${item.nama}" readonly>
+                    </div>
+                    <div class="col-sm-2 text-right">
+                        <button type="button" class="btn btn-danger btn-sm removeChild">X</button>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Urutan</label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control" name="urutan[]" required value="${index ?? ''}" readonly>
+                    </div>
+                </div>
+            `;
+
+            childContainer.appendChild(row);
+
+            // Populate select mahasiswa
+
+            attachDeleteEvents();
+        }
+
+        $(document).ready(function() {
+
+            $("#btn-import").on("click", function() {
+
+                let fd = new FormData();
+                fd.append("import_mahasiswa", $("input[name=import_mahasiswa]")[0].files[0]);
+
+                $.ajax({
+                    url: "{{url('/soca/penjadwalan/mapping/import')}}",
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    },
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+
+                        console.log(response);
+                        childContainer.innerHTML = "";
+                        response.data.forEach((item, index) => {
+                            addChildRowFromImport(item, index + 1);
+                        });
+
+                    },
+                    error: function(response) {
+                        console.error(response)
+                    }
+                });
+
+            });
+
+            $("input[name='input_mahasiswa']").on('change', function() {
+                let metode = $(this).val();
+
+                if(metode == 'import') {
+                    $('#form-import-mahasiswa').css('display', 'block');
+                    $('#form-input-manual-mahasiswa').css('display', 'none');
+                } else {
+                    $('#form-input-manual-mahasiswa').css('display', 'flex');
+                    $('#form-import-mahasiswa').css('display', 'none');
+                }
+
+            });
+
+        });
     </script>
+
     <script>
         const childContainer = document.getElementById('childRows');
         const addBtn = document.getElementById('addChild');
@@ -211,6 +325,6 @@
 
             attachDeleteEvents();
         });
-        </script>
+    </script>
 
 @endpush

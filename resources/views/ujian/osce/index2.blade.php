@@ -128,19 +128,18 @@
             <div class="card">
                 <div class="card-body">
 
-                <form id="form-penilaian" action="{{url('soca/penguji/penilaian-ujian')}}" method="POST">
+                <form id="form-penilaian" action="{{url('osce/penguji/penilaian-ujian')}}" method="POST">
                     @csrf
-
                     <div class="d-flex justify-content-between mb-4">
                         <p></p>
-                        <h5>{{ $penguji->ujianSoca->nama }} Sesi {{ $penguji->ujianSoca->sesi }}</h5>
+                        <h5>{{ $station->ujianOsce->nama }} Sesi {{ $station->ujianOsce->sesi }}</h5>
                         <p>Total Nilai : <span id="total-nilai" class="badge bg-warning text-dark">0</span></p>
                     </div>
 
-                    <div class="d-flex">
+                    {{-- <div class="d-flex">
                         <button type="button" id="btn-check-nilai" class="btn btn-outline-primary btn-sm mb-3 me-4">Check Nilai</button>
                         <h6 style="font-size: 12px" class="mt-2">Status Nilai : <span id="status-nilai" style="color: red">Tidak Sinkron</span></h6>
-                    </div>
+                    </div> --}}
 
                     <div class="row">
                         <div class="col-md-12">
@@ -151,10 +150,9 @@
                                     <div class="card">
                                         <div class="card-body">
 
-                                                <input type="hidden" name="penguji_soca_id" value="{{$penguji->id}}">
-                                                <input type="hidden" name="tipe_penguji" value="{{$tipe_penguji}}">
-                                                <input type="hidden" name="id_peserta" value="{{$peserta->id}}">
-                                                {{-- <input type="hidden" name="id_ujian" value="{{$peserta->ujianSoca->id}}"> --}}
+                                                {{-- <input type="hidden" name="tipe_penguji" value="{{$tipe_penguji}}"> --}}
+                                                <input type="hidden" name="peserta_id" value="{{$peserta->id}}">
+                                                <input type="hidden" name="station_id" value="{{$station->id}}">
 
                                                 <div id="wizardContents">
                                                     @foreach ($list_indikator as $key => $indikator)
@@ -166,8 +164,14 @@
 
                                                             <!-- Scrollable content wrapper -->
                                                             <div class="step-scroll">
-                                                                <h4 class="mb-3">
-                                                                    {{ Str::limit($indikator->deskripsi, 10) }}</h4>
+
+                                                                <div class="d-flex justify-content-between mb-3">
+                                                                    <h4>
+                                                                        {{ Str::limit($indikator->deskripsi, 10) }}
+                                                                    </h4>
+                                                                    <p class="badge bg-warning text-dark">Bobot : {{$indikator->bobot}}</p>
+                                                                </div>
+                                                                <input type="hidden" name="bobot[{{$key}}]" value="{{$indikator->bobot}}">
 
                                                                 <div class="form-group">
                                                                     {{-- <label>{{ Str::limit($indikator->deskripsi, 10) }}</label> --}}
@@ -179,15 +183,24 @@
 
                                                             <!-- Fixed footer -->
                                                             <div class="form-footer">
-
-                                                                @for ($i = 0; $i < $indikator->skormax; $i++)
-                                                                    <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input" type="radio" name="nilai[{{$key}}]" value="{{$i + 1}}" checked>
-                                                                        <label class="form-check-label" >{{$i + 1}}</label>
-                                                                    </div>
-                                                                @endfor
-
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="nilai[{{$key}}]" value="0" checked>
+                                                                    <label class="form-check-label">0</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="nilai[{{$key}}]" value="1" checked>
+                                                                    <label class="form-check-label">1</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="nilai[{{$key}}]" value="2" checked>
+                                                                    <label class="form-check-label">2</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="nilai[{{$key}}]" value="3" checked>
+                                                                    <label class="form-check-label">3</label>
+                                                                </div>
                                                             </div>
+
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -242,7 +255,7 @@
                         </div>
                         <div class="col-md-6">
 
-                            <div class="row mb-3">
+                            {{-- <div class="row mb-3">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="form-label">Rating</label>
@@ -254,7 +267,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="row">
                                 <div class="col-md-12">
@@ -339,7 +352,8 @@
 
             total_nilai = 0;
             Object.keys(nilai).forEach(key => {
-                total_nilai += Number(nilai[key]);
+                const bobot = document.querySelector('input[name="bobot[' + key + ']"]').value;
+                total_nilai += Number(nilai[key] * bobot);
             });
 
             document.getElementById('total-nilai').innerText = total_nilai;
@@ -363,11 +377,11 @@
                 is_complete = false;
             }
 
-            let status_penilaian = $("#status-nilai").html();
+            // let status_penilaian = $("#status-nilai").html();
 
-            if (status_penilaian != "Sinkron") {
-                is_complete = false;
-            }
+            // if (status_penilaian != "Sinkron") {
+            //     is_complete = false;
+            // }
 
             if (is_complete) {
                 $("#form-penilaian").submit();
@@ -427,6 +441,7 @@
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                 },
                 success: function(response) {
+                    console.log("SUCCESS:", response);
 
                     if (response.status == 'success') {
                         $("#status-nilai").css('color', 'green');

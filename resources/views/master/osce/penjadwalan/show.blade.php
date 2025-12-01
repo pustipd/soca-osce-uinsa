@@ -15,7 +15,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title">Detail</h6>
-                        <a href="{{ url('/osce/exam-scheduled') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
+                        <a href="{{ url('/osce/penjadwalan') }}" title="Back"><button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
                         {{-- <a href="{{ url('/ujian/' . 1 . '/edit') }}" title="Edit Ujian"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a> --}}
 
                         <form method="POST" action="{{ url('ujian' . '/' . 1) }}" accept-charset="UTF-8" style="display:inline">

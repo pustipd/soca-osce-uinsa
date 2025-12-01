@@ -27,4 +27,9 @@ class StationOsce extends Model
     {
         return $this->hasMany(PesertaOsce::class, 'id_station');
     }
+
+    public function kriteriaOsce()
+    {
+        return $this->belongsTo(KriteriaOsce::class, 'id_kriteria');
+    }
 }

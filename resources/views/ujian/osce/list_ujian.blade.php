@@ -36,22 +36,18 @@
                                     <th>#</th>
                                     <th scope="col" class="px-6 py-3">Station</th>
                                     <th scope="col" class="px-6 py-3">Ujian</th>
-                                    <th scope="col" class="px-6 py-3">Sesi</th>
-                                    <th scope="col" class="px-6 py-3">Waktu</th>
-                                    <th scope="col" class="px-6 py-3">Mahasiswa</th>
+                                    <th scope="col" class="px-6 py-3">Kriteria</th>
                                     <th scope="col" class="px-6 py-3">Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($list_ujian as $item)
+                                @foreach($list_station as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td class="px-6 py-4">{{ $item->stationOsce->no_station }}</td>
-                                        <td class="px-6 py-4">{{ $item->stationOsce->ujianOsce->nama }}</td>
-                                        <td class="px-6 py-4">{{ $item->stationOsce->ujianOsce->sesi }}</td>
-                                        <td class="px-6 py-4">{{ $item->stationOsce->ujianOsce->waktu }}</td>
-                                        <td class="px-6 py-4">{{ $item->mahasiswa->nama }}</td>
+                                        <td class="px-6 py-4">{{ $item->no_station }}</td>
+                                        <td class="px-6 py-4">{{ $item->ujianOsce->nama }} Sesi {{ $item->ujianOsce->sesi }}</td>
+                                        <td class="px-6 py-4">{{ $item->kriteriaOsce->nama }}</td>
                                         <td class="px-6 py-4">{{ ucfirst($item->status) }}</td>
                                         <td>
                                             @if ($item->status == "selesai")

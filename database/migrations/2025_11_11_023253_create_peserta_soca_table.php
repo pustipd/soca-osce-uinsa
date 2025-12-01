@@ -21,14 +21,16 @@ return new class extends Migration
             $table->unsignedBigInteger('id_penguji_soca');
             $table->foreign('id_penguji_soca')->references('id')->on('penguji_soca');
 
-            $table->enum("status", ['terjadwal', 'sedang', 'tidak sinkron', 'sinkron', 'tidak hadir', 'selesai'])->nullable();
-            $table->string("totalskor1")->nullable();
-            $table->string("totalskor2")->nullable();
+            $table->enum("status", ['terjadwal', 'sedang', 'tidak sinkron', 'sinkron', 'tidak hadir', 'selesai'])->default('terjadwal');
+            $table->int("totalskor1")->default(0);
+            $table->int("totalskor2")->default(0);
 
             $table->integer("urutan")->nullable();
-            $table->enum("rating", ["tidak lulus", "borderline", "lulus", "superior"])->default("tidak lulus");
+            $table->enum("rating1", ["tidak lulus", "borderline", "lulus", "superior"])->default("tidak lulus");
+            $table->enum("rating2", ["tidak lulus", "borderline", "lulus", "superior"])->default("tidak lulus");
 
-            $table->text("feedback")->nullable();
+            $table->text("feedback1")->nullable();
+            $table->text("feedback2")->nullable();
 
             $table->timestamps();
         });

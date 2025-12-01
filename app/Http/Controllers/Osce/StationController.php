@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\StationOsce;
 use App\Models\Penguji;
 use App\Models\UjianOsce;
+use App\Models\KriteriaOsce;
 
 class StationController extends Controller
 {
@@ -26,10 +27,12 @@ class StationController extends Controller
 
         $list_penguji = Penguji::all();
         $list_ujian = UjianOsce::all();
+        $list_kriteria = KriteriaOsce::all();
 
         return view('master.osce.station.create', [
             "list_penguji" => $list_penguji,
-            "list_ujian" => $list_ujian
+            "list_ujian" => $list_ujian,
+            'list_kriteria' => $list_kriteria
         ]);
     }
 
@@ -53,6 +56,10 @@ class StationController extends Controller
             $station->id_ujian_osce = $request->ujian;
         }
 
+        if($request->kriteria) {
+            $station->id_kriteria = $request->kriteria;
+        }
+
         $station->save();
 
         return redirect('osce/station');
@@ -69,11 +76,13 @@ class StationController extends Controller
 
         $list_penguji = Penguji::all();
         $list_ujian = UjianOsce::all();
+        $list_kriteria = KriteriaOsce::all();
 
         return view('master.osce.station.edit', [
             "list_penguji" => $list_penguji,
             "list_ujian" => $list_ujian,
-            "station" => $station
+            "station" => $station,
+            'list_kriteria' => $list_kriteria
         ]);
     }
 
@@ -95,6 +104,9 @@ class StationController extends Controller
         $station->no_station = $request->no_station;
         $station->id_penguji = $request->penguji;
         $station->id_ujian_osce = $request->ujian;
+        if($request->kriteria) {
+            $station->id_kriteria = $request->kriteria;
+        }
         $station->save();
 
         return redirect('osce/station');
