@@ -22,8 +22,8 @@ return new class extends Migration
             $table->foreign('id_penguji_soca')->references('id')->on('penguji_soca');
 
             $table->enum("status", ['terjadwal', 'sedang', 'tidak sinkron', 'sinkron', 'tidak hadir', 'selesai'])->default('terjadwal');
-            $table->int("totalskor1")->default(0);
-            $table->int("totalskor2")->default(0);
+            $table->integer("totalskor1")->default(0);
+            $table->integer("totalskor2")->default(0);
 
             $table->integer("urutan")->nullable();
             // $table->enum("rating1", ["tidak lulus", "borderline", "lulus", "superior"])->default("tidak lulus");
