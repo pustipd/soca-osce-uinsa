@@ -19,7 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger('id_kategori');
             $table->foreign('id_kategori')->references('id')->on('kategori_soca');
             $table->string("nama");
-            $table->text("deskripsi");
+            $table->enum("jenis_indikator", ['deskripsi', 'dokumen']);
+            $table->text("deskripsi")->nullable();
+            $table->string("dokumen")->nullable();
             $table->integer("skormax");
             $table->timestamps();
         });

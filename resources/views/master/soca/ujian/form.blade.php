@@ -29,6 +29,15 @@
     <input class="form-control" name="batasnilai" type="number" id="batasnilai" value="{{ isset($ujian->batasnilai) ? $ujian->batasnilai : ''}}" >
     {!! $errors->first('batasnilai', '<p class="text-danger">:message</p>') !!}
 </div>
+<div class="mb-3 {{ $errors->has('status') ? 'has-error' : ''}}">
+    <label for="status" class="form-label">{{ 'Status' }}</label>
+    <select name="status" id="status">
+        <option value="" disabled selected>Pilih Status</option>
+        <option value="1" @if (isset($ujian) && $ujian->status == 1) selected @endif>Aktif</option>
+        <option value="0" @if (isset($ujian) && $ujian->status == 0) selected @endif>Non Aktif</option>
+    </select>
+    {!! $errors->first('status', '<p class="text-danger">:message</p>') !!}
+</div>
 
 <div class="d-flex justify-content-between">
     <a href="{{url('/soca/ujian')}}" class="btn btn-secondary" >Cancel

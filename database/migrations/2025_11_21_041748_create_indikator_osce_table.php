@@ -21,7 +21,10 @@ return new class extends Migration
             $table->foreign('id_kriteria')->references('id')->on('kriteria_osce');
             $table->string('nama');
 
-            $table->text('deskripsi');
+            $table->enum("jenis_indikator", ['deskripsi', 'dokumen']);
+            $table->text("deskripsi")->nullable();
+            $table->string("dokumen")->nullable();
+
             $table->integer("skormax");
             $table->integer("bobot");
 

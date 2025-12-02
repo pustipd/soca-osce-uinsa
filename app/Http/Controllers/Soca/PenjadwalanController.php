@@ -37,11 +37,18 @@ class PenjadwalanController extends Controller
         $list_ujian = UjianSoca::all();
         $list_kriteria = KriteriaSoca::all();
 
+        $ujian_id = 0;
+
+        if(request()->query('ujian_id')) {
+            $ujian_id = request()->query('ujian_id');
+        }
+
         return view('master.soca.penjadwalan.create', [
             'list_mahasiswa' => $list_mahasiswa,
             'list_penguji' => $list_penguji,
             'list_ujian' => $list_ujian,
-            "list_kriteria" => $list_kriteria
+            "list_kriteria" => $list_kriteria,
+            'ujian_id' => $ujian_id
         ]);
     }
 

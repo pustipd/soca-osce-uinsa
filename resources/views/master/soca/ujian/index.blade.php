@@ -52,7 +52,8 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td class="px-6 py-4">{{ $item->nama }}</td><td class="px-6 py-4">{{ $item->sesi }}</td><td class="px-6 py-4">{{ $item->waktu }}</td>
                                         <td>
-                                            <a href="{{ url('/soca/ujian/mapping/') . '/' . $item->id }}" title="Mapping Ujian"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> Mapping</button></a>
+                                            {{-- <a href="{{ url('/soca/penjadwalan/mapping/' . $item->id) }}" title="Mapping Ujian"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> Mapping</button></a> --}}
+                                            <a href="{{ url('/soca/penjadwalan/create/') . '?ujian_id=' . $item->id }}" title="Mapping Ujian"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> Mapping</button></a>
                                             <a href="{{ url('/soca/ujian/' . $item->id . '/edit') }}" title="Edit Ujian"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
 
                                             <form method="POST" action="{{ url('/soca/ujian' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">

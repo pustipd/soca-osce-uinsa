@@ -30,6 +30,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
     <!-- end common css -->
 
+    <link href="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" />
+
     @stack('style')
 </head>
 

@@ -48,6 +48,7 @@ Route::prefix('soca')->group(function() {
 
     Route::prefix("ujian")->group(function() {
         Route::get('', [UjianController::class, 'index']);
+        Route::get('change-status/{id}', [UjianController::class, 'updateStatusUjian']);
         Route::get('create', [UjianController::class, 'create']);
         Route::post('store', [UjianController::class, 'store']);
         Route::get('{id}/edit', [UjianController::class, 'edit']);

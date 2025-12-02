@@ -26,8 +26,8 @@ return new class extends Migration
             $table->int("totalskor2")->default(0);
 
             $table->integer("urutan")->nullable();
-            $table->enum("rating1", ["tidak lulus", "borderline", "lulus", "superior"])->default("tidak lulus");
-            $table->enum("rating2", ["tidak lulus", "borderline", "lulus", "superior"])->default("tidak lulus");
+            // $table->enum("rating1", ["tidak lulus", "borderline", "lulus", "superior"])->default("tidak lulus");
+            // $table->enum("rating2", ["tidak lulus", "borderline", "lulus", "superior"])->default("tidak lulus");
 
             $table->text("feedback1")->nullable();
             $table->text("feedback2")->nullable();

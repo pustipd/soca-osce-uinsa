@@ -37,6 +37,29 @@ class IndikatorController extends Controller
         $indikator->deskripsi = $request->deskripsi;
         $indikator->skormax = $request->skormax;
         $indikator->bobot = $request->bobot;
+        $indikator->jenis_indikator = $request->jenis_indikator;
+
+        if($request->jenis_indikator == "deskripsi") {
+            $indikator->deskripsi = $request->deskripsi;
+        } else {
+            if ($request->dokumen) {
+
+                $filename = "indikator-" . rand(10, 99) . "-" . time() . "." .
+                            $request->dokumen->getClientOriginalExtension();
+
+                $file_path = "osce/indikator/" . $filename;
+
+                Storage::disk("public")->put(
+                    $file_path,
+                    file_get_contents($request->dokumen)
+                );
+
+                $indikator->dokumen = $file_path;
+            }
+
+
+        }
+
         $indikator->save();
 
         return redirect('osce/indikator');
@@ -72,6 +95,27 @@ class IndikatorController extends Controller
         $indikator->deskripsi = $request->deskripsi;
         $indikator->skormax = $request->skormax;
         $indikator->bobot = $request->bobot;
+        $indikator->jenis_indikator = $request->jenis_indikator;
+
+        if($request->jenis_indikator == "deskripsi") {
+            $indikator->deskripsi = $request->deskripsi;
+        } else {
+
+            if (isset($request->dokumen)) {
+
+                if ($indikator->dokumen && Storage::disk('public')->exists($indikator->dokumen)) {
+                    Storage::disk('public')->delete($indikator->dokumen);
+                }
+
+                $filename =  "indikator-" . rand(10, 99) . "-" . time() . "." . $request->dokumen->extension();
+                $file_path =  "osce/indikator/" . $filename;
+
+                Storage::disk("public")->put($file_path, file_get_contents($request->dokumen), 'public');
+                $indikator->dokumen = $file_path;
+            }
+
+        }
+
         $indikator->save();
 
         return redirect('osce/indikator');

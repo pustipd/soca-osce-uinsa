@@ -57,8 +57,8 @@
             padding: 12px 20px;
             border-top: 1px solid #ddd;
             background: #fff;
+            overflow: auto;
         }
-
 
         @keyframes fadeIn {
             from {
@@ -167,7 +167,7 @@
 
                                                                 <div class="d-flex justify-content-between mb-3">
                                                                     <h4>
-                                                                        {{ Str::limit($indikator->deskripsi, 10) }}
+                                                                        {{ $indikator->nama }}
                                                                     </h4>
                                                                     <p class="badge bg-warning text-dark">Bobot : {{$indikator->bobot}}</p>
                                                                 </div>
@@ -175,15 +175,22 @@
 
                                                                 <div class="form-group">
                                                                     {{-- <label>{{ Str::limit($indikator->deskripsi, 10) }}</label> --}}
-                                                                    <div class="text-block">
-                                                                        {{$indikator->deskripsi}}
-                                                                    </div>
+                                                                    @if ($indikator->jenis_indikator == "deskripsi")
+                                                                        <div class="text-block">
+                                                                            {!! $indikator->deskripsi !!}
+                                                                        </div>
+                                                                    @else
+                                                                        <div class="text-block">
+                                                                            <iframe src="{{Storage::url($indikator->dokumen)}}" width="100%" height="600px"></iframe>
+                                                                        </div>
+
+                                                                    @endif
                                                                 </div>
                                                             </div>
 
                                                             <!-- Fixed footer -->
                                                             <div class="form-footer">
-                                                                <div class="form-check form-check-inline">
+                                                                {{-- <div class="form-check form-check-inline">
                                                                     <input class="form-check-input" type="radio" name="nilai[{{$key}}]" value="0" checked>
                                                                     <label class="form-check-label">0</label>
                                                                 </div>
@@ -198,7 +205,44 @@
                                                                 <div class="form-check form-check-inline">
                                                                     <input class="form-check-input" type="radio" name="nilai[{{$key}}]" value="3" checked>
                                                                     <label class="form-check-label">3</label>
+                                                                </div> --}}
+
+
+                                                                <div class="radio-button-group">
+
+                                                                    <div class="radio-button">
+                                                                        <input type="radio" id="nilai{{$key}}_0"
+                                                                            name="nilai[{{$key}}]"
+                                                                            value="0" checked>
+
+                                                                        <label for="nilai{{$key}}_0">0</label>
+                                                                    </div>
+
+                                                                    <div class="radio-button">
+                                                                        <input type="radio" id="nilai{{$key}}_1"
+                                                                            name="nilai[{{$key}}]"
+                                                                            value="1" checked>
+
+                                                                        <label for="nilai{{$key}}_1">1</label>
+                                                                    </div>
+
+                                                                    <div class="radio-button">
+                                                                        <input type="radio" id="nilai{{$key}}_2"
+                                                                            name="nilai[{{$key}}]"
+                                                                            value="2" checked>
+
+                                                                        <label for="nilai{{$key}}_2">2</label>
+                                                                    </div>
+
+                                                                    <div class="radio-button">
+                                                                        <input type="radio" id="nilai{{$key}}_3"
+                                                                            name="nilai[{{$key}}]"
+                                                                            value="3" checked>
+
+                                                                        <label for="nilai{{$key}}_3">3</label>
+                                                                    </div>
                                                                 </div>
+
                                                             </div>
 
                                                         </div>
@@ -225,7 +269,7 @@
                                                 @foreach ($list_indikator as $key => $item)
                                                     <div class="step-item {{ $key == 0 ? 'active' : '' }}"
                                                         data-step="{{ $key + 1 }}">{{ $key + 1 }}.
-                                                        {{ Str::limit($item->deskripsi, 10) }}</div>
+                                                        {{ $item->nama }}</div>
                                                 @endforeach
                                             </div>
 
@@ -255,7 +299,7 @@
                         </div>
                         <div class="col-md-6">
 
-                            {{-- <div class="row mb-3">
+                            <div class="row mb-3">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="form-label">Rating</label>
@@ -267,7 +311,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
 
                             <div class="row">
                                 <div class="col-md-12">
@@ -320,12 +364,36 @@
 
             // Change Next → Submit
             if (index === steps.length - 1) {
+                document.getElementById('btnNext').style.display = "none";
                 document.getElementById('btnNext').innerText = "Submit";
             } else {
-                // document.getElementById('btnNext').style.display = "block";
+                document.getElementById('btnNext').style.display = "block";
                 document.getElementById('btnNext').innerText = "Next";
             }
         }
+
+        // RIGHT STEPPER CLICKABLE
+        stepItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+
+                // Save current nilai before moving
+                let value = document.querySelector('input[name="nilai[' + currentStep + ']"]:checked');
+                if (value) {
+                    nilai[currentStep] = Number(value.value);
+                }
+
+                // Move to selected step
+                currentStep = index;
+                showStep(currentStep);
+
+                // Recalculate total nilai
+                total_nilai = 0;
+                Object.keys(nilai).forEach(key => {
+                    total_nilai += Number(nilai[key]);
+                });
+                document.getElementById('total-nilai').innerText = total_nilai;
+            });
+        });
 
         document.getElementById('btnPrev').addEventListener('click', () => {
             // document.getElementById('btnNext').disabled = false;
@@ -359,8 +427,24 @@
             document.getElementById('total-nilai').innerText = total_nilai;
         });
 
+        $('input[type=radio]').on('change', function () {
+            console.log('asdad')
+            let index = this.name.match(/\[(\d+)\]/)[1];
+
+            nilai[index] = this.value;
+
+            total_nilai = 0;
+            Object.keys(nilai).forEach(key => {
+                total_nilai += Number(nilai[key]);
+            });
+            document.getElementById('total-nilai').innerText = total_nilai;
+
+        });
+
         // Initialize first step
         showStep(currentStep);
+
+
     </script>
 
     <script>

@@ -4,7 +4,7 @@
         <select name="id_ujian_soca" id="id-ujian-soca" class="form-select select2">
             <option value="" disabled selected>Pilih Ujian</option>
             @foreach ($list_ujian as $ujian)
-                <option value="{{$ujian->id}}" @if (isset($penguji) && $ujian->id == $penguji->id_ujian_soca) selected @endif>{{$ujian->nama}} Sesi {{$ujian->sesi}}</option>
+                <option value="{{$ujian->id}}" @if (isset($penguji) && $ujian->id == $penguji->id_ujian_soca) selected @elseif(isset($ujian_id) && $ujian_id == $ujian->id) selected @endif>{{$ujian->nama}} Sesi {{$ujian->sesi}}</option>
             @endforeach
         </select>
         {!! $errors->first('id_ujian_soca', '<p class="text-danger">:message</p>') !!}

@@ -1,6 +1,12 @@
 @extends('layout.master')
 
 @section('content')
+
+    <style>
+        .ck-editor__editable {
+            min-height: 300px !important;
+        }
+    </style>
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">CRUD-MASTER</a></li>
@@ -81,10 +87,38 @@
 
 @push('plugin-scripts')
     <script src="{{ asset('assets/plugins/select2/select2.min.js') }}"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.0/classic/ckeditor.js"></script>
 @endpush
 
 @push('custom-scripts')
     <script>
         $('#id_ujian').select2();
     </script>
+
+    <script>
+        $("#input-form-dokumen").css('display', 'none');
+        $("input[name='jenis_indikator']").on("change", function() {
+
+            if($(this).val() == "deskripsi") {
+                $("#input-form-deskripsi").show();
+                $("#input-form-dokumen").hide();
+            } else {
+                $("#input-form-deskripsi").hide();
+                $("#input-form-dokumen").show();
+            }
+
+        });
+    </script>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#deskripsi'))
+            .then(editor => {
+                console.log("CKEditor ready");
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
 @endpush

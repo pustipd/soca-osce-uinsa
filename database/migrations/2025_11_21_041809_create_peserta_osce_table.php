@@ -28,6 +28,7 @@ return new class extends Migration
             $table->integer("skor")->nullable();
             $table->text("feedback")->nullable();
             $table->integer("rotasi")->nullable();
+            $table->enum("rating", ["tidak lulus", "borderline", "lulus", "superior"])->default("tidak lulus");
 
             $table->timestamps();
         });

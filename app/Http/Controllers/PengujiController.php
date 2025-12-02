@@ -199,10 +199,10 @@ class PengujiController extends Controller
 
         if($request->tipe_penguji == 1) {
             $peserta->feedback1 = $request->feedback;
-            $peserta->rating1 = $request->rating;
+            // $peserta->rating1 = $request->rating;
         } else {
             $peserta->feedback2 = $request->feedback;
-            $peserta->rating2 = $request->rating;
+            // $peserta->rating2 = $request->rating;
         }
 
         $peserta->save();
@@ -307,6 +307,7 @@ class PengujiController extends Controller
         $peserta->status = "selesai";
         $peserta->feedback = $request->feedback;
         $peserta->skor = $total_skor;
+        $peserta->rating = $request->rating;
         $peserta->save();
 
         return redirect('osce/penguji/ujian/' . $station->id);

@@ -57,6 +57,7 @@
             padding: 12px 20px;
             border-top: 1px solid #ddd;
             background: #fff;
+            overflow: auto;
         }
 
 
@@ -116,12 +117,37 @@
         }
     </style>
 
-    {{-- <nav class="page-breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">Forms</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Wizard</li>
-  </ol>
-</nav> --}}
+    <style>
+        .radio-button-group {
+    display: flex;
+    gap: 8px;
+}
+
+.radio-button {
+    position: relative;
+}
+
+.radio-button input {
+    display: none;
+}
+
+.radio-button label {
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #f5f5f5;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: 500;
+}
+
+.radio-button input:checked + label {
+    background: #6571ff;
+    border-color: #6571ff;
+    color: #fff;
+}
+
+    </style>
 
     <div class="row">
         <div class="col-md-12 stretch-card">
@@ -167,25 +193,47 @@
                                                             <!-- Scrollable content wrapper -->
                                                             <div class="step-scroll">
                                                                 <h4 class="mb-3">
-                                                                    {{ Str::limit($indikator->deskripsi, 10) }}</h4>
+                                                                    {{ $indikator->nama ?? '-' }}</h4>
 
                                                                 <div class="form-group">
                                                                     {{-- <label>{{ Str::limit($indikator->deskripsi, 10) }}</label> --}}
-                                                                    <div class="text-block">
-                                                                        {{$indikator->deskripsi}}
-                                                                    </div>
+                                                                    @if ($indikator->jenis_indikator == "deskripsi")
+                                                                        <div class="text-block">
+                                                                            {!! $indikator->deskripsi !!}
+                                                                        </div>
+                                                                    @else
+                                                                        <div class="text-block">
+                                                                            <iframe src="{{Storage::url($indikator->dokumen)}}" width="100%" height="600px"></iframe>
+                                                                        </div>
+
+                                                                    @endif
                                                                 </div>
                                                             </div>
 
                                                             <!-- Fixed footer -->
                                                             <div class="form-footer">
 
-                                                                @for ($i = 0; $i < $indikator->skormax; $i++)
+                                                                {{-- @for ($i = 0; $i < $indikator->skormax; $i++)
                                                                     <div class="form-check form-check-inline">
                                                                         <input class="form-check-input" type="radio" name="nilai[{{$key}}]" value="{{$i + 1}}" checked>
                                                                         <label class="form-check-label" >{{$i + 1}}</label>
                                                                     </div>
-                                                                @endfor
+                                                                @endfor --}}
+
+                                                                <div class="radio-button-group">
+
+                                                                    @for ($i = 0; $i <= $indikator->skormax; $i++)
+                                                                        <div class="radio-button">
+                                                                            <input type="radio" id="nilai{{$key}}_{{$i}}"
+                                                                                name="nilai[{{$key}}]"
+                                                                                value="{{$i}}"
+                                                                                {{ $i === 0 ? 'checked' : '' }}>
+
+                                                                            <label for="nilai{{$key}}_{{$i}}">{{$i}}</label>
+                                                                        </div>
+                                                                    @endfor
+
+                                                                </div>
 
                                                             </div>
                                                         </div>
@@ -212,7 +260,7 @@
                                                 @foreach ($list_indikator as $key => $item)
                                                     <div class="step-item {{ $key == 0 ? 'active' : '' }}"
                                                         data-step="{{ $key + 1 }}">{{ $key + 1 }}.
-                                                        {{ Str::limit($item->deskripsi, 10) }}</div>
+                                                        {{ $item->nama ?? '-' }}</div>
                                                 @endforeach
                                             </div>
 
@@ -241,20 +289,6 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="form-label">Rating</label>
-                                        <select name="rating" class="form-select">
-                                            <option value="tidak lulus">Tidak Lulus</option>
-                                            <option value="borderline">Borderline</option>
-                                            <option value="lulus">Lulus</option>
-                                            <option value="superior">Superior</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
 
                             <div class="row">
                                 <div class="col-md-12">
@@ -285,6 +319,7 @@
 @endpush
 
 @push('custom-scripts')
+
     <script>
 
         let nilai = {};
@@ -307,12 +342,38 @@
 
             // Change Next → Submit
             if (index === steps.length - 1) {
+                document.getElementById('btnNext').style.display = "none";
                 document.getElementById('btnNext').innerText = "Submit";
             } else {
-                // document.getElementById('btnNext').style.display = "block";
+                document.getElementById('btnNext').style.display = "block";
                 document.getElementById('btnNext').innerText = "Next";
             }
         }
+
+        // RIGHT STEPPER CLICKABLE
+        stepItems.forEach((item, index) => {
+
+            item.addEventListener('click', () => {
+
+                // Save current nilai before moving
+                let value = document.querySelector('input[name="nilai[' + currentStep + ']"]:checked');
+                if (value) {
+                    nilai[currentStep] = Number(value.value);
+                }
+
+                // Move to selected step
+                currentStep = index;
+                showStep(currentStep);
+
+                // Recalculate total nilai
+                total_nilai = 0;
+                Object.keys(nilai).forEach(key => {
+                    total_nilai += Number(nilai[key]);
+                });
+
+                document.getElementById('total-nilai').innerText = total_nilai;
+            });
+        });
 
         document.getElementById('btnPrev').addEventListener('click', () => {
             // document.getElementById('btnNext').disabled = false;
@@ -345,8 +406,23 @@
             document.getElementById('total-nilai').innerText = total_nilai;
         });
 
+        $('input[type=radio]').on('change', function () {
+            console.log('asdad')
+            let index = this.name.match(/\[(\d+)\]/)[1];
+
+            nilai[index] = this.value;
+
+            total_nilai = 0;
+            Object.keys(nilai).forEach(key => {
+                total_nilai += Number(nilai[key]);
+            });
+            document.getElementById('total-nilai').innerText = total_nilai;
+
+        });
+
         // Initialize first step
         showStep(currentStep);
+
     </script>
 
     <script>
@@ -442,7 +518,6 @@
                     console.log("ERROR:", xhr.responseText);
                 }
             });
-
 
         });
     </script>

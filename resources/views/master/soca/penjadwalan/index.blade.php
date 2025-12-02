@@ -45,7 +45,9 @@
                                     <th scope="col" class="px-6 py-3">Penguji 1</th>
                                     <th scope="col" class="px-6 py-3">Penguji 2</th>
                                     <th scope="col" class="px-6 py-3">Station</th>
-                                    <th scope="col" class="px-6 py-3">Status</th>
+                                    <th scope="col" class="px-6 py-3">Jumlah Peserta</th>
+                                    <th scope="col" class="px-6 py-3">Status Mapping</th>
+                                    {{-- <th scope="col" class="px-6 py-3">Status Ujian</th> --}}
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -58,13 +60,35 @@
                                         <td class="px-6 py-4">{{ $item->penguji1->nama }}</td>
                                         <td class="px-6 py-4">{{ $item->penguji2->nama }}</td>
                                         <td class="px-6 py-4">{{ $item->station }}</td>
+                                        <td class="px-6 py-4">{{ $item->pesertaSoca()->count() }}</td>
                                         <td class="px-6 py-4">
-                                            @if ($item->ujianSoca->status == 1)
-                                                Aktif
+                                            @if ($item->pesertaSoca()->count() > 0)
+                                                <p class="badge bg-success">Sudah di mapping</p>
                                             @else
-                                                Tidak Aktif
+                                                <p class="badge bg-secondary">Belum di mapping</p>
                                             @endif
                                         </td>
+                                        {{-- <td class="px-6 py-4">
+                                            @if ($item->ujianSoca->status == 1)
+                                                <div class="d-flex">
+                                                    <p class="me-3">Aktif</p>
+                                                    <div class="mb-3">
+                                                        <div class="form-check form-switch mb-2">
+                                                            <input type="checkbox" class="form-check-input switch-aktif" id="switch-aktif" data-id="{{$item->ujianSoca->id}}" @if ($item->ujianSoca->status == 1) checked @endif>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="d-flex">
+                                                    <p class="me-3">Tidak Aktif</p>
+                                                    <div class="mb-3">
+                                                        <div class="form-check form-switch mb-2">
+                                                            <input type="checkbox" class="form-check-input switch-nonaktif" id="switch-nonaktif" data-id="{{$item->ujianSoca->id}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </td> --}}
                                         <td>
                                             <a href="{{ url('/soca/penjadwalan/mapping/' . $item->id) }}" title="Mapping Ujian"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> Mapping</button></a>
                                             <a href="{{ url('/soca/penjadwalan/' . $item->id . '/edit') }}" title="Edit Ujian"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
@@ -93,4 +117,137 @@
 
 @push('custom-scripts')
     <script src="{{ asset('assets/js/data-table.js') }}"></script>
+    <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script>
+
+        $(".switch-aktif").on("change", function() {
+
+            let url = "{{url('soca/ujian/change-status')}}" + "/" + $(this).data("id");
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger me-2'
+                },
+                buttonsStyling: false,
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Apakah anda yakin mengganti status ?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonClass: 'me-2',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+
+                    $.ajax({
+                        url: url,
+                        type: "GET",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        },
+                        success: function(response) {
+                            console.log("SUCCESS:", response);
+
+                            if(response.status == 'complete') {
+                            //     $("#status-nilai").css('color', 'green');
+                            //     $("#status-nilai").html('Sinkron')
+                                $("#form-penilaian").submit();
+
+                            } else {
+                            //     $("#status-nilai").css('color', 'red');
+                            //     $("#status-nilai").html('Tidak Sinkron')
+                            }
+
+                        },
+                        error: function(xhr) {
+                            console.log("ERROR:", xhr.responseText);
+                        }
+                    });
+
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    // swalWithBootstrapButtons.fire(
+                    //     'Cancelled',
+                    //     'Your imaginary file is safe :)',
+                    //     'error'
+                    // )
+                    return;
+                }
+            })
+
+        });
+
+        $(".switch-nonaktif").on("change", function() {
+
+            let url = "{{url('soca/ujian/change-status')}}" + "/" + $(this).data("id");
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger me-2'
+                },
+                buttonsStyling: false,
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Apakah anda yakin mengganti status ?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonClass: 'me-2',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                reverseButtons: true
+            }).then((result) => {
+
+                if (result.value) {
+
+                    $.ajax({
+                        url: url,
+                        type: "GET",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        },
+                        success: function(response) {
+                            console.log("SUCCESS:", response);
+
+                            // if(response.status == 'complete') {
+                            // //     $("#status-nilai").css('color', 'green');
+                            // //     $("#status-nilai").html('Sinkron')
+                            //     $("#form-penilaian").submit();
+
+                            // } else {
+                            // //     $("#status-nilai").css('color', 'red');
+                            // //     $("#status-nilai").html('Tidak Sinkron')
+                            // }
+
+                        },
+                        error: function(xhr) {
+                            console.log("ERROR:", xhr.responseText);
+                        }
+                    });
+
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    // swalWithBootstrapButtons.fire(
+                    //     'Cancelled',
+                    //     'Your imaginary file is safe :)',
+                    //     'error'
+                    // )
+                    return;
+                }
+            })
+
+        });
+
+    </script>
 @endpush
