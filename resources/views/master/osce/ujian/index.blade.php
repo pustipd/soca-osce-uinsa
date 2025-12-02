@@ -43,6 +43,7 @@
                                     <th scope="col" class="px-6 py-3">Nama</th>
                                     <th scope="col" class="px-6 py-3">Sesi</th>
                                     <th scope="col" class="px-6 py-3">Waktu</th>
+                                    <th scope="col" class="px-6 py-3">Status</th>
                                     {{-- <th scope="col" class="px-6 py-3">Kriteria</th> --}}
                                     <th>Actions</th>
                                 </tr>
@@ -54,6 +55,27 @@
                                         <td class="px-6 py-4">{{ $item->nama }}</td>
                                         <td class="px-6 py-4">{{ $item->sesi }}</td>
                                         <td class="px-6 py-4">{{ $item->waktu }}</td>
+                                        <td class="px-6 py-4">
+                                            @if ($item->status == 1)
+                                                <div class="d-flex">
+                                                    <p class="me-3">Aktif</p>
+                                                    <div class="mb-3">
+                                                        <div class="form-check form-switch mb-2">
+                                                            <input type="checkbox" class="form-check-input switch-aktif" id="switch-aktif" data-id="{{$item->id}}" @if ($item->status == 1) checked @endif>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="d-flex">
+                                                    <p class="me-3">Tidak Aktif</p>
+                                                    <div class="mb-3">
+                                                        <div class="form-check form-switch mb-2">
+                                                            <input type="checkbox" class="form-check-input switch-nonaktif" id="switch-nonaktif" data-id="{{$item->id}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </td>
                                         <td>
                                             <a href="{{ url('/osce/ujian/' . $item->id) }}" title="View Ujian"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
                                             <a href="{{ url('/osce/ujian/' . $item->id . '/edit') }}" title="Edit Ujian"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
@@ -82,4 +104,140 @@
 
 @push('custom-scripts')
     <script src="{{ asset('assets/js/data-table.js') }}"></script>
+    <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script>
+
+        $(".switch-aktif").on("change", function() {
+
+            let checkbox = $(this);
+            let currentState = checkbox.prop("checked");
+
+            let url = "{{url('soca/ujian/change-status')}}" + "/" + $(this).data("id");
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger me-2'
+                },
+                buttonsStyling: false,
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Apakah anda yakin mengganti status ?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonClass: 'me-2',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+
+                    $.ajax({
+                        url: url,
+                        type: "GET",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        },
+                        success: function(response) {
+                            console.log("SUCCESS:", response);
+
+                            if(response.status == 'success') {
+
+                            } else {
+                                checkbox.prop("checked", !currentState)
+                            }
+
+                        },
+                        error: function(xhr) {
+                            checkbox.prop("checked", !currentState)
+                            console.log("ERROR:", xhr.responseText);
+                        }
+                    });
+
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    // swalWithBootstrapButtons.fire(
+                    //     'Cancelled',
+                    //     'Your imaginary file is safe :)',
+                    //     'error'
+                    // )
+                    checkbox.prop("checked", !currentState)
+                    return;
+                }
+            })
+
+        });
+
+        $(".switch-nonaktif").on("change", function() {
+
+            let checkbox = $(this);
+            let currentState = checkbox.prop("checked");
+
+            let url = "{{url('soca/ujian/change-status')}}" + "/" + $(this).data("id");
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger me-2'
+                },
+                buttonsStyling: false,
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Apakah anda yakin mengganti status ?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonClass: 'me-2',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                reverseButtons: true
+            }).then((result) => {
+
+                if (result.value) {
+
+                    $.ajax({
+                        url: url,
+                        type: "GET",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        },
+                        success: function(response) {
+                            console.log("SUCCESS:", response);
+
+                            if(response.status == 'success') {
+
+                            } else {
+
+                                checkbox.prop("checked", !currentState)
+                            }
+
+                        },
+                        error: function(xhr) {
+                            console.log("ERROR:", xhr.responseText);
+                        }
+                    });
+
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    // swalWithBootstrapButtons.fire(
+                    //     'Cancelled',
+                    //     'Your imaginary file is safe :)',
+                    //     'error'
+                    // )
+
+                    checkbox.prop("checked", !currentState)
+                    return;
+                }
+            })
+
+        });
+
+    </script>
 @endpush

@@ -109,6 +109,7 @@ Route::prefix('osce')->group(function() {
 
     Route::prefix("ujian")->group(function() {
         Route::get('', [UjianControllerOsce::class, 'index']);
+        Route::get('change-status/{id}', [UjianControllerOsce::class, 'updateStatusUjian']);
         Route::get('create', [UjianControllerOsce::class, 'create']);
         Route::post('store', [UjianControllerOsce::class, 'store']);
         Route::get('{id}/edit', [UjianControllerOsce::class, 'edit']);

@@ -90,4 +90,27 @@ class UjianController extends Controller
         return redirect('osce/ujian');
     }
 
+    public function updateStatusUjian($id)
+    {
+        $ujian = UjianOsce::find($id);
+
+        if(! $ujian){
+            return response([
+                "status" => "failed"
+            ]);
+        }
+
+        if($ujian->status == 1) {
+            $ujian->status = 0;
+        } else {
+            $ujian->status = 1;
+        }
+
+        $ujian->save();
+
+        return response([
+            'status' => "success"
+        ]);
+    }
+
 }
