@@ -20,6 +20,9 @@ use App\Http\Controllers\Osce\PenjadwalanController as PenjadwalanControllerOsce
 use App\Http\Controllers\Osce\StationController;
 use App\Http\Controllers\AuthController;
 
+Route::get('/', function() {
+    return redirect("login");
+});
 Route::get('login', [AuthController::class, 'login']);
 Route::post('login', [AuthController::class, 'doLogin']);
 Route::get('logout', function() {
@@ -98,10 +101,10 @@ Route::prefix('soca')->group(function() {
 
 
 
-Route::get('/', function () {
-    // dd(Route::current()->uri());
-    return view('dashboard');
-});
+// Route::get('/', function () {
+//     // dd(Route::current()->uri());
+//     return view('dashboard');
+// });
 
 // =============================================================================================================================================
 

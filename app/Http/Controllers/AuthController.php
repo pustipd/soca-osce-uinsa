@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Auth;
+
+// Models
+use App\Models\User;
+use App\Models\Penguji;
 
 class AuthController extends Controller
 {
@@ -14,27 +19,45 @@ class AuthController extends Controller
 
     public function doLogin(Request $request)
     {
-        if($request->type == "admin") {
 
-            $admin = \App\Models\User::where('email', $request->username)
-                        ->first();
+        $type = "admin";
 
-            if ($admin) {
-                Auth::guard('web')->login($admin);
+        $user = User::where("email", $request->username)->first();
+
+        if(! $user) {
+            $type = "penguji";
+
+            $user = Penguji::where("nip", $request->username)->first();
+        }
+
+        if(! $user) {
+            Session::flash('page_error', 'username / password tidak sesuai');
+            return redirect()->back();
+        }
+
+        if($type == "admin") {
+
+            if(Auth::guard('web')->attempt([
+                'email' => $request->username,
+                'password' => $request->password
+            ])) {
+                // Session::flash("page_success", "Berhasil Login");
                 return redirect('soca/ujian');
-            }
-        } else {
-
-            $penguji = \App\Models\Penguji::where('nip', $request->username)
-                        ->first();
-
-            if ($penguji) {
-                Auth::guard('penguji')->login($penguji);
-                return redirect('soca/penguji/list-ujian');
             }
 
         }
 
-        return redirect('login');
+        if($type == "penguji") {
+            if(Auth::guard('penguji')->attempt([
+                'nip' => $request->username,
+                'password' => $request->password
+            ])) {
+                // Session::flash("page_success", "Berhasil Login");
+                return redirect('soca/ujian');
+            }
+        }
+
+        Session::flash('page_error', 'username / password tidak sesuai');
+        return redirect()->back();
     }
 }

@@ -66,8 +66,10 @@ class PengujiController extends Controller
             }
         }
 
-        $list_indikator = IndikatorSoca::where("id_kriteria", $penguji->id_kriteria)->get();
-
+        // $list_category = KategoriSoca::with(['indikatorSoca' => function($q) use ($idKriteria) {
+        //                     $q->where('id_kriteria', $penguji->id_kriteria);
+        //                 }])->get();
+        $list_indikator = IndikatorSoca::where("id_kriteria", $penguji->id_kriteria)->orderBy('id_kategori')->get();
         if(is_int($peserta)) {
             return redirect('soca/penguji/list-ujian');
         }
@@ -77,7 +79,8 @@ class PengujiController extends Controller
             'penguji' => $penguji,
             'tipe_penguji' => $tipe_penguji,
             "list_indikator" => $list_indikator,
-            "peserta" => $peserta
+            "peserta" => $peserta,
+            // "list_category" => $list_category
         ]);
     }
 

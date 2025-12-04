@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('penguji', function (Blueprint $table) {
             $table->id();
             $table->string('nip', 25);
+            $table->string('password')->nullable();
             $table->string('nidn', 20);
             $table->string('nama', 150);
             $table->timestamps();

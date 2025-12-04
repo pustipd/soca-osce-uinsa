@@ -119,34 +119,33 @@
 
     <style>
         .radio-button-group {
-    display: flex;
-    gap: 8px;
-}
+            display: flex;
+            gap: 8px;
+        }
 
-.radio-button {
-    position: relative;
-}
+        .radio-button {
+            position: relative;
+        }
 
-.radio-button input {
-    display: none;
-}
+        .radio-button input {
+            display: none;
+        }
 
-.radio-button label {
-    padding: 8px 14px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background: #f5f5f5;
-    cursor: pointer;
-    transition: 0.2s;
-    font-weight: 500;
-}
+        .radio-button label {
+            padding: 8px 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #f5f5f5;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+        }
 
-.radio-button input:checked + label {
-    background: #6571ff;
-    border-color: #6571ff;
-    color: #fff;
-}
-
+        .radio-button input:checked+label {
+            background: #6571ff;
+            border-color: #6571ff;
+            color: #fff;
+        }
     </style>
 
     <div class="row">
@@ -154,38 +153,40 @@
             <div class="card">
                 <div class="card-body">
 
-                <form id="form-penilaian" action="{{url('soca/penguji/penilaian-ujian')}}" method="POST">
-                    @csrf
+                    <form id="form-penilaian" action="{{ url('soca/penguji/penilaian-ujian') }}" method="POST">
+                        @csrf
 
-                    <div class="d-flex justify-content-between mb-4">
-                        <p></p>
-                        <h5>{{ $penguji->ujianSoca->nama }} Sesi {{ $penguji->ujianSoca->sesi }}</h5>
-                        <p>Total Nilai : <span id="total-nilai" class="badge bg-warning text-dark">0</span></p>
-                    </div>
+                        <div class="d-flex justify-content-between mb-4">
+                            <p></p>
+                            <h5>{{ $penguji->ujianSoca->nama }} Sesi {{ $penguji->ujianSoca->sesi }}</h5>
+                            <p>Total Nilai : <span id="total-nilai" class="badge bg-warning text-dark">0</span></p>
+                        </div>
 
-                    <div class="d-flex">
-                        <button type="button" id="btn-check-nilai" class="btn btn-outline-primary btn-sm mb-3 me-4">Check Nilai</button>
-                        <h6 style="font-size: 12px" class="mt-2">Status Nilai : <span id="status-nilai" style="color: red">Tidak Sinkron</span></h6>
-                    </div>
+                        <div class="d-flex">
+                            <button type="button" id="btn-check-nilai"
+                                class="btn btn-outline-primary btn-sm mb-3 me-4">Check Nilai</button>
+                            <h6 style="font-size: 12px" class="mt-2">Status Nilai : <span id="status-nilai"
+                                    style="color: red">Tidak Sinkron</span></h6>
+                        </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
 
-                            <div class="row">
-                                <!-- LEFT: CONTENT -->
-                                <div class="col-md-8">
-                                    <div class="card">
-                                        <div class="card-body">
+                                <div class="row">
+                                    <!-- LEFT: CONTENT -->
+                                    <div class="col-md-8">
+                                        <div class="card">
+                                            <div class="card-body">
 
-                                                <input type="hidden" name="penguji_soca_id" value="{{$penguji->id}}">
-                                                <input type="hidden" name="tipe_penguji" value="{{$tipe_penguji}}">
-                                                <input type="hidden" name="id_peserta" value="{{$peserta->id}}">
+                                                <input type="hidden" name="penguji_soca_id" value="{{ $penguji->id }}">
+                                                <input type="hidden" name="tipe_penguji" value="{{ $tipe_penguji }}">
+                                                <input type="hidden" name="id_peserta" value="{{ $peserta->id }}">
                                                 {{-- <input type="hidden" name="id_ujian" value="{{$peserta->ujianSoca->id}}"> --}}
 
                                                 <div id="wizardContents">
                                                     @foreach ($list_indikator as $key => $indikator)
-
-                                                        <input type="hidden" name="indikator_id[]" value="{{$indikator->id}}">
+                                                        <input type="hidden" name="indikator_id[]"
+                                                            value="{{ $indikator->id }}">
 
                                                         <div class="step-content {{ $key == 0 ? 'active' : '' }}"
                                                             data-step="{{ $key + 1 }}">
@@ -197,15 +198,16 @@
 
                                                                 <div class="form-group">
                                                                     {{-- <label>{{ Str::limit($indikator->deskripsi, 10) }}</label> --}}
-                                                                    @if ($indikator->jenis_indikator == "deskripsi")
+                                                                    @if ($indikator->jenis_indikator == 'deskripsi')
                                                                         <div class="text-block">
                                                                             {!! $indikator->deskripsi !!}
                                                                         </div>
                                                                     @else
                                                                         <div class="text-block">
-                                                                            <iframe src="{{Storage::url($indikator->dokumen)}}" width="100%" height="600px"></iframe>
+                                                                            <iframe
+                                                                                src="{{ Storage::url($indikator->dokumen) }}"
+                                                                                width="100%" height="600px"></iframe>
                                                                         </div>
-
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -224,12 +226,14 @@
 
                                                                     @for ($i = 0; $i <= $indikator->skormax; $i++)
                                                                         <div class="radio-button">
-                                                                            <input type="radio" id="nilai{{$key}}_{{$i}}"
-                                                                                name="nilai[{{$key}}]"
-                                                                                value="{{$i}}"
+                                                                            <input type="radio"
+                                                                                id="nilai{{ $key }}_{{ $i }}"
+                                                                                name="nilai[{{ $key }}]"
+                                                                                value="{{ $i }}"
                                                                                 {{ $i === 0 ? 'checked' : '' }}>
 
-                                                                            <label for="nilai{{$key}}_{{$i}}">{{$i}}</label>
+                                                                            <label
+                                                                                for="nilai{{ $key }}_{{ $i }}">{{ $i }}</label>
                                                                         </div>
                                                                     @endfor
 
@@ -248,61 +252,68 @@
                                                         id="btnNext">Next</button>
                                                 </div>
 
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- RIGHT: STEPPER -->
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="wizard-steps-right">
-                                                @foreach ($list_indikator as $key => $item)
-                                                    <div class="step-item {{ $key == 0 ? 'active' : '' }}"
-                                                        data-step="{{ $key + 1 }}">{{ $key + 1 }}.
-                                                        {{ $item->nama ?? '-' }}</div>
-                                                @endforeach
                                             </div>
-
                                         </div>
+                                    </div>
+
+                                    <!-- RIGHT: STEPPER -->
+                                    <div class="col-md-4">
+                                        <div class="card" style="height: 455px; overflow: auto;">
+                                            <div class="card-body">
+                                                @php($id_kategori = 0)
+                                                <div class="wizard-steps-right">
+                                                    @foreach ($list_indikator as $key => $item)
+                                                        @if ($id_kategori != $item->id_kategori)
+                                                            @php($id_kategori = $item->id_kategori)
+                                                            <h6>{{ $item->kategoriSoca->nama }}</h6>
+                                                        @endif
+                                                        <div class="step-item {{ $key == 0 ? 'active' : '' }}"
+                                                            data-step="{{ $key + 1 }}">{{ $key + 1 }}.
+                                                            {{ $item->nama ?? '-' }}</div>
+                                                    @endforeach
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div class="card mt-3">
+                                    <div class="card-title text-center mt-3">Daftar Mahasiswa</div>
+                                    <div class="card-body">
+
+                                        @foreach ($list_peserta as $item)
+                                            <div
+                                                class="badge {{ $item->id == $peserta->id ? 'bg-primary' : 'bg-secondary' }} w-100 p-2 mb-2">
+                                                <p class="text-center">{{ $item->mahasiswa->nama }}</p>
+                                            </div>
+                                        @endforeach
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="form-label">Feedback untuk mahasiswa</label>
+                                            <textarea name="feedback" class="form-control" id="feedback" cols="10" rows="5"></textarea>
+                                        </div>
+
+                                        <button id="submit-penilaian" class="btn btn-primary w-100 mt-3">Simpan
+                                            Penilaian</button>
                                     </div>
                                 </div>
 
                             </div>
-
                         </div>
-                    </div>
-
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <div class="card mt-3">
-                                <div class="card-title text-center mt-3">Daftar Mahasiswa</div>
-                                <div class="card-body">
-
-                                    @foreach ($list_peserta as $item)
-                                        <div class="badge {{($item->id == $peserta->id) ? 'bg-primary' : 'bg-secondary' }} w-100 p-2 mb-2">
-                                            <p class="text-center">{{$item->mahasiswa->nama}}</p>
-                                        </div>
-                                    @endforeach
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="form-label">Feedback untuk mahasiswa</label>
-                                        <textarea name="feedback" class="form-control" id="feedback" cols="10" rows="5"></textarea>
-                                    </div>
-
-                                    <button id="submit-penilaian" class="btn btn-primary w-100 mt-3">Simpan Penilaian</button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
 
                 </div>
 
@@ -319,9 +330,9 @@
 @endpush
 
 @push('custom-scripts')
+    <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 
     <script>
-
         let nilai = {};
         let total_nilai = 0;
 
@@ -393,7 +404,8 @@
                 currentStep++;
                 showStep(currentStep);
             } else {
-                let value = document.querySelector('input[name="nilai[' + (Number(currentStep)) + ']"]:checked').value;
+                let value = document.querySelector('input[name="nilai[' + (Number(currentStep)) + ']"]:checked')
+                    .value;
                 nilai[currentStep] = Number(value);
                 // document.getElementById('btnNext').disabled = true;
             }
@@ -406,7 +418,7 @@
             document.getElementById('total-nilai').innerText = total_nilai;
         });
 
-        $('input[type=radio]').on('change', function () {
+        $('input[type=radio]').on('change', function() {
             console.log('asdad')
             let index = this.name.match(/\[(\d+)\]/)[1];
 
@@ -422,35 +434,69 @@
 
         // Initialize first step
         showStep(currentStep);
-
     </script>
 
     <script>
 
         $("#submit-penilaian").on("click", function(e) {
-
             e.preventDefault();
 
-            let is_complete = true;
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger me-2'
+                },
+                buttonsStyling: false,
+            })
 
-            let feedback = $("#feedback").val();
+            swalWithBootstrapButtons.fire({
+                title: 'Apakah anda yakin ?',
+                text: "Anda tidak bisa kembali lagi",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonClass: 'me-2',
+                confirmButtonText: 'Ya, Yakin',
+                cancelButtonText: 'Tidak',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
 
-            if (!feedback) {
-                is_complete = false;
-            }
+                    let is_complete = true;
 
-            let status_penilaian = $("#status-nilai").html();
+                    let feedback = $("#feedback").val();
 
-            if (status_penilaian != "Sinkron") {
-                is_complete = false;
-            }
+                    if (!feedback) {
+                        is_complete = false;
+                    }
 
-            if (is_complete) {
-                $("#form-penilaian").submit();
-            }
+                    let status_penilaian = $("#status-nilai").html();
+
+                    if (status_penilaian != "Sinkron") {
+                        is_complete = false;
+                    }
+
+                    if (is_complete) {
+                        $("#form-penilaian").submit();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Pastikan nilai antar penguji sudah sinkron dan sudah mengisi feedback'
+                        })
+                    }
+
+                } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    // swalWithBootstrapButtons.fire(
+                    //     'Cancelled',
+                    //     'Your imaginary file is safe :)',
+                    //     'error'
+                    // )
+                }
+            })
 
         });
-
     </script>
 
     <script src="{{ asset('assets/js/wizard.js') }}"></script>
