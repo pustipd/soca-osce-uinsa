@@ -13,12 +13,6 @@
 
     </style>
 
-    <nav class="page-breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">CRUD-MASTER</a></li>
-            <li class="breadcrumb-item active" aria-current="page">ujian</li>
-        </ol>
-    </nav>
 
     <div class="row">
         <div class="col-md-6 grid-margin stretch-card">

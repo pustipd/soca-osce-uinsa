@@ -1,13 +1,6 @@
 @extends('layout.master')
 
 @section('content')
-    <nav class="page-breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">CRUD-MASTER</a></li>
-            <li class="breadcrumb-item"><a href="{{ url('/indikator') }}">indikator</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ $indikator->id }}</li>
-        </ol>
-    </nav>
 
     <div class="container">
         <div class="row">
