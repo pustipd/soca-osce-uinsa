@@ -48,13 +48,6 @@
 
     </style>
 
-{{-- <nav class="page-breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="#">Forms</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Wizard</li>
-  </ol>
-</nav> --}}
-
 <div class="row">
   <div class="col-md-12 stretch-card">
     <div class="card">

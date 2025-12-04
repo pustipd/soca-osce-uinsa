@@ -5,13 +5,6 @@
 @endpush
 
 @section('content')
-    <nav class="page-breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Tables</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Data Table</li>
-        </ol>
-    </nav>
-
     @if (session('page_success'))
         <div class="alert alert-success" role="alert">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
