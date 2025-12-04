@@ -32,6 +32,22 @@
 
     <link href="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" />
 
+    <style>
+        .btn-primary {
+            background-color: #125335;
+            border: none;
+        }
+
+        .btn-outline-primary {
+            border-color: #125335;
+            /* border: none */
+            color: #125335;
+        }
+
+        .bg-primary {
+            background-color: #125335 !important;
+        }
+    </style>
     @stack('style')
 </head>
 

@@ -22,7 +22,8 @@
         }
 
         .wizard-steps-right .step-item.active {
-            background: #6571ff;
+            /* background: #6571ff; */
+            background: #125335;
             /* NobleUI primary */
             color: white;
         }
@@ -142,8 +143,10 @@
         }
 
         .radio-button input:checked+label {
-            background: #6571ff;
-            border-color: #6571ff;
+            /* background: #6571ff;
+            border-color: #6571ff; */
+            background: #125335;
+            border-color: #125335;
             color: #fff;
         }
     </style>

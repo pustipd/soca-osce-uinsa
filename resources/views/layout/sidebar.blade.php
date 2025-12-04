@@ -1,7 +1,7 @@
 <nav class="sidebar">
     <div class="sidebar-header">
-        <a href="#" class="sidebar-brand">
-            Noble<span>UI</span>
+        <a href="#" class="sidebar-brand" style="color: #125335">
+            Medexam
         </a>
         <div class="sidebar-toggler not-active">
             <span></span>

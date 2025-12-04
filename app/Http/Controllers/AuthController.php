@@ -53,7 +53,7 @@ class AuthController extends Controller
                 'password' => $request->password
             ])) {
                 // Session::flash("page_success", "Berhasil Login");
-                return redirect('soca/ujian');
+                return redirect('soca/penguji/list-ujian');
             }
         }
 
