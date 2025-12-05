@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\APIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+
+Route::middleware('custom.basic')->group(function() {
+    Route::get('/master/penguji/reset-password-all', [ApiController::class, 'resetPasswordPengujiAll']);
+    Route::post('/master/penguji/reset-password-by-id/{id}', [ApiController::class, 'resetPasswordPengujiById']);
 });
