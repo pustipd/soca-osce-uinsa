@@ -422,7 +422,7 @@
         });
 
         $('input[type=radio]').on('change', function() {
-            console.log('asdad')
+
             let index = this.name.match(/\[(\d+)\]/)[1];
 
             nilai[index] = this.value;

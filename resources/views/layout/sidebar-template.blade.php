@@ -43,7 +43,7 @@
     <li class="nav-item {{ active_class(['penguji/*']) }}">
         <a href="{{ url('soca/penguji/list-ujian') }}" class="nav-link">
             <i class="link-icon" data-feather="box"></i>
-            <span class="link-title">Dashboard</span>
+            <span class="link-title">Dashboard SOCA</span>
         </a>
     </li>
 @endif
@@ -93,7 +93,7 @@
 <li class="nav-item {{ active_class(['penguji/*']) }}">
     <a href="{{ url('osce/penguji/list-ujian') }}" class="nav-link">
         <i class="link-icon" data-feather="box"></i>
-        <span class="link-title">Dashboard</span>
+        <span class="link-title">Dashboard OSCE</span>
     </a>
 </li>
 @endif

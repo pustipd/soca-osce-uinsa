@@ -117,6 +117,39 @@
         }
     </style>
 
+    <style>
+        .radio-button-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .radio-button {
+            position: relative;
+        }
+
+        .radio-button input {
+            display: none;
+        }
+
+        .radio-button label {
+            padding: 8px 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #f5f5f5;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+
+        .radio-button input:checked+label {
+            /* background: #6571ff;
+            border-color: #6571ff; */
+            background: #125335;
+            border-color: #125335;
+            color: #fff;
+        }
+    </style>
+
     <div class="row">
         <div class="col-md-12 stretch-card">
             <div class="card">
@@ -433,7 +466,7 @@
         });
 
         $('input[type=radio]').on('change', function() {
-            console.log('asdad')
+
             let index = this.name.match(/\[(\d+)\]/)[1];
 
             nilai[index] = this.value;
