@@ -253,7 +253,7 @@
                                                                         <input type="radio"
                                                                             id="nilai{{ $key }}_0"
                                                                             name="nilai[{{ $key }}]"
-                                                                            value="0" class="point-radio" data-step="{{ $key + 1 }}" checked>
+                                                                            value="0" class="point-radio" data-step="{{ $key + 1 }}">
 
                                                                         <label for="nilai{{ $key }}_0">0</label>
                                                                     </div>
@@ -262,7 +262,7 @@
                                                                         <input type="radio"
                                                                             id="nilai{{ $key }}_1"
                                                                             name="nilai[{{ $key }}]"
-                                                                            value="1" class="point-radio" data-step="{{ $key + 1 }}" checked>
+                                                                            value="1" class="point-radio" data-step="{{ $key + 1 }}">
 
                                                                         <label for="nilai{{ $key }}_1">1</label>
                                                                     </div>
@@ -271,7 +271,7 @@
                                                                         <input type="radio"
                                                                             id="nilai{{ $key }}_2"
                                                                             name="nilai[{{ $key }}]"
-                                                                            value="2" class="point-radio" data-step="{{ $key + 1 }}" checked>
+                                                                            value="2" class="point-radio" data-step="{{ $key + 1 }}">
 
                                                                         <label for="nilai{{ $key }}_2">2</label>
                                                                     </div>
@@ -280,7 +280,7 @@
                                                                         <input type="radio"
                                                                             id="nilai{{ $key }}_3"
                                                                             name="nilai[{{ $key }}]"
-                                                                            value="3" class="point-radio" data-step="{{ $key + 1 }}" checked>
+                                                                            value="3" class="point-radio" data-step="{{ $key + 1 }}">
 
                                                                         <label for="nilai{{ $key }}_3">3</label>
                                                                     </div>
@@ -502,8 +502,35 @@
     </script>
 
     <script>
+
+        function isAllAnswered() {
+            let totalSteps = $('.step-content').length;
+            let answered = 0;
+
+            $('.step-content').each(function() {
+                let step = $(this).data('step');
+                let radios = $('input[name="nilai[' + (step-1) + ']"]');
+
+                if (radios.is(':checked')) {
+                    answered++;
+                }
+            });
+
+            return answered === totalSteps;
+        }
+
         $("#submit-penilaian").on("click", function(e) {
             e.preventDefault();
+
+            if (!isAllAnswered()) {
+                // e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Semua rubrik/indikator wajib diberi nilai.'
+                });
+                return;
+            }
 
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -547,11 +574,11 @@
                     // Read more about handling dismissals
                     result.dismiss === Swal.DismissReason.cancel
                 ) {
-                    swalWithBootstrapButtons.fire(
-                        'Cancelled',
-                        'Your imaginary file is safe :)',
-                        'error'
-                    )
+                    // swalWithBootstrapButtons.fire(
+                    //     'Cancelled',
+                    //     'Your imaginary file is safe :)',
+                    //     'error'
+                    // )
                 }
             })
 

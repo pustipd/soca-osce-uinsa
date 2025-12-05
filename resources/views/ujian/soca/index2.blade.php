@@ -227,13 +227,6 @@
                                                             <!-- Fixed footer -->
                                                             <div class="form-footer">
 
-                                                                {{-- @for ($i = 0; $i < $indikator->skormax; $i++)
-                                                                    <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input" type="radio" name="nilai[{{$key}}]" value="{{$i + 1}}" checked>
-                                                                        <label class="form-check-label" >{{$i + 1}}</label>
-                                                                    </div>
-                                                                @endfor --}}
-
                                                                 <div class="radio-button-group">
 
                                                                     @for ($i = 0; $i <= $indikator->skormax; $i++)
@@ -242,8 +235,7 @@
                                                                                 id="nilai{{ $key }}_{{ $i }}"
                                                                                 name="nilai[{{ $key }}]"
                                                                                 value="{{ $i }}"
-                                                                                class="point-radio" data-step="{{ $key + 1 }}"
-                                                                                {{ $i === 0 ? 'checked' : '' }}>
+                                                                                class="point-radio" data-step="{{ $key + 1 }}">
 
                                                                             <label
                                                                                 for="nilai{{ $key }}_{{ $i }}">{{ $i }}</label>
@@ -460,8 +452,34 @@
 
     <script>
 
+        function isAllAnswered() {
+            let totalSteps = $('.step-content').length;
+            let answered = 0;
+
+            $('.step-content').each(function() {
+                let step = $(this).data('step');
+                let radios = $('input[name="nilai[' + (step-1) + ']"]');
+
+                if (radios.is(':checked')) {
+                    answered++;
+                }
+            });
+
+            return answered === totalSteps;
+        }
+
         $("#submit-penilaian").on("click", function(e) {
             e.preventDefault();
+
+            if (!isAllAnswered()) {
+                // e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Semua rubrik/indikator wajib diberi nilai.'
+                });
+                return;
+            }
 
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
