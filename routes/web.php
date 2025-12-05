@@ -175,3 +175,14 @@ Route::prefix('osce')->group(function() {
     Route::post('penguji/penilaian-ujian', [PengujiController::class, 'examJudgmentOsce']);
     Route::get('penguji/hasil-ujian/{id}', [PengujiController::class, 'hasilUjianOsce']);
 });
+
+Route::prefix("master")->group(function() {
+
+    Route::prefix("penguji")->group(function() {
+
+        Route::get("ubah-password", [AuthController::class, 'changePassword']);
+        Route::post("ubah-password", [AuthController::class, 'doChangePassword']);
+
+    });
+
+});

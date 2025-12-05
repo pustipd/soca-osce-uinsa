@@ -148,6 +148,13 @@
             border-color: #125335;
             color: #fff;
         }
+
+        .step-item.done {
+            border-left: 4px solid #28a745 !important;
+            background: #e8f7ee;
+            color: #28a745;
+            font-weight: bold;
+        }
     </style>
 
     <div class="row">
@@ -158,9 +165,11 @@
                     <form id="form-penilaian" action="{{ url('osce/penguji/penilaian-ujian') }}" method="POST">
                         @csrf
                         <div class="d-flex justify-content-between mb-4">
-                            <p></p>
                             <h5>{{ $station->ujianOsce->nama }} Sesi {{ $station->ujianOsce->sesi }}</h5>
-                            <p>Total Nilai : <span id="total-nilai" class="badge bg-warning text-dark">0</span></p>
+                            <div class="d-flex" style="gap: 16px">
+                                <p class="bg-primary ps-3 pe-3 pt-1 pb-1" style="border-radius: 6px; color: white">{{$peserta->mahasiswa->nama}}</p>
+                                <p>Total Nilai : <span id="total-nilai" class="badge bg-warning text-dark">0</span></p>
+                            </div>
                         </div>
 
                         {{-- <div class="d-flex">
@@ -244,7 +253,7 @@
                                                                         <input type="radio"
                                                                             id="nilai{{ $key }}_0"
                                                                             name="nilai[{{ $key }}]"
-                                                                            value="0" checked>
+                                                                            value="0" class="point-radio" data-step="{{ $key + 1 }}" checked>
 
                                                                         <label for="nilai{{ $key }}_0">0</label>
                                                                     </div>
@@ -253,7 +262,7 @@
                                                                         <input type="radio"
                                                                             id="nilai{{ $key }}_1"
                                                                             name="nilai[{{ $key }}]"
-                                                                            value="1" checked>
+                                                                            value="1" class="point-radio" data-step="{{ $key + 1 }}" checked>
 
                                                                         <label for="nilai{{ $key }}_1">1</label>
                                                                     </div>
@@ -262,7 +271,7 @@
                                                                         <input type="radio"
                                                                             id="nilai{{ $key }}_2"
                                                                             name="nilai[{{ $key }}]"
-                                                                            value="2" checked>
+                                                                            value="2" class="point-radio" data-step="{{ $key + 1 }}" checked>
 
                                                                         <label for="nilai{{ $key }}_2">2</label>
                                                                     </div>
@@ -271,7 +280,7 @@
                                                                         <input type="radio"
                                                                             id="nilai{{ $key }}_3"
                                                                             name="nilai[{{ $key }}]"
-                                                                            value="3" checked>
+                                                                            value="3" class="point-radio" data-step="{{ $key + 1 }}" checked>
 
                                                                         <label for="nilai{{ $key }}_3">3</label>
                                                                     </div>
@@ -442,6 +451,15 @@
 
         document.getElementById('btnNext').addEventListener('click', () => {
 
+            let current = $('.step-item.active');
+            let next = current.next('.step-item');
+
+            // tandai step sekarang jadi done
+            current.removeClass('active').addClass('done');
+
+            // aktifkan step berikutnya
+            next.addClass('active');
+
             if (currentStep < steps.length - 1) {
 
                 let value = document.querySelector('input[name="nilai[' + currentStep + ']"]:checked').value;
@@ -541,45 +559,6 @@
         });
     </script>
 
-    <script src="{{ asset('assets/js/wizard.js') }}"></script>
-    <script>
-        $("#wizardVertical").steps({
-
-            onStepChanging: function(event, currentIndex, newIndex) {
-
-                return true; // allow to continue
-            },
-            onFinished: function(event, currentIndex) {
-
-                let is_complete = true;
-
-                let feedback = $("#feedback").val();
-
-                if (!feedback) {
-                    is_complete = false;
-                }
-
-                let status_penilaian = $("#status-nilai").html();
-
-                if (status_penilaian != "Sinkron") {
-                    is_complete = false;
-                }
-
-                if (is_complete) {
-                    $("#form-penilaian").submit();
-                }
-
-                // Submit form, AJAX, redirect, etc.
-                // Example:
-                // $("#formWizard").submit();
-            },
-            headerTag: "h2",
-            bodyTag: "section",
-            transitionEffect: "slideLeft",
-            stepsOrientation: 'vertical'
-        });
-    </script>
-
     <script>
         $("#btn-check-nilai").on('click', function() {
 
@@ -609,6 +588,16 @@
             });
 
 
+        });
+    </script>
+
+    <script>
+        $(document).on('change', '.point-radio', function() {
+
+            let step = $(this).data('step');
+            let stepItem = $('.step-item[data-step="'+ step +'"]');
+
+            stepItem.addClass('done');
         });
     </script>
 @endpush

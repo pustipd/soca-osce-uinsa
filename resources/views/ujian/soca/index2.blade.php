@@ -149,6 +149,13 @@
             border-color: #125335;
             color: #fff;
         }
+
+        .step-item.done {
+            border-left: 4px solid #28a745 !important;
+            background: #e8f7ee;
+            color: #28a745;
+            font-weight: bold;
+        }
     </style>
 
     <div class="row">
@@ -160,9 +167,11 @@
                         @csrf
 
                         <div class="d-flex justify-content-between mb-4">
-                            <p></p>
                             <h5>{{ $penguji->ujianSoca->nama }} Sesi {{ $penguji->ujianSoca->sesi }}</h5>
-                            <p>Total Nilai : <span id="total-nilai" class="badge bg-warning text-dark">0</span></p>
+                            <div class="d-flex" style="gap: 16px">
+                                <p class="bg-primary ps-3 pe-3 pt-1 pb-1" style="border-radius: 6px; color: white">{{$peserta->mahasiswa->nama}}</p>
+                                <p>Total Nilai : <span id="total-nilai" class="badge bg-warning text-dark">0</span></p>
+                            </div>
                         </div>
 
                         <div class="d-flex">
@@ -233,6 +242,7 @@
                                                                                 id="nilai{{ $key }}_{{ $i }}"
                                                                                 name="nilai[{{ $key }}]"
                                                                                 value="{{ $i }}"
+                                                                                class="point-radio" data-step="{{ $key + 1 }}"
                                                                                 {{ $i === 0 ? 'checked' : '' }}>
 
                                                                             <label
@@ -398,6 +408,15 @@
         });
 
         document.getElementById('btnNext').addEventListener('click', () => {
+
+            let current = $('.step-item.active');
+            let next = current.next('.step-item');
+
+            // tandai step sekarang jadi done
+            current.removeClass('active').addClass('done');
+
+            // aktifkan step berikutnya
+            next.addClass('active');
 
             if (currentStep < steps.length - 1) {
 
@@ -568,6 +587,16 @@
                 }
             });
 
+        });
+    </script>
+
+    <script>
+        $(document).on('change', '.point-radio', function() {
+
+            let step = $(this).data('step');
+            let stepItem = $('.step-item[data-step="'+ step +'"]');
+
+            stepItem.addClass('done');
         });
     </script>
 @endpush

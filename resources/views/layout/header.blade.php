@@ -8,9 +8,12 @@
         <div class="input-group-text">
           <i data-feather="search"></i>
         </div>
-        <input type="text" class="form-control" id="navbarForm" placeholder="Search here...">
+        {{-- <input type="text" class="form-control" id="navbarForm" placeholder="Search here..."> --}}
       </div>
     </form>
+    <div class="d-flex justify-content-end align-items-center me-3 w-50 text-right">
+      <p class="tx-12 fw-bolder mb-0">{{Auth::guard('penguji')->check() ? Auth::guard('penguji')->user()->nama : 'Guest'}}</p></li>
+    </div>
     <ul class="navbar-nav">
       {{-- <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -192,7 +195,7 @@
           </div>
         </div>
       </li> --}}
-
+      <li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <img class="wd-30 ht-30 rounded-circle" src="{{ url('assets/images/person-icon.png') }}" alt="profile">
@@ -207,7 +210,7 @@
                 @if (Auth::guard('web')->check())
                     Admin
                 @else
-                    Penguji
+                    {{Auth::guard('penguji')->check() ? Auth::guard('penguji')->user()->nama : 'Guest'}}
                 @endif
               </p>
               {{-- <p class="tx-12 text-muted">amiahburton@gmail.com</p> --}}
@@ -232,6 +235,14 @@
                 <span>Switch User</span>
               </a>
             </li> --}}
+
+            <li class="dropdown-item py-2">
+              <a href="{{url('master/penguji/ubah-password')}}" class="text-body ms-0">
+                <i class="me-2 icon-md" data-feather="ubah-password"></i>
+                <span>Ubah Password</span>
+              </a>
+            </li>
+
             <li class="dropdown-item py-2">
               <a href="{{url('logout')}}" class="text-body ms-0">
                 <i class="me-2 icon-md" data-feather="log-out"></i>

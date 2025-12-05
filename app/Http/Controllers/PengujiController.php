@@ -210,7 +210,7 @@ class PengujiController extends Controller
 
         $peserta->save();
 
-        return redirect('osce/penguji/ujian/' . $request->penguji_soca_id);
+        return redirect('soca/penguji/ujian/' . $request->penguji_soca_id);
         return redirect('soca/penguji/list-ujian');
     }
 
@@ -239,7 +239,7 @@ class PengujiController extends Controller
         }
 
         $list_indikator = IndikatorOsce::where("id_kriteria", $station->id_kriteria)->get();
-        $list_peserta = PesertaOsce::where("id_station", $station->id)->get();
+        $list_peserta = PesertaOsce::where("id_station", $station->id)->orderBy("rotasi")->get();
 
         $peserta = 0;
 
