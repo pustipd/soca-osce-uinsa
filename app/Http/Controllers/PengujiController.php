@@ -400,6 +400,7 @@ class PengujiController extends Controller
         $peserta->status = "tidak hadir";
         $peserta->save();
 
+        return redirect('soca/penguji/ujian/' . $peserta->id_penguji_soca);
         return redirect('soca/penguji/list-ujian');
     }
 
@@ -415,6 +416,7 @@ class PengujiController extends Controller
         $peserta->status = "tidak hadir";
         $peserta->save();
 
+        return redirect('osce/penguji/ujian/' . $peserta->id_station);
         return redirect('osce/penguji/list-ujian');
     }
 

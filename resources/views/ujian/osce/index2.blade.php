@@ -187,7 +187,7 @@
                                             <div class="card-body">
 
                                                 {{-- <input type="hidden" name="tipe_penguji" value="{{$tipe_penguji}}"> --}}
-                                                <input type="hidden" name="peserta_id" value="{{ $peserta->id }}">
+                                                <input id="peserta-id" type="hidden" name="peserta_id" value="{{ $peserta->id }}">
                                                 <input type="hidden" name="station_id" value="{{ $station->id }}">
 
                                                 <div id="wizardContents">
@@ -363,7 +363,7 @@
                                             <label for="form-label">Feedback untuk mahasiswa</label>
                                             <textarea name="feedback" class="form-control" id="feedback" cols="10" rows="5"></textarea>
                                         </div>
-
+                                        <button id="tidak-hadir" class="btn btn-danger w-100 mt-3">Tidak Hadir</button>
                                         <button id="submit-penilaian" class="btn btn-primary w-100 mt-3">Simpan
                                             Penilaian</button>
                                     </div>
@@ -582,8 +582,52 @@
                 }
             })
 
+        });
+
+        $("#tidak-hadir").on("click", function(e) {
+            e.preventDefault();
+
+            let peserta_id = $("#peserta-id").val();
+
+            const tidakHadirSwal = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger me-2'
+                },
+                buttonsStyling: false,
+            })
+
+            tidakHadirSwal.fire({
+                title: 'Apakah anda yakin mahasiswa tidak hadir?',
+                text: "Anda tidak bisa kembali lagi",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonClass: 'me-2',
+                confirmButtonText: 'Ya, Yakin',
+                cancelButtonText: 'Tidak',
+                reverseButtons: true
+            }).then((result) => {
+
+                if (result.value) {
+
+                    // let url = "penguji/ujian/" + peserta_id + "/tidak-hadir";
+
+                    window.location.href = "{{url('osce/penguji/ujian')}}" + "/" + peserta_id + "/tidak-hadir";
+
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    // swalWithBootstrapButtons.fire(
+                    //     'Cancelled',
+                    //     'Your imaginary file is safe :)',
+                    //     'error'
+                    // )
+                }
+            })
 
         });
+
     </script>
 
     <script>
