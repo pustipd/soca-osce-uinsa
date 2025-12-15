@@ -14,14 +14,6 @@ class PenjadwalanSoca implements ToCollection, WithHeadingRow
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            // var_dump($row['nim']);
-            // You can process manually, for example:
-            // \DB::table('mahasiswa')->insert([
-            //     'nim'         => $row['nim'],
-            //     'nama'        => $row['nama'],
-            //     'tahunmasuk'  => $row['tahunmasuk'],
-            // ]);
         }
-        // die;
     }
 }

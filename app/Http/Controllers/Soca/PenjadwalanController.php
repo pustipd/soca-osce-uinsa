@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Soca;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Session;
 
 // models
 use App\Models\PengujiSoca;
@@ -13,6 +14,7 @@ use App\Models\Penguji;
 use App\Models\UjianSoca;
 use App\Models\KriteriaSoca;
 use App\Models\PesertaSoca;
+use App\Models\HasilUjianSoca;
 
 // Import
 use App\Imports\PenjadwalanSoca;
@@ -132,7 +134,7 @@ class PenjadwalanController extends Controller
 
         $list_mahasiswa = Mahasiswa::all();
 
-        $peserta = PesertaSoca::where("id_penguji_soca", $penguji->id)->get();
+        $peserta = PesertaSoca::where("id_penguji_soca", $penguji->id)->orderBy("urutan")->get();
         $list_peserta = [];
 
         if($peserta) {
@@ -150,11 +152,28 @@ class PenjadwalanController extends Controller
     {
 
         if(count($request->mahasiswa) != count(array_unique($request->mahasiswa))) {
+                Session::flash('page_error', "Data Mahasiswa dobel");
             return redirect('soca/penjadwalan');
         }
 
         if(count($request->urutan) != count(array_unique($request->urutan))) {
+                Session::flash('page_error', "Data urutan dobel");
             return redirect('soca/penjadwalan');
+        }
+
+        $peserta_soca = PesertaSoca::where("id_penguji_soca", $request->id_penguji)->pluck('id')->toArray();
+        // dd($peserta_soca);
+        if($peserta_soca) {
+
+            $hasil_ujian = HasilUjianSoca::whereIn("id_peserta_soca", $peserta_soca)->get();
+            // dd($hasil_ujian);
+            if(count($hasil_ujian) > 0) {
+                Session::flash('page_error', "Data peserta telah melakukan ujian, tidak bisa diganti");
+                return redirect('soca/penjadwalan');
+            } else {
+                PesertaSoca::where("id_penguji_soca", $request->id_penguji)->delete();
+            }
+
         }
 
         foreach($request->mahasiswa as $key => $mahasiswa) {
@@ -167,6 +186,7 @@ class PenjadwalanController extends Controller
 
         }
 
+        Session::flash("page_success", "Berhasil melakukan mapping");
         return redirect('soca/penjadwalan');
     }
 
@@ -178,9 +198,9 @@ class PenjadwalanController extends Controller
 
             $collection = Excel::toCollection(new PenjadwalanSoca, $request->file('import_mahasiswa'));
 
-            $nims = $collection[0]->pluck('nim');
-
-            $list_mahasiswa = Mahasiswa::whereIn("nim", $nims)->get();
+            $nims = $collection[0]->pluck('nim')->toArray();
+            // var_dump($nims);
+            $list_mahasiswa = Mahasiswa::whereIn("nim", $nims)->orderByRaw('FIELD(nim, ' . implode(',', $nims) . ')')->get();
 
             if(count($list_mahasiswa) < 1) {
                 return response([
@@ -194,9 +214,9 @@ class PenjadwalanController extends Controller
             ]);
 
         } catch (\Throwable $th) {
-
             return response([
-                "status" => "failed"
+                "status" => "failed",
+                "message" => $th->getMessage()
             ]);
 
         }
