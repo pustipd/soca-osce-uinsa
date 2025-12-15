@@ -25,8 +25,8 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
-                        <h6 class="card-title">Station</h6>
-                        <a href="{{ url('osce/station/create') }}">
+                        <h6 class="card-title">Station ( {{$ujian->nama}} )</h6>
+                        <a href="{{ url('osce/ujian/station/') . "/" . $ujian->id . "/create" }}">
                             <button class="btn btn-secondary">Create New</button>
                         </a>
                     </div>
@@ -49,8 +49,8 @@
                                         <td class="px-6 py-4">{{ ($item->ujianOsce()->exists()) ? $item->ujianOsce->nama : '-' }}</td>
                                         <td class="px-6 py-4">{{ ($item->penguji()->exists()) ? $item->penguji->nama : '-'  }}</td>
                                         <td>
-                                            <a href="{{ url('/osce/station/' . $item->id) }}" title="View Station"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
-                                            <a href="{{ url('/osce/station/' . $item->id . '/edit') }}" title="Edit Station"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
+                                            <a href="{{ url('/osce/ujian/station/' . $item->id) }}" title="View Station"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
+                                            <a href="{{ url('/osce/ujian/station/' . $ujian->id . "/" . $item->id . '/edit') }}" title="Edit Station"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
 
                                             <form method="POST" action="{{ url('/osce/station' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                                                 {{ method_field('DELETE') }}

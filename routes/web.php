@@ -118,6 +118,15 @@ Route::prefix('osce')->group(function() {
         Route::get('{id}/edit', [UjianControllerOsce::class, 'edit']);
         Route::patch('{id}', [UjianControllerOsce::class, 'update']);
         Route::delete('{id}', [UjianControllerOsce::class, 'delete']);
+
+        Route::prefix("station")->group(function() {
+            Route::get('{ujian_id}', [StationController::class, 'index']);
+            Route::get('{ujian_id}/create', [StationController::class, 'create']);
+            Route::post('{ujian_id}/store', [StationController::class, 'store']);
+            Route::get('{ujian_id}/{id}/edit', [StationController::class, 'edit']);
+            Route::patch('{ujian_id}/{id}', [StationController::class, 'update']);
+            Route::delete('{ujian_id}/{id}', [StationController::class, 'delete']);
+        });
     });
 
     Route::prefix("kriteria")->group(function() {
@@ -136,15 +145,6 @@ Route::prefix('osce')->group(function() {
         Route::get('{id}/edit', [IndikatorControllerOsce::class, 'edit']);
         Route::patch('{id}', [IndikatorControllerOsce::class, 'update']);
         Route::delete('{id}', [IndikatorControllerOsce::class, 'delete']);
-    });
-
-    Route::prefix("station")->group(function() {
-        Route::get('', [StationController::class, 'index']);
-        Route::get('create', [StationController::class, 'create']);
-        Route::post('store', [StationController::class, 'store']);
-        Route::get('{id}/edit', [StationController::class, 'edit']);
-        Route::patch('{id}', [StationController::class, 'update']);
-        Route::delete('{id}', [StationController::class, 'delete']);
     });
 
     Route::prefix('penjadwalan')->group(function() {

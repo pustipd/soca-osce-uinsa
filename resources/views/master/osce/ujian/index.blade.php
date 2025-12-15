@@ -20,6 +20,19 @@
         </div>
     @endif
 
+    @if (session('page_error'))
+        <div class="alert alert-danger" role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="feather feather-alert-circle">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            {{ session('page_error') }}
+        </div>
+    @endif
+
     <div class="row">
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
@@ -72,6 +85,8 @@
                                             @endif
                                         </td>
                                         <td>
+
+                                            <a href="{{ url('/osce/ujian/station/' . $item->id) }}" title="Station"><button class="btn btn-secondary btn-sm"><i class="fa fa-door-open" aria-hidden="true"></i> Station</button></a>
                                             <a href="{{ url('/osce/ujian/' . $item->id) }}" title="View Ujian"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
                                             <a href="{{ url('/osce/ujian/' . $item->id . '/edit') }}" title="Edit Ujian"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
 

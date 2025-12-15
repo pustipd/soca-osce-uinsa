@@ -24,13 +24,16 @@
 </div>
 <div class="mb-3 {{ $errors->has('ujian') ? 'has-error' : ''}}">
     <label for="ujian" class="form-label">{{ 'Ujian' }}</label>
+    <input type="hidden" name="ujian" value="{{$ujian->id}}">
+    <input type="text" value="{{$ujian->nama}}" class="form-control" readonly>
 
-    <select name="ujian" id="ujian" class="form-select">
+    {{-- <select name="ujian" id="ujian" class="form-select" readonly>
         <option value="" selected disabled>Pilih Ujian</option>
         @foreach ($list_ujian as $item)
-            <option value="{{$item->id}}" @if (isset($station) && $item->id == $station->id_ujian_osce) selected @endif>{{$item->nama}}</option>
+
+            <option value="{{$item->id}}" @if ($item->id == $ujian_id) selected @endif>{{$item->nama}}</option>
         @endforeach
-    </select>
+    </select> --}}
 
     {!! $errors->first('ujian', '<p class="text-danger">:message</p>') !!}
 </div>

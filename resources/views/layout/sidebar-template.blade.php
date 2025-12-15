@@ -75,12 +75,12 @@
             <span class="link-title">Indikator</span>
         </a>
     </li>
-    <li class="nav-item {{ active_class(['osce/station/*']) }}">
+    {{-- <li class="nav-item {{ active_class(['osce/station/*']) }}">
         <a href="{{ url('osce/station') }}" class="nav-link">
             <i class="link-icon" data-feather="box"></i>
             <span class="link-title">Station</span>
         </a>
-    </li>
+    </li> --}}
     <li class="nav-item {{ active_class(['osce/penjadwalan/*']) }}">
         <a href="{{ url('osce/penjadwalan') }}" class="nav-link">
             <i class="link-icon" data-feather="box"></i>

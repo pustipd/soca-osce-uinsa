@@ -45,7 +45,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ url('osce/station/store') }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                    <form method="POST" action="{{ url('osce/ujian/station') . "/" . $ujian->id . "/store" }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
                         {{ csrf_field() }}
 
                         @include ('master.osce.station.form', ['formMode' => 'create'])
