@@ -199,7 +199,7 @@ class PenjadwalanController extends Controller
             $collection = Excel::toCollection(new PenjadwalanSoca, $request->file('import_mahasiswa'));
 
             $nims = $collection[0]->pluck('nim')->toArray();
-            // var_dump($nims);
+
             $list_mahasiswa = Mahasiswa::whereIn("nim", $nims)->orderByRaw('FIELD(nim, ' . implode(',', $nims) . ')')->get();
 
             if(count($list_mahasiswa) < 1) {
