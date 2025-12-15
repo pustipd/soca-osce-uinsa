@@ -406,7 +406,7 @@ class PengujiController extends Controller
 
     public function mahasiswaAbsenOsce($id)
     {
-
+        
         $peserta = PesertaOsce::find($id);
 
         if(! $peserta) {
