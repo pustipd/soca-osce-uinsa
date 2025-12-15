@@ -75,10 +75,12 @@ class IndikatorController extends Controller
             return redirect('osce/indikator');
         }
         $list_ujian = UjianOsce::all();
+        $list_kriteria = KriteriaOsce::all();
 
         return view('master.osce.indikator.edit', [
             "indikator" => $indikator,
-            "list_ujian" => $list_ujian
+            "list_ujian" => $list_ujian,
+            "list_kriteria" => $list_kriteria
         ]);
     }
 
