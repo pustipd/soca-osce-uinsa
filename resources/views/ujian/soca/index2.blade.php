@@ -169,7 +169,8 @@
                         <div class="d-flex justify-content-between mb-4">
                             <h5>{{ $penguji->ujianSoca->nama }} Sesi {{ $penguji->ujianSoca->sesi }}</h5>
                             <div class="d-flex" style="gap: 16px">
-                                <p class="bg-primary ps-3 pe-3 pt-1 pb-1" style="border-radius: 6px; color: white">{{$peserta->mahasiswa->nama}}</p>
+                                <div class="d-flex badge rounded-pill border border-primary text-primary ps-3 pe-3 pt-1 pb-1" style="border-radius: 6px; color: white; align-items: center"><p style="text-decoration: underline;">{{$peserta->mahasiswa->nama}}</p></div>
+                                <button id="tidak-hadir" class="btn btn-danger">Tidak Hadir</button>
                                 <p>Total Nilai : <span id="total-nilai" class="badge bg-warning text-dark">0</span></p>
                             </div>
                         </div>

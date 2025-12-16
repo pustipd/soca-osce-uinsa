@@ -167,7 +167,8 @@
                         <div class="d-flex justify-content-between mb-4">
                             <h5>{{ $station->ujianOsce->nama }} Sesi {{ $station->ujianOsce->sesi }}</h5>
                             <div class="d-flex" style="gap: 16px">
-                                <p class="bg-primary ps-3 pe-3 pt-1 pb-1" style="border-radius: 6px; color: white">{{$peserta->mahasiswa->nama}}</p>
+                                <div class="d-flex badge rounded-pill border border-primary text-primary ps-3 pe-3 pt-1 pb-1" style="border-radius: 6px; color: white; align-items: center"><p style="text-decoration: underline;">{{$peserta->mahasiswa->nama}}</p></div>
+                                <button id="tidak-hadir" class="btn btn-danger">Tidak Hadir</button>
                                 <p>Total Nilai : <span id="total-nilai" class="badge bg-warning text-dark">0</span></p>
                             </div>
                         </div>
@@ -176,7 +177,6 @@
                         <button type="button" id="btn-check-nilai" class="btn btn-outline-primary btn-sm mb-3 me-4">Check Nilai</button>
                         <h6 style="font-size: 12px" class="mt-2">Status Nilai : <span id="status-nilai" style="color: red">Tidak Sinkron</span></h6>
                     </div> --}}
-
                         <div class="row">
                             <div class="col-md-12">
 
@@ -363,7 +363,6 @@
                                             <label for="form-label">Feedback untuk mahasiswa</label>
                                             <textarea name="feedback" class="form-control" id="feedback" cols="10" rows="5"></textarea>
                                         </div>
-                                        <button id="tidak-hadir" class="btn btn-danger w-100 mt-3">Tidak Hadir</button>
                                         <button id="submit-penilaian" class="btn btn-primary w-100 mt-3">Simpan
                                             Penilaian</button>
                                     </div>

@@ -31,6 +31,7 @@ class GeneratePasswordPenguji extends Command
         $list_penguji = Penguji::all();
 
         foreach($list_penguji as $penguji) {
+            var_dump($penguji->nidn); die;
             $penguji->password = Hash::make($penguji->nidn);
             $penguji->save();
         }
