@@ -223,7 +223,14 @@ class PengujiController extends Controller
         //     $q->where('id_penguji', $penguji_id);
         // })->get();
 
-        $list_station = StationOsce::where('id_penguji', $penguji_id)->get();
+        $list_station = StationOsce::where('id_penguji', $penguji_id)->whereHas('pesertaOsce', function ($q) {
+                            $q->whereIn('status', ['terjadwal', 'aktif']);
+                        })
+                        ->withCount([
+                            'pesertaOsce as peserta_ongoing_count' => function ($q) {
+                                $q->whereIn('status', ['terjadwal', 'aktif']);
+                            }
+                        ])->get();
 
         return view('ujian.osce.list_ujian', [
             "list_station" => $list_station
@@ -406,7 +413,7 @@ class PengujiController extends Controller
 
     public function mahasiswaAbsenOsce($id)
     {
-        
+
         $peserta = PesertaOsce::find($id);
 
         if(! $peserta) {

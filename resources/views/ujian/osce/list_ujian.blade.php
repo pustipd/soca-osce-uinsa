@@ -31,7 +31,8 @@
                                     <th scope="col" class="px-6 py-3">Station</th>
                                     <th scope="col" class="px-6 py-3">Ujian</th>
                                     <th scope="col" class="px-6 py-3">Kriteria</th>
-                                    <th scope="col" class="px-6 py-3">Status</th>
+                                    <th scope="col" class="px-6 py-3">Jumlah Mahasiswa</th>
+                                    <th scope="col" class="px-6 py-3">Jumlah Mahasiswa Belum Dinilai</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -42,7 +43,8 @@
                                         <td class="px-6 py-4">{{ $item->no_station }}</td>
                                         <td class="px-6 py-4">{{ $item->ujianOsce->nama }} Sesi {{ $item->ujianOsce->sesi }}</td>
                                         <td class="px-6 py-4">{{ $item->kriteriaOsce->nama }}</td>
-                                        <td class="px-6 py-4">{{ ucfirst($item->status) }}</td>
+                                        <td class="px-6 py-4">{{ $item->pesertaOsce->count() }}</td>
+                                        <td class="px-6 py-4">{{ $item->peserta_ongoing_count }}</td>
                                         <td>
                                             @if ($item->status == "selesai")
                                                 <a href="{{ url('/osce/penguji/hasil-ujian/' . $item->id) }}" title="View Ujian">

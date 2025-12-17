@@ -168,7 +168,7 @@ Route::prefix('osce')->group(function() {
 
     });
 
-    Route::get('penguji/ujian/check-station/{id}', [PengujiController::class, 'checkStation']);
+    Route::get('penguji/ujian/check-station/{id}', [PengujiController::class, 'checkStation']); // tidak dipakai
     Route::get('penguji/list-ujian', [PengujiController::class, 'listUjianOsce']);
     Route::get('penguji/ujian/{id}/tidak-hadir', [PengujiController::class, 'mahasiswaAbsenOsce']);
     Route::get('penguji/ujian/{id}', [PengujiController::class, 'ujianOsce']);
