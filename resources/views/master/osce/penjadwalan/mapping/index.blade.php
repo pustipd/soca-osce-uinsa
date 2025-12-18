@@ -85,7 +85,6 @@
                                             </select>
                                         </td>
                                     </tr>
-
                                 @endforeach
                             </tbody>
 

@@ -223,7 +223,7 @@ class PenjadwalanController extends Controller
     public function editMapping($id)
     {
 
-        $ujian = UjianOsce::find($id);
+        $ujian = UjianOsce::with('stationOsce.pesertaOsce')->find($id);
 
         if(! $ujian) {
             return redirect('osce/penjadwalan');

@@ -41,17 +41,17 @@
                             @php($rotasi = 1)
 
                             <tbody>
-                                @foreach ($list_peserta as $key => $item)
-                                    <input type="hidden" name="station_id[]" value="{{$item->id_station}}">
+                                @foreach ($ujian->stationOsce as $key => $item)
+                                    <input type="hidden" name="station_id[]" value="{{$item->id}}">
                                     <tr>
-                                        <td>{{$item->stationOsce->no_station}}</td>
-                                        <td>{{$item->rotasi}}</td>
-                                        <td>{{($item->stationOsce->penguji()->exists()) ? $item->stationOsce->penguji->nama : '--- Istirahat ---'}}</td>
+                                        <td>{{$item->no_station}}</td>
+                                        <td>{{$rotasi}}</td>
+                                        <td>{{($item->penguji()->exists()) ? $item->penguji->nama : '--- Istirahat ---'}}</td>
                                         <td>
                                             <select name="mahasiswa_id[]" class="form-select">
                                                 <option value="" selected disabled>Pilih Mahasiswa</option>
                                                 @foreach ($list_mahasiswa as $mahasiswa)
-                                                    <option value="{{$mahasiswa->id}}" @if ($mahasiswa->id == $item->id_mahasiswa) selected @endif>{{$mahasiswa->nama}}</option>
+                                                    <option value="{{$mahasiswa->id}}" @if ($item->pesertaOsce()->where('rotasi', 1)->exists() && $item->pesertaOsce()->where('rotasi', 1)->first()->id_mahasiswa == $mahasiswa->id) selected @endif>{{$mahasiswa->nama}}</option>
                                                 @endforeach
                                             </select>
                                         </td>
